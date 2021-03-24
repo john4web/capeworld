@@ -13,23 +13,13 @@ app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
     res.json({
-        message: 'Behold The MEVN Stack!'
+        message: 'Root'
     });
 });
 
 app.get('/testCollection', (req, res) => {
     messages.getAll().then((messages) => {
         res.json(messages);
-    });
-});
-
-app.post('/testCollection', (req, res) => {
-    console.log(req.body);
-    messages.create(req.body).then((message) => {
-        res.json(message);
-    }).catch((error) => {
-        res.status(500);
-        res.json(error);
     });
 });
 
