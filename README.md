@@ -1,29 +1,11 @@
-# client
+# CapeWorld
 
-## Project setup
-```
-npm install
-```
+## Idea:
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+A **fancy** Superhero-wiki-like application
+The application communicates with a couple of different APIs to get information about superheroes/supervillains and related topics like comics, films, actors, etc.
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## Team:
 
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- Johannes Gerstbauer (s2010629002)
+- Regina Schrattmaier(s2010629009)
