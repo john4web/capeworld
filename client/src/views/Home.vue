@@ -6,8 +6,6 @@
   </div>
 </template>
 
-
-
 <script>
 const API_URL = "http://localhost:4000/testCollection";
 
@@ -29,5 +27,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
