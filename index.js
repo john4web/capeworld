@@ -1,29 +1,15 @@
-const express = require("express");
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const morgan = require("morgan");
-
-const messages = require("./db/messages");
+import express from "express";
+import cors from "cors";
+import morgan from "morgan";
+import routes from "./src/routes/crmRoutes";
 
 const app = express();
-
-app.use(morgan("tiny"));
 app.use(cors());
-app.use(bodyParser.json());
-
-app.get("/", (req, res) => {
-  res.json({
-    message: "Root",
-  });
-});
-
-app.get("/testCollection", (req, res) => {
-  messages.getAll().then((messages) => {
-    res.json(messages);
-  });
-});
+app.use(morgan("tiny"));
+app.use(express.json()); //Used to parse JSON bodies. bodyParser is deprecated!
+routes(app);
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
-  console.log(`listening on ${port}`);
+  console.log(`Server is running on port ${port}`);
 });
