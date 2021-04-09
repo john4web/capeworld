@@ -1,4 +1,9 @@
-import { getSuperHero } from "../controllers/crmController";
+import {
+  getSuperHero,
+  addNewContact,
+  getContacts,
+} from "../controllers/crmController";
+
 const routes = (app) => {
   app.route("/").get((req, res) => {
     res.json({
@@ -6,14 +11,17 @@ const routes = (app) => {
     });
   });
 
-  app.route("/superhero/:id").get(getSuperHero);
+  app.route("/superhero/:heroID").get(getSuperHero);
 
   app.route("/testCollection").get((req, res) => {
-    const messages = require("../db/messages");
-    messages.getAll().then((messages) => {
-      res.json(messages);
-    });
+    res.json({ messages: "abc" });
   });
+
+  //route for post request
+  app.route("/contact").post(addNewContact);
+
+  //route for get request
+  app.route("/contacts").get(getContacts);
 };
 
 export default routes;

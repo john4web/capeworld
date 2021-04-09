@@ -1,13 +1,10 @@
 <template>
-  <div>
-    <div>{{ output.username }}</div>
-    <div>{{ output.subject }}</div>
-    <div>{{ output.message }}</div>
-  </div>
+  <div></div>
 </template>
 
 <script>
-const API_URL = "http://localhost:4000/testCollection";
+//const axios = require("axios");
+const API_URL = "http://localhost:4000/contacts";
 
 export default {
   name: "home",
@@ -20,8 +17,22 @@ export default {
     fetch(API_URL)
       .then((response) => response.json())
       .then((result) => {
-        this.output = result[0];
+        console.log(result);
       });
+    // axios
+    //   .post(API_URL, {
+    //     firstName: "Johannes",
+    //     lastName: "Gerstbauer",
+    //     email: "test@example.com",
+    //     company: "FH-HGB",
+    //     phone: "12345678",
+    //   })
+    //   .then(function (response) {
+    //     console.log(response);
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
   },
   methods: {},
 };
