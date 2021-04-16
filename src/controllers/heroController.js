@@ -15,7 +15,18 @@ export const getHeroByID = async (req, res) => {
   }
 };
 
-export const getHeroesByNameFilter = (req, res) => {};
+export const getHeroesByNameFilter = async (req, res) => {
+  const heroName = req.params.heroName;
+
+  try {
+    const response = await axios.get(
+      `https://superheroapi.com/api/${credentials.superhero_api.access_token}/search/${heroName}`
+    );
+    res.json(response.data);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 export const getRandomHero = (req, res) => {};
 

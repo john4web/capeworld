@@ -1,9 +1,13 @@
 //import { addNewContact, getContacts } from "../controllers/crmController";
 
-import { getHeroByID } from "../controllers/heroController";
+import {
+  getHeroByID,
+  getHeroesByNameFilter,
+} from "../controllers/heroController";
 
 const routes = (app) => {
   app.route("/hero/:heroID").get(getHeroByID);
+  app.route("/hero/name/:heroName").get(getHeroesByNameFilter);
 
   // app.route("/").get((req, res) => {
   //   res.json({
