@@ -53,6 +53,12 @@ const routes = [
       ),
   },
   {
+    path: "/legal",
+    name: "Legal",
+    component: () =>
+      import(/* webpackChunkName: "legal" */ "../views/Legal.vue"),
+  },
+  {
     path: "*",
     name: "NotFound",
     component: () =>

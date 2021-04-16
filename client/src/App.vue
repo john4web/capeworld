@@ -5,6 +5,7 @@
       <router-link to="/superheroes">Superheroes</router-link>
       <router-link to="/comics">Comics</router-link>
       <router-link to="/movies">Movies</router-link>
+      <router-link to="/legal">Legal Notice</router-link>
     </div>
     <router-view />
   </div>
