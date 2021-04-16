@@ -11,13 +11,52 @@ const routes = [
     component: Home,
   },
   {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+    path: "/superhero/:id",
+    name: "Superhero",
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
+      import(/* webpackChunkName: "superhero" */ "../views/Superhero.vue"),
+  },
+  {
+    path: "/comic/:id",
+    name: "Comic",
+    component: () =>
+      import(/* webpackChunkName: "comic" */ "../views/Comic.vue"),
+  },
+  {
+    path: "/movie/:id",
+    name: "Movie",
+    component: () =>
+      import(/* webpackChunkName: "movie" */ "../views/Movie.vue"),
+  },
+  {
+    path: "/movies",
+    name: "MoviesOverview",
+    component: () =>
+      import(
+        /* webpackChunkName: "moviesoverview" */ "../views/MoviesOverview.vue"
+      ),
+  },
+  {
+    path: "/comics",
+    name: "ComicsOverview",
+    component: () =>
+      import(
+        /* webpackChunkName: "comicsoverview" */ "../views/ComicsOverview.vue"
+      ),
+  },
+  {
+    path: "/superheroes",
+    name: "SuperheroesOverview",
+    component: () =>
+      import(
+        /* webpackChunkName: "superheroesoverview" */ "../views/SuperheroesOverview.vue"
+      ),
+  },
+  {
+    path: "*",
+    name: "NotFound",
+    component: () =>
+      import(/* webpackChunkName: "notfound" */ "../views/NotFound.vue"),
   },
 ];
 
