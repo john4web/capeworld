@@ -1,29 +1,34 @@
 //import { addNewContact, getContacts } from "../controllers/crmController";
-
+import express from "express";
 import {
   getHeroByID,
   getHeroesByNameFilter,
 } from "../controllers/heroController";
 
-const routes = (app) => {
-  app.route("/hero/:heroID").get(getHeroByID);
-  app.route("/hero/name/:heroName").get(getHeroesByNameFilter);
+const router = express.Router();
 
-  // app.route("/").get((req, res) => {
-  //   res.json({
-  //     message: "Root",
-  //   });
-  // });
+router.get("/hero/:heroID", getHeroByID);
+router.get("/hero/name/:heroName", getHeroesByNameFilter);
 
-  // app.route("/testCollection").get((req, res) => {
-  //   res.json({ messages: "abc" });
-  // });
+//const routes = (app) => {
+// app.route("/hero/:heroID").get(getHeroByID);
+//app.route("/hero/name/:heroName").get(getHeroesByNameFilter);
 
-  // //route for post request
-  // app.route("/contact").post(addNewContact);
+// app.route("/").get((req, res) => {
+//   res.json({
+//     message: "Root",
+//   });
+// });
 
-  // //route for get request
-  // app.route("/contacts").get(getContacts);
-};
+// app.route("/testCollection").get((req, res) => {
+//   res.json({ messages: "abc" });
+// });
 
-export default routes;
+// //route for post request
+// app.route("/contact").post(addNewContact);
+
+// //route for get request
+// app.route("/contacts").get(getContacts);
+//};
+
+module.exports = router;

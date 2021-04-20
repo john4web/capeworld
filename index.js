@@ -7,8 +7,20 @@ import mongoose from "mongoose";
 const app = express();
 app.use(cors());
 app.use(morgan("tiny"));
-app.use(express.json()); //Used to parse JSON bodies. bodyParser is deprecated!
-routes(app);
+app.use(express.json()); //Used to parse JSON bodies.
+
+app.use("/api", routes); // '/api' redirects to the routes specified in routes.js
+
+//Handle Production
+if (process.env.NODE_ENV === "production") {
+  //when project is deployed, this if statement gets executed
+
+  //set static folder
+  app.use(express.static(__dirname + "/public/"));
+
+  //Handle Single-Page-Application
+  app.get(/.*/, (req, res) => res.sendFile(__dirname + "/public/index.html"));
+}
 
 //mongoose connection
 mongoose.Promise = global.Promise;

@@ -3,8 +3,7 @@
 </template>
 
 <script>
-//const axios = require("axios");
-//const API_URL = "http://localhost:4000/contacts";
+const axios = require("axios");
 
 export default {
   name: "Home",
@@ -35,6 +34,16 @@ export default {
   //   //   });
   // },
   // methods: {},
+  mounted() {
+    axios
+      .get("/api/hero/1")
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  },
 };
 </script>
 
