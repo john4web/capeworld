@@ -22,4 +22,8 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
+#ignoring credentials for API-Requests
 api_credentials.js
+
+#in this folder, the vue.js app gets deployed
+/public
