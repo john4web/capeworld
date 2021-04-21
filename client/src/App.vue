@@ -1,18 +1,100 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link>
-      <router-link to="/superheroes">Superheroes</router-link>
-      <router-link to="/comics">Comics</router-link>
-      <router-link to="/movies">Movies</router-link>
-      <router-link to="/legal">Legal Notice</router-link>
-    </div>
-    <router-view />
+    <header class="w-full flex flex-col">
+      <nav
+        id="navbar"
+        class="p-4 flex flex-col sm:flex-row w-full justify-between items-center bg-white border-b-2 border-gray-900"
+      >
+        <div
+          class="w-full sm:w-auto flex flex-row sm:flex-none flex-no-wrap justify-between items-center"
+        >
+          <router-link to="/">
+            <img class="logo" src="./assets/cape.svg" />
+          </router-link>
+          <button
+            class="hamburger block sm:hidden"
+            :class="{ open: isOpen }"
+            @click="navToggle"
+          >
+            <img class="hamburger" src="./assets/hamburger.svg" />
+          </button>
+        </div>
+        <div
+          class="w-full sm:w-auto self-end sm:self-center flex-col sm:flex-row items-center h-full md:block"
+          :class="{ hidden: isHidden, flex: isFlex }"
+        >
+          <router-link
+            to="/"
+            class="uppercase text-gray-900 hover:text-red-500 m-4"
+            >Home</router-link
+          >
+          <router-link
+            to="/superheroes"
+            class="uppercase text-gray-900 hover:text-red-500 m-4"
+            >Superheroes</router-link
+          >
+          <router-link
+            to="/comics"
+            class="uppercase text-gray-900 hover:text-red-500 m-4"
+            >Comics</router-link
+          >
+          <router-link
+            to="/movies"
+            class="uppercase text-gray-900 hover:text-red-500 m-4"
+            >Movies</router-link
+          >
+          <router-link
+            to="/legal"
+            class="uppercase text-gray-900 hover:text-red-500 m-4"
+            >Legal Notice</router-link
+          >
+        </div>
+      </nav>
+    </header>
+    <div id="content"><router-view /></div>
   </div>
 </template>
 
 <style>
-#nav a.router-link-exact-active {
-  color: #42b983;
+.hamburger {
+  width: 25px;
+}
+.logo {
+  width: 30px;
 }
 </style>
+
+<script>
+export default {
+  components: {},
+  data() {
+    return {
+      isOpen: false,
+      isHidden: true,
+      isFlex: false,
+    };
+  },
+  methods: {
+    navToggle: function () {
+      if (this.isOpen) {
+        this.isOpen = false;
+      } else {
+        this.isOpen = true;
+      }
+      if (this.isHidden) {
+        this.isHidden = false;
+      } else {
+        this.isHidden = true;
+      }
+      if (this.isFlex) {
+        this.isFlex = false;
+      } else {
+        this.isFlex = true;
+      }
+    },
+  },
+};
+</script>
+
+
+
