@@ -1,12 +1,25 @@
 <template>
-  <h1>Home</h1>
+  <div>
+    <h1 class="uppercase">Home</h1>
+    <div class="grid grid-rows-4 gap-1 grid-flow-col">
+      <overview-item />
+      <overview-item />
+      <overview-item />
+      <overview-item />
+      <overview-item />
+      <overview-item />
+      <overview-item />
+      <overview-item />
+    </div>
+  </div>
 </template>
 
 <script>
 const axios = require("axios");
-
+import OverviewItem from "../components/OverviewItem.vue";
 export default {
   name: "Home",
+  components: { OverviewItem },
   // data: () => ({
   //   error: "",
   //   output: [],

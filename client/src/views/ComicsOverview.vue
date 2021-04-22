@@ -1,13 +1,24 @@
 <template>
   <div>
-    <h1>Comics Overview</h1>
+    <h1 class="uppercase">Comics Overview</h1>
+    <div class="grid grid-rows-4 gap-1 grid-flow-col">
+      <overview-item />
+      <overview-item />
+      <overview-item />
+      <overview-item />
+      <overview-item />
+      <overview-item />
+      <overview-item />
+      <overview-item />
+    </div>
   </div>
 </template>
 
 <script>
+import OverviewItem from "../components/OverviewItem.vue";
 export default {
   name: "ComicsOverview",
-  components: {},
+  components: { OverviewItem },
   props: {},
   watch: {},
 

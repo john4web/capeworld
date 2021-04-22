@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Movie</h1>
+    <h1 class="uppercase">Movie</h1>
   </div>
 </template>
 

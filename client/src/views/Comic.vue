@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Comic</h1>
+    <h1 class="uppercase">Comic</h1>
   </div>
 </template>
 

@@ -1,22 +1,26 @@
 <template>
-  <div id="app">
+  <div id="app" class="">
     <header class="w-full flex flex-col">
       <nav
         id="navbar"
-        class="p-4 flex flex-col sm:flex-row w-full justify-between items-center bg-white border-b-2 border-gray-900"
+        class="p-4 flex flex-col sm:flex-row w-full justify-between items-center bg-gray-900 border-b-2 border-red-500"
       >
         <div
           class="w-full sm:w-auto flex flex-row sm:flex-none flex-no-wrap justify-between items-center"
         >
           <router-link to="/">
-            <img class="logo" src="./assets/cape.svg" />
+            <img class="logo" src="./assets/cape.svg" alt="logo" />
           </router-link>
           <button
             class="hamburger block sm:hidden"
             :class="{ open: isOpen }"
             @click="navToggle"
           >
-            <img class="hamburger" src="./assets/hamburger.svg" />
+            <img
+              class="hamburger"
+              src="./assets/hamburger.svg"
+              alt="hamburger"
+            />
           </button>
         </div>
         <div
@@ -25,33 +29,33 @@
         >
           <router-link
             to="/"
-            class="uppercase text-gray-900 hover:text-red-500 m-4"
+            class="uppercase text-white hover:text-red-500 m-4"
             >Home</router-link
           >
           <router-link
             to="/superheroes"
-            class="uppercase text-gray-900 hover:text-red-500 m-4"
+            class="uppercase text-white hover:text-red-500 m-4"
             >Superheroes</router-link
           >
           <router-link
             to="/comics"
-            class="uppercase text-gray-900 hover:text-red-500 m-4"
+            class="uppercase text-white hover:text-red-500 m-4"
             >Comics</router-link
           >
           <router-link
             to="/movies"
-            class="uppercase text-gray-900 hover:text-red-500 m-4"
+            class="uppercase text-white hover:text-red-500 m-4"
             >Movies</router-link
           >
           <router-link
             to="/legal"
-            class="uppercase text-gray-900 hover:text-red-500 m-4"
+            class="uppercase text-white hover:text-red-500 m-4"
             >Legal Notice</router-link
           >
         </div>
       </nav>
     </header>
-    <div id="content"><router-view /></div>
+    <div id="content" class="m-4 flex justify-center"><router-view /></div>
   </div>
 </template>
 
@@ -66,6 +70,7 @@
 
 <script>
 export default {
+  name: "App",
   components: {},
   data() {
     return {
