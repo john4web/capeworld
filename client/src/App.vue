@@ -54,7 +54,25 @@
           >
         </div>
       </nav>
+      <div class="banner w-full flex justify-center">
+        <div class="items-center title-container">
+          <h1 class="title uppercase text-5xl font-bold text-white text-center">
+            Capeworld
+          </h1>
+          <router-link
+            to="/superheroes"
+            class="uppercase text-white hover:text-red-500 m-4 flex justify-center"
+          >
+            <button
+              class="bg-gray-900 hover:bg-gray-800 text-white uppercase py-2 px-4 m-4 rounded"
+            >
+              Find Superhero
+            </button></router-link
+          >
+        </div>
+      </div>
     </header>
+
     <div id="content" class="m-4 flex justify-center"><router-view /></div>
   </div>
 </template>
@@ -65,6 +83,19 @@
 }
 .logo {
   width: 30px;
+}
+.banner {
+  height: 500px;
+  background: url("./assets/header.jpg") rgba(239, 68, 68, 0.5);
+  background-size: cover;
+  background-blend-mode: multiply;
+  background-position: right;
+}
+.title-container {
+  width: 300px;
+}
+.title {
+  margin-top: 75%;
 }
 </style>
 
