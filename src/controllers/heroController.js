@@ -26,6 +26,9 @@ export const getHeroByID = async (req, res) => {
   } catch (error) {
     console.error(error);
   }
+  //http://gateway.marvel.com/v1/public/characters/${characterID}?apikey=${publicKey}&limit=100&ts=${timestamp}&hash=${hash}`;
+  //https://superheroapi.com/api/${access-token}/${characterID}
+  //https://comicvine.gamespot.com/api/character/4005-${characterID}/?api_key=${access-token}&format=json
 };
 
 export const getHeroesByNameFilter = (req, res) => {
@@ -40,9 +43,20 @@ export const getHeroesByNameFilter = (req, res) => {
     .update(timestamp + privateKey + publicKey)
     .digest("hex");
 
-  const marvel_api_request_url = `http://gateway.marvel.com/v1/public/characters?nameStartsWith=${heroName}&orderBy=name&ts=${timestamp}&apikey=${publicKey}&hash=${hash}`;
+  const marvel_api_request_url = `http://gateway.marvel.com/v1/public/characters?nameStartsWith=${heroName}&orderBy=name&limit=100&ts=${timestamp}&apikey=${publicKey}&hash=${hash}`;
+  // Return characters with names that begin with the specified string (e.g. Sp) for Spider-Man.
+  // order by name ascending
+  // limit 100: returns not more than 100 items, max: 100
+
   const superheroes_api_request_url = `https://superheroapi.com/api/${credentials.superhero_api.access_token}/search/${heroName}`;
-  const comicvines_api_request_url = `http://www.comicvine.com/api/search/?api_key=${credentials.comic_vines_api.access_token}&query=${heroName}&resources=character&format=json`;
+  //gibt unendlich viele zurück
+  //const comicvines_api_request_url = `http://www.comicvine.com/api/search/?api_key=${credentials.comic_vines_api.access_token}&query=${heroName}&resources=character&format=json`;
+  const comicvines_api_request_url = `https://comicvine.gamespot.com/api/characters/?api_key=${credentials.comic_vines_api.access_token}&filter=name:${heroName}&field_list=id,name,image,api_detail_url&format=json`;
+  // max 100 results
+  //&field_list=id,name,image,api_detail_url   ---> works!
+  //&limit=100
+  //&sort=name:asc
+  //&filter=name:spider
 
   const promises = [
     axios.get(marvel_api_request_url),
@@ -59,26 +73,39 @@ export const getHeroesByNameFilter = (req, res) => {
         .filter((item) => item !== undefined)
         .filter((item) => item.data.response !== "error");
 
-      const responseObject = {};
+      const responseArray = [];
 
       filteredResponse.forEach((item) => {
         switch (item.config.url) {
           case marvel_api_request_url:
-            Object.defineProperty(responseObject, "Marvel-API", {
-              value: item.data.data.results,
-              enumerable: true,
+            item.data.data.results.forEach((character) => {
+              //IDs from Marvel-API start with 0--
+              responseArray.push({
+                id: `0--${character.id}`,
+                name: character.name,
+                imageURL: `${character.thumbnail.path}.${character.thumbnail.extension}`,
+              });
             });
             break;
           case superheroes_api_request_url:
-            Object.defineProperty(responseObject, "SuperheroesAPI", {
-              value: item.data.results,
-              enumerable: true,
+            item.data.results.forEach((character) => {
+              //IDs from Superhero-API start with 1--
+              responseArray.push({
+                id: `1--${character.id}`,
+                name: character.name,
+                imageURL: character.image.url,
+              });
             });
             break;
           case comicvines_api_request_url:
-            Object.defineProperty(responseObject, "Comicvine-API", {
-              value: item.data.results,
-              enumerable: true,
+            item.data.results.forEach((character) => {
+              //IDs from Comicvine-API start with 2--
+              responseArray.push({
+                id: `2--${character.id}`,
+                name: character.name,
+                imageURL: character.image.thumb_url,
+                //bigger images are also available
+              });
             });
             break;
           default:
@@ -86,7 +113,7 @@ export const getHeroesByNameFilter = (req, res) => {
         }
       });
 
-      res.json(responseObject);
+      res.json(responseArray);
     });
   // ToDo: Handle Promise Timeout. What if the API-Calls take 5 hours?
   // ToDo: Handle Promise Timeout on frontend

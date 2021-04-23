@@ -17,22 +17,16 @@
     <div class="grid grid-rows-4 gap-1 grid-flow-col">
       <overview-item />
     </div>
-    <router-link
-      :to="`/superhero/${superheroesID[0]}`"
-      class="uppercase text-white hover:text-red-500 m-4"
-      >{{ superheroesJSON[0] }}</router-link
-    >
-    <router-link
-      :to="`/superhero/${superheroesID[1]}`"
-      class="uppercase text-white hover:text-red-500 m-4"
-      >{{ superheroesJSON[1] }}</router-link
-    >
-    <router-link
-      :to="`/superhero/${superheroesID[2]}`"
-      class="uppercase text-white hover:text-red-500 m-4"
-      >{{ superheroesJSON[2] }}</router-link
-    >
-    {{ superheroesJSON }}
+    <ul v-if="superheroesJSON.length">
+      <li v-for="item in superheroesJSON" :key="item.id">
+        <router-link
+          :to="`/superhero/${item.id}`"
+          class="uppercase text-white hover:text-red-500 m-4"
+          >{{ item.name }}</router-link
+        >
+        <img :src="item.imageURL" />
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -46,26 +40,16 @@ export default {
   watch: {},
   data() {
     return {
-      superheroesJSON: [],
-      superheroesID: [],
+      superheroesJSON: {},
       inputText: "",
     };
   },
-
   mounted() {},
   methods: {
     async getHeroesByName() {
       try {
         const response = await axios.get(`/api/hero/name/${this.inputText}`);
-        var api = response.data.SuperheroesAPI;
-        var size = Object.keys(api).length;
-        var i;
-        for (i = 0; i < size; i++) {
-          this.superheroesJSON[i] = response.data.SuperheroesAPI[i].name;
-          this.superheroesID[i] = response.data.SuperheroesAPI[i].id;
-          console.log(this.superheroesJSON[i]);
-        }
-        console.log(this.superheroesJSON[5]);
+        this.superheroesJSON = response.data;
       } catch (error) {
         console.error(error);
       }
