@@ -5,9 +5,13 @@
       <input type="text" v-model="inputText" />
       <button @click="getHeroesByName">Send Axios Request</button>
     </div>
-    <div>
-      {{ superheroesJSON }}
-    </div>
+    <ul v-if="superheroesJSON.length">
+      <li v-for="item in superheroesJSON" :key="item.id">
+        {{ item.id }}
+        {{ item.name }}
+        <img :src="item.imageURL" />
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -20,7 +24,7 @@ export default {
   watch: {},
   data() {
     return {
-      superheroesJSON: {},
+      superheroesJSON: [],
       inputText: "",
     };
   },
