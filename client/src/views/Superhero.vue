@@ -88,17 +88,35 @@
         </p>
       </div>
     </div>
+    {{ currentID }}
+    {{ superheroesJSON }}
   </div>
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "Superhero",
   components: {},
   props: {},
   watch: {},
+  data() {
+    return {
+      currentID: this.$route.params.id,
+      superheroesJSON: {},
+    };
+  },
 
-  mounted() {},
+  mounted: async function () {
+    try {
+      const response = await axios.get(`/api/hero/${this.currentID}`);
+      this.currentUrl = window.location.pathname;
+      this.superheroesJSON = response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  },
+
   methods: {},
 };
 </script>

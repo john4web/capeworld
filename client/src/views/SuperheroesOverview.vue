@@ -16,17 +16,23 @@
     </div>
     <div class="grid grid-rows-4 gap-1 grid-flow-col">
       <overview-item />
-      <overview-item />
-      <overview-item />
-      <overview-item />
-      <overview-item />
-      <overview-item />
-      <overview-item />
-      <overview-item />
     </div>
-    <div>
-      {{ superheroesJSON }}
-    </div>
+    <router-link
+      :to="`/superhero/${superheroesID[0]}`"
+      class="uppercase text-white hover:text-red-500 m-4"
+      >{{ superheroesJSON[0] }}</router-link
+    >
+    <router-link
+      :to="`/superhero/${superheroesID[1]}`"
+      class="uppercase text-white hover:text-red-500 m-4"
+      >{{ superheroesJSON[1] }}</router-link
+    >
+    <router-link
+      :to="`/superhero/${superheroesID[2]}`"
+      class="uppercase text-white hover:text-red-500 m-4"
+      >{{ superheroesJSON[2] }}</router-link
+    >
+    {{ superheroesJSON }}
   </div>
 </template>
 
@@ -40,7 +46,8 @@ export default {
   watch: {},
   data() {
     return {
-      superheroesJSON: {},
+      superheroesJSON: [],
+      superheroesID: [],
       inputText: "",
     };
   },
@@ -50,7 +57,15 @@ export default {
     async getHeroesByName() {
       try {
         const response = await axios.get(`/api/hero/name/${this.inputText}`);
-        this.superheroesJSON = response.data;
+        var api = response.data.SuperheroesAPI;
+        var size = Object.keys(api).length;
+        var i;
+        for (i = 0; i < size; i++) {
+          this.superheroesJSON[i] = response.data.SuperheroesAPI[i].name;
+          this.superheroesID[i] = response.data.SuperheroesAPI[i].id;
+          console.log(this.superheroesJSON[i]);
+        }
+        console.log(this.superheroesJSON[5]);
       } catch (error) {
         console.error(error);
       }
