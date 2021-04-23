@@ -4,15 +4,15 @@
   >
     <div class="inline-block">
       <router-link
-        to="/superhero/100"
+        :to="`/superhero/${id}`"
         class="uppercase text-gray-900 hover:text-red-500"
       >
-        <h1 class="uppercase">Overview Item</h1></router-link
+        <h1 class="uppercase">{{ name }}</h1></router-link
       >
-      <p class="mt-2 text-sm">Short Info Text</p>
+      <p class="mt-2 text-sm">{{ id }}</p>
     </div>
     <div class="float-left justify-center overflow-hidden inline-block mr-4">
-      <img src="../assets/cape.svg" class="max-w-xs max-h-7" alt="thumbnail" />
+      <img :src="imageURL" class="max-w-xs max-h-7" alt="thumbnail" />
     </div>
   </div>
 </template>
@@ -21,7 +21,7 @@
 export default {
   name: "Overview",
   components: {},
-  props: {},
+  props: ["id", "name", "imageURL"],
   watch: {},
 
   mounted() {},

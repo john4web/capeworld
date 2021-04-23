@@ -89,7 +89,7 @@
       </div>
     </div>
     {{ currentID }}
-    {{ superheroesJSON }}
+    {{ superheroJSON }}
   </div>
 </template>
 
@@ -103,15 +103,14 @@ export default {
   data() {
     return {
       currentID: this.$route.params.id,
-      superheroesJSON: {},
+      superheroJSON: {},
     };
   },
 
   mounted: async function () {
     try {
       const response = await axios.get(`/api/hero/${this.currentID}`);
-      this.currentUrl = window.location.pathname;
-      this.superheroesJSON = response.data;
+      this.superheroJSON = response.data;
     } catch (error) {
       console.error(error);
     }

@@ -3,32 +3,38 @@ import credentials from "../../api_credentials";
 import crypto from "crypto";
 
 export const getHeroByID = async (req, res) => {
-  const heroID = req.params.heroID;
-  console.log(req.params.heroID);
-  //ToDo: validate heroID
+  var heroID = req.params.heroID;
+  var id = heroID.charAt(0);
+  const finalHeroID = heroID.slice(3);
+  const timestamp = String(Date.now());
+  const privateKey = credentials.marvel_api.private_key;
+  const publicKey = credentials.marvel_api.public_key;
+  const hash = crypto
+    .createHash("md5")
+    .update(timestamp + privateKey + publicKey)
+    .digest("hex");
 
-  //superhero api
-  try {
-    const response = await axios.get(
-      `https://superheroapi.com/api/${credentials.superhero_api.access_token}/${heroID}`
-    );
-    res.json(response.data);
-  } catch (error) {
-    console.error(error);
+  if (id == 0) {
+    //marvel api
+    try {
+      const response = await axios.get(
+        `http://gateway.marvel.com/v1/public/characters/${finalHeroID}?apikey=${publicKey}&limit=100&ts=${timestamp}&hash=${hash}`
+      );
+      res.json(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  } else {
+    //superhero api
+    try {
+      const response = await axios.get(
+        `https://superheroapi.com/api/${credentials.superhero_api.access_token}/${finalHeroID}`
+      );
+      res.json(response.data);
+    } catch (error) {
+      console.error(error);
+    }
   }
-
-  //comicvines api
-  try {
-    const response = await axios.get(
-      `https://comicvine.gamespot.com/api/character/${heroID}/?api_key=${credentials.comic_vines_api.access_token}&format=json`
-    );
-    res.json(response.data);
-  } catch (error) {
-    console.error(error);
-  }
-  //http://gateway.marvel.com/v1/public/characters/${characterID}?apikey=${publicKey}&limit=100&ts=${timestamp}&hash=${hash}`;
-  //https://superheroapi.com/api/${access-token}/${characterID}
-  //https://comicvine.gamespot.com/api/character/4005-${characterID}/?api_key=${access-token}&format=json
 };
 
 export const getHeroesByNameFilter = (req, res) => {
@@ -43,6 +49,7 @@ export const getHeroesByNameFilter = (req, res) => {
     .update(timestamp + privateKey + publicKey)
     .digest("hex");
 
+  console.log("test");
   const marvel_api_request_url = `http://gateway.marvel.com/v1/public/characters?nameStartsWith=${heroName}&orderBy=name&limit=100&ts=${timestamp}&apikey=${publicKey}&hash=${hash}`;
   // Return characters with names that begin with the specified string (e.g. Sp) for Spider-Man.
   // order by name ascending
@@ -61,7 +68,7 @@ export const getHeroesByNameFilter = (req, res) => {
   const promises = [
     axios.get(marvel_api_request_url),
     axios.get(superheroes_api_request_url),
-    axios.get(comicvines_api_request_url),
+    //axios.get(comicvines_api_request_url),
   ];
 
   Promise.allSettled(promises) //returns a promise that resolves after all of the given promises have either fulfilled or rejected, with an array of objects that each describes the outcome of each promise.

@@ -14,19 +14,18 @@
         Send Axios Request
       </button>
     </div>
-    <div class="grid grid-rows-4 gap-1 grid-flow-col">
-      <overview-item />
+    <div
+      v-if="superheroesJSON.length"
+      class="grid grid-rows-6 gap-1 grid-flow-col"
+    >
+      <div v-for="item in superheroesJSON" :key="item.id">
+        <overview-item
+          :id="item.id"
+          :name="item.name"
+          :imageURL="item.imageURL"
+        />
+      </div>
     </div>
-    <ul v-if="superheroesJSON.length">
-      <li v-for="item in superheroesJSON" :key="item.id">
-        <router-link
-          :to="`/superhero/${item.id}`"
-          class="uppercase text-white hover:text-red-500 m-4"
-          >{{ item.name }}</router-link
-        >
-        <img :src="item.imageURL" />
-      </li>
-    </ul>
   </div>
 </template>
 
