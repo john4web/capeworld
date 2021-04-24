@@ -35,6 +35,9 @@ export const getHeroByID = async (req, res) => {
       console.error(error);
     }
   }
+  //http://gateway.marvel.com/v1/public/characters/${characterID}?apikey=${publicKey}&limit=100&ts=${timestamp}&hash=${hash}`;
+  //https://superheroapi.com/api/${access-token}/${characterID}
+  //https://comicvine.gamespot.com/api/character/4005-${characterID}/?api_key=${access-token}&format=json
 };
 
 export const getHeroesByNameFilter = (req, res) => {
@@ -49,7 +52,6 @@ export const getHeroesByNameFilter = (req, res) => {
     .update(timestamp + privateKey + publicKey)
     .digest("hex");
 
-  console.log("test");
   const marvel_api_request_url = `http://gateway.marvel.com/v1/public/characters?nameStartsWith=${heroName}&orderBy=name&limit=100&ts=${timestamp}&apikey=${publicKey}&hash=${hash}`;
   // Return characters with names that begin with the specified string (e.g. Sp) for Spider-Man.
   // order by name ascending

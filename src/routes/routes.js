@@ -4,11 +4,25 @@ import {
   getHeroByID,
   getHeroesByNameFilter,
 } from "../controllers/heroController";
+import {
+  getComicByID,
+  getComicsByNameFilter,
+} from "../controllers/comicController";
+import {
+  getMovieByID,
+  getMoviesByNameFilter,
+} from "../controllers/movieController";
 
 const router = express.Router();
 
 router.get("/hero/:heroID", getHeroByID);
 router.get("/hero/name/:heroName", getHeroesByNameFilter);
+
+router.get("/comic/:comicID", getComicByID);
+router.get("/comic/name/:comicName", getComicsByNameFilter);
+
+router.get("/movie/:movieID", getMovieByID);
+router.get("/movie/name/:movieName", getMoviesByNameFilter);
 
 //const routes = (app) => {
 // app.route("/hero/:heroID").get(getHeroByID);

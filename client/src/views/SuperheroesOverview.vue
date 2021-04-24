@@ -20,6 +20,7 @@
     >
       <div v-for="item in superheroesJSON" :key="item.id">
         <overview-item
+          :dataType="dataType"
           :id="item.id"
           :name="item.name"
           :imageURL="item.imageURL"
@@ -41,6 +42,7 @@ export default {
     return {
       superheroesJSON: {},
       inputText: "",
+      dataType: "superhero",
     };
   },
   mounted() {},

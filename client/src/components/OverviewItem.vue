@@ -4,7 +4,7 @@
   >
     <div class="inline-block">
       <router-link
-        :to="`/superhero/${id}`"
+        :to="`/${dataType}/${id}`"
         class="uppercase text-gray-900 hover:text-red-500"
       >
         <h1 class="uppercase">{{ name }}</h1></router-link
@@ -21,7 +21,7 @@
 export default {
   name: "Overview",
   components: {},
-  props: ["id", "name", "imageURL"],
+  props: ["dataType", "id", "name", "imageURL"],
   watch: {},
 
   mounted() {},
