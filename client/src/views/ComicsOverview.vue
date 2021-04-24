@@ -24,6 +24,19 @@
         />
       </div>
     </div>
+    <div
+      v-if="randomComicJSON.length"
+      class="grid grid-rows-6 gap-1 grid-flow-col"
+    >
+      <div v-for="item in randomComicJSON" :key="item.id">
+        <overview-item
+          :dataType="dataType"
+          :id="item.id"
+          :name="item.name"
+          :imageURL="item.imageURL"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -40,9 +53,17 @@ export default {
       comicsJSON: {},
       inputText: "",
       dataType: "comic",
+      randomComicJSON: {},
     };
   },
-  mounted() {},
+  mounted: async function () {
+    try {
+      const responseRandomComic = await axios.get(`/api/comicrandom`);
+      this.randomComicJSON = responseRandomComic.data;
+    } catch (error) {
+      console.error(error);
+    }
+  },
   methods: {
     async getComicsByName() {
       try {

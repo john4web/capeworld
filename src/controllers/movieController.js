@@ -3,11 +3,20 @@ import credentials from "../../api_credentials";
 
 export const getMovieByID = async (req, res) => {
   var movieID = req.params.movieID;
+
   try {
     const response = await axios.get(
       `https://comicvine.gamespot.com/api/movie/4025-${movieID}/?api_key=${credentials.comic_vines_api.access_token}&format=json`
     );
-    res.json(response.data);
+    const responseArray = [];
+
+    responseArray.push({
+      id: response.data.results.id,
+      name: response.data.results.name,
+      imageURL: response.data.results.image.icon_url,
+    });
+
+    res.json(responseArray);
   } catch (error) {
     console.error(error);
   }
@@ -43,6 +52,26 @@ export const getMoviesByNameFilter = (req, res) => {
   // ToDo: Handle Promise Timeout on frontend
 };
 
-export const getRandomMovie = (req, res) => {};
+export const getRandomMovie = async (req, res) => {
+  //TODO test if id is valid
+  var movieID = Math.floor(Math.random() * 1999) + 1;
 
-export const getRandomMovies = (req, res) => {};
+  try {
+    const response = await axios.get(
+      `https://comicvine.gamespot.com/api/movie/4025-${movieID}/?api_key=${credentials.comic_vines_api.access_token}&format=json`
+    );
+    const responseArray = [];
+
+    responseArray.push({
+      id: response.data.results.id,
+      name: response.data.results.name,
+      imageURL: response.data.results.image.icon_url,
+    });
+
+    res.json(responseArray);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getRandomMovies = async (req, res) => {};

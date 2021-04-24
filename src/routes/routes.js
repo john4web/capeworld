@@ -12,6 +12,14 @@ import {
   getMovieByID,
   getMoviesByNameFilter,
 } from "../controllers/movieController";
+import {
+  getRandomMovie,
+  getRandomMovies,
+} from "../controllers/movieController";
+import {
+  getRandomComic,
+  getRandomComics,
+} from "../controllers/comicController";
 
 const router = express.Router();
 
@@ -23,6 +31,12 @@ router.get("/comic/name/:comicName", getComicsByNameFilter);
 
 router.get("/movie/:movieID", getMovieByID);
 router.get("/movie/name/:movieName", getMoviesByNameFilter);
+
+router.get("/movierandom", getRandomMovie);
+router.get("/moviesrandom", getRandomMovies);
+
+router.get("/comicrandom", getRandomComic);
+router.get("/comicsrandom", getRandomComics);
 
 //const routes = (app) => {
 // app.route("/hero/:heroID").get(getHeroByID);

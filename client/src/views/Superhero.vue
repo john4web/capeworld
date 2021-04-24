@@ -90,20 +90,53 @@
     </div>
     {{ currentID }}
     {{ superheroJSON }}
+
+    <div>
+      <p>Movies about this character:</p>
+    </div>
+    <div v-if="moviesJSON.length" class="grid grid-rows-6 gap-1 grid-flow-col">
+      <div v-for="item in moviesJSON" :key="item.id">
+        <overview-item
+          :dataType="dataTypeMovie"
+          :id="item.id"
+          :name="item.name"
+          :imageURL="item.imageURL"
+        />
+      </div>
+    </div>
+    <div>
+      <p>Comics about this character:</p>
+    </div>
+    <div v-if="comicsJSON.length" class="grid grid-rows-6 gap-1 grid-flow-col">
+      <div v-for="item in comicsJSON" :key="item.id">
+        <overview-item
+          :dataType="dataTypeComic"
+          :id="item.id"
+          :name="item.name"
+          :imageURL="item.imageURL"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import OverviewItem from "../components/OverviewItem.vue";
 export default {
   name: "Superhero",
-  components: {},
+  components: { OverviewItem },
   props: {},
   watch: {},
   data() {
     return {
       currentID: this.$route.params.id,
+      superheroName: "",
       superheroJSON: {},
+      moviesJSON: {},
+      comicsJSON: {},
+      dataTypeMovie: "movie",
+      dataTypeComic: "comic",
     };
   },
 
@@ -111,6 +144,27 @@ export default {
     try {
       const response = await axios.get(`/api/hero/${this.currentID}`);
       this.superheroJSON = response.data;
+      var name = response.data.name;
+      this.superheroName = name.substr(0, name.indexOf(" "));
+      if (this.superheroName == "") {
+        this.superheroName = response.data.name;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    try {
+      const responseMovie = await axios.get(
+        `/api/movie/name/${this.superheroName}`
+      );
+      this.moviesJSON = responseMovie.data;
+    } catch (error) {
+      console.error(error);
+    }
+    try {
+      const responseComic = await axios.get(
+        `/api/comic/name/${this.superheroName}`
+      );
+      this.comicsJSON = responseComic.data;
     } catch (error) {
       console.error(error);
     }

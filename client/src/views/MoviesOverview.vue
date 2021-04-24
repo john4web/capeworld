@@ -24,6 +24,19 @@
         />
       </div>
     </div>
+    <div
+      v-if="randomMovieJSON.length"
+      class="grid grid-rows-6 gap-1 grid-flow-col"
+    >
+      <div v-for="item in randomMovieJSON" :key="item.id">
+        <overview-item
+          :dataType="dataType"
+          :id="item.id"
+          :name="item.name"
+          :imageURL="item.imageURL"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -40,9 +53,17 @@ export default {
       moviesJSON: {},
       inputText: "",
       dataType: "movie",
+      randomMovieJSON: {},
     };
   },
-  mounted() {},
+  mounted: async function () {
+    try {
+      const responseRandomMovie = await axios.get(`/api/movierandom`);
+      this.randomMovieJSON = responseRandomMovie.data;
+    } catch (error) {
+      console.error(error);
+    }
+  },
   methods: {
     async getMoviesByName() {
       try {
