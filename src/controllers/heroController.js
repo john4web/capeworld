@@ -83,6 +83,7 @@ export const getHeroesByNameFilter = (req, res) => {
         .filter((item) => item.data.response !== "error");
 
       const responseArray = [];
+      var testDuplicateArray = [];
 
       filteredResponse.forEach((item) => {
         switch (item.config.url) {
@@ -94,29 +95,35 @@ export const getHeroesByNameFilter = (req, res) => {
                 name: character.name,
                 imageURL: `${character.thumbnail.path}.${character.thumbnail.extension}`,
               });
+              testDuplicateArray.push(character.name);
             });
             break;
           case superheroes_api_request_url:
             item.data.results.forEach((character) => {
               //IDs from Superhero-API start with 1--
-              responseArray.push({
-                id: `1--${character.id}`,
-                name: character.name,
-                imageURL: character.image.url,
-              });
+              //if character already exists in the Marvel API, it will be delted from the Superhero-API results to avoid duplicates
+              if (testDuplicateArray.includes(character.name)) {
+                console.log("deleted");
+              } else {
+                responseArray.push({
+                  id: `1--${character.id}`,
+                  name: character.name,
+                  imageURL: character.image.url,
+                });
+              }
             });
             break;
-          case comicvines_api_request_url:
-            item.data.results.forEach((character) => {
-              //IDs from Comicvine-API start with 2--
-              responseArray.push({
-                id: `2--${character.id}`,
-                name: character.name,
-                imageURL: character.image.thumb_url,
-                //bigger images are also available
-              });
-            });
-            break;
+          // case comicvines_api_request_url:
+          //   item.data.results.forEach((character) => {
+          //     //IDs from Comicvine-API start with 2--
+          //     responseArray.push({
+          //       id: `2--${character.id}`,
+          //       name: character.name,
+          //       imageURL: character.image.thumb_url,
+          //       //bigger images are also available
+          //     });
+          //   });
+          // break;
           default:
             throw new Error("API request not defined");
         }
