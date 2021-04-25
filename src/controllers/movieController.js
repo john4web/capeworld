@@ -13,7 +13,13 @@ export const getMovieByID = async (req, res) => {
     responseArray.push({
       id: response.data.results.id,
       name: response.data.results.name,
-      imageURL: response.data.results.image.icon_url,
+      imageURL: response.data.results.image.medium_url,
+      rating: response.data.results.rating,
+      releaseDate: response.data.results.release_date,
+      runtime: response.data.results.runtime,
+      studios: response.data.results.studios,
+      writers: response.data.results.writers,
+      story: response.data.results.description,
     });
 
     res.json(responseArray);

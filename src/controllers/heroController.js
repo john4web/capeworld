@@ -20,7 +20,15 @@ export const getHeroByID = async (req, res) => {
       const response = await axios.get(
         `http://gateway.marvel.com/v1/public/characters/${finalHeroID}?apikey=${publicKey}&limit=100&ts=${timestamp}&hash=${hash}`
       );
-      res.json(response.data);
+      const responseArray = [];
+
+      responseArray.push({
+        id: response.data.results.id,
+        name: response.data.results.name,
+        imageURL: response.data.results.thumbnail.path,
+      });
+
+      res.json(responseArray);
     } catch (error) {
       console.error(error);
     }
@@ -30,7 +38,15 @@ export const getHeroByID = async (req, res) => {
       const response = await axios.get(
         `https://superheroapi.com/api/${credentials.superhero_api.access_token}/${finalHeroID}`
       );
-      res.json(response.data);
+      const responseArray = [];
+
+      responseArray.push({
+        id: response.data.id,
+        name: response.data.name,
+        imageURL: response.data.image.url,
+      });
+
+      res.json(responseArray);
     } catch (error) {
       console.error(error);
     }

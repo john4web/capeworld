@@ -1,19 +1,22 @@
 <template>
   <div class="max-w-7xl">
-    <h1 class="uppercase text-2xl p-4 bg-red-500 text-white">Wonder Woman</h1>
+    <h1 class="uppercase text-2xl p-4 bg-red-500 text-white">
+      {{ superheroJSON[0]["name"] }}
+    </h1>
+
     <div class="flex flex-wrap overflow-hidden">
       <div class="w-full overflow-hidden md:w-2/6 bg-gray-300 p-10">
         <div class="w-full overflow-hidden flex justify-center mb-10">
-          <img
-            src="https://www.superherodb.com/pictures2/portraits/10/100/807.jpg"
-            class="max-h-80"
-            alt="image"
-          />
+          <div v-if="superheroJSON.length">
+            <div v-for="item in superheroJSON" :key="item.id">
+              <img :src="item.imageURL" class="max-h-80" alt="image" />
+            </div>
+          </div>
         </div>
         <table class="">
           <tr>
             <th class="uppercase">Name</th>
-            <td>Wonder Woman</td>
+            <td>{{ superheroJSON[0]["name"] }}</td>
           </tr>
           <tr>
             <th class="uppercase">Full Name</th>
@@ -88,12 +91,9 @@
         </p>
       </div>
     </div>
-    {{ currentID }}
-    {{ superheroJSON }}
-
-    <div>
-      <p>Movies about this character:</p>
-    </div>
+    <h1 class="uppercase text-2xl p-4 bg-red-500 text-white">
+      Movies about {{ superheroJSON[0]["name"] }}
+    </h1>
     <div v-if="moviesJSON.length" class="grid grid-rows-6 gap-1 grid-flow-col">
       <div v-for="item in moviesJSON" :key="item.id">
         <overview-item
@@ -104,9 +104,9 @@
         />
       </div>
     </div>
-    <div>
-      <p>Comics about this character:</p>
-    </div>
+    <h1 class="uppercase text-2xl p-4 bg-red-500 text-white">
+      Comics about {{ superheroJSON[0]["name"] }}
+    </h1>
     <div v-if="comicsJSON.length" class="grid grid-rows-6 gap-1 grid-flow-col">
       <div v-for="item in comicsJSON" :key="item.id">
         <overview-item
@@ -144,10 +144,10 @@ export default {
     try {
       const response = await axios.get(`/api/hero/${this.currentID}`);
       this.superheroJSON = response.data;
-      var name = response.data.name;
+      var name = this.superheroJSON[0]["name"];
       this.superheroName = name.substr(0, name.indexOf(" "));
       if (this.superheroName == "") {
-        this.superheroName = response.data.name;
+        this.superheroName = this.superheroJSON[0]["name"];
       }
     } catch (error) {
       console.error(error);

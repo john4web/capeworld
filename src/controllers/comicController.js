@@ -12,7 +12,12 @@ export const getComicByID = async (req, res) => {
     responseArray.push({
       id: response.data.results.id,
       name: response.data.results.name,
-      imageURL: response.data.results.image.icon_url,
+      imageURL: response.data.results.image.medium_url,
+      issueNumber: response.data.results.issue_number,
+      coverDate: response.data.results.cover_date,
+      volume: response.data.results.volume.name,
+      personCredits: response.data.results.person_credits,
+      story: response.data.results.description,
     });
 
     res.json(responseArray);
