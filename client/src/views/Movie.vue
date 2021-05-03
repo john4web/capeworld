@@ -33,19 +33,21 @@
           </tr>
           <tr>
             <th class="uppercase">Studios</th>
-            <td v-if="studios.length">
+            <td v-if="studios">
               <p v-for="item in studios" :key="item.id">
                 {{ item.name }}
               </p>
             </td>
+            <td v-else></td>
           </tr>
           <tr>
             <th class="uppercase">Writers</th>
-            <td v-if="writers.length">
+            <td v-if="writers">
               <p v-for="item in writers" :key="item.id">
                 {{ item.name }}
               </p>
             </td>
+            <td v-else></td>
           </tr>
         </table>
       </div>
@@ -92,8 +94,8 @@ export default {
     try {
       const response = await axios.get(`/api/movie/${this.currentID}`);
       this.movieJSON = response.data;
-      this.studios = this.movieJSON[0]["studios"];
-      this.writers = this.movieJSON[0]["writers"];
+      this.studios = this.movieJSON.studios;
+      this.writers = this.movieJSON.writers;
     } catch (error) {
       console.error(error);
     }

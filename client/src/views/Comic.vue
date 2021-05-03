@@ -32,11 +32,12 @@
           </tr>
           <tr>
             <th class="uppercase">Persons</th>
-            <td v-if="personCredits.length">
+            <td v-if="personCredits">
               <p v-for="item in personCredits" :key="item.id">
                 {{ item.name }}
               </p>
             </td>
+            <td v-else></td>
           </tr>
         </table>
       </div>

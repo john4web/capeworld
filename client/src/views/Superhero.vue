@@ -1,82 +1,143 @@
 <template>
   <div class="max-w-7xl">
     <h1 class="uppercase text-2xl p-4 bg-red-500 text-white">
-      {{ superheroJSON[0]["name"] }}
+      {{ superheroJSON.comicvine_api.name }}
     </h1>
 
     <div class="flex flex-wrap overflow-hidden">
       <div class="w-full overflow-hidden md:w-2/6 bg-gray-300 p-10">
         <div class="w-full overflow-hidden flex justify-center mb-10">
-          <div v-if="superheroJSON.length">
-            <div v-for="item in superheroJSON" :key="item.id">
-              <img :src="item.imageURL" class="max-h-80" alt="image" />
-            </div>
-          </div>
+          <img
+            :src="superheroJSON.comicvine_api.image.medium_url"
+            class="max-h-80"
+            alt="image"
+          />
         </div>
         <table class="">
           <tr>
             <th class="uppercase">Name</th>
-            <td>{{ superheroJSON[0]["name"] }}</td>
+            <td>{{ superheroJSON.comicvine_api.name }}</td>
+          </tr>
+
+          <tr>
+            <th class="uppercase">Real Name</th>
+            <td>{{ superheroJSON.comicvine_api.real_name }}</td>
           </tr>
           <tr>
-            <th class="uppercase">Full Name</th>
-            <td>Diana Prince</td>
+            <th class="uppercase">Aliases</th>
+
+            <td>{{ superheroJSON.comicvine_api.aliases }}</td>
           </tr>
           <tr>
             <th class="uppercase">Place of Birth</th>
-            <td>Themyscira</td>
+            <td>{{ superheroJSON.comicvine_api.birth }}</td>
           </tr>
           <tr>
-            <th class="uppercase">First appearance</th>
-            <td>All-Star Comics #8 (December, 1941)</td>
-          </tr>
-          <tr>
-            <th class="uppercase">Publisher</th>
-            <td>DC Comics</td>
+            <th class="uppercase">First Appearance in Issue</th>
+            <td>
+              {{ superheroJSON.comicvine_api.first_appeared_in_issue.name }}
+            </td>
           </tr>
           <tr>
             <th class="uppercase">Gender</th>
-            <td>Female</td>
+            <td>{{ superheroJSON.comicvine_api.gender }}</td>
           </tr>
           <tr>
-            <th class="uppercase">Race</th>
-            <td>Amazon</td>
+            <th class="uppercase">Friends</th>
+            <td v-if="superheroJSON.comicvine_api.character_friends.length > 1">
+              <p
+                v-for="item in superheroJSON.comicvine_api.character_friends"
+                :key="item.id"
+              >
+                <a href=""></a>
+                <router-link :to="`/superhero/${item.id}`" target="_blank">
+                  {{ item.name }}</router-link
+                >
+              </p>
+            </td>
+            <td v-else>
+              <a href=""></a>
+              <router-link
+                :to="`/superhero/${superheroJSON.comicvine_api.character_friends.id}`"
+                target="_blank"
+              >
+                {{
+                  superheroJSON.comicvine_api.character_friends.name
+                }}</router-link
+              >
+            </td>
           </tr>
           <tr>
-            <th class="uppercase">Weight</th>
-            <td>183 cm</td>
-          </tr>
-          <tr>
-            <th class="uppercase">Height</th>
-            <td>74 kg</td>
+            <th class="uppercase">Enemies</th>
+            <td v-if="superheroJSON.comicvine_api.character_enemies.length > 1">
+              <p
+                v-for="item in superheroJSON.comicvine_api.character_enemies"
+                :key="item.id"
+              >
+                <a href=""></a>
+                <router-link :to="`/superhero/${item.id}`" target="_blank">
+                  {{ item.name }}</router-link
+                >
+              </p>
+            </td>
+            <td v-else>
+              <a href=""></a>
+              <router-link
+                :to="`/superhero/${superheroJSON.comicvine_api.character_enemies.id}`"
+                target="_blank"
+              >
+                {{
+                  superheroJSON.comicvine_api.character_enemies.name
+                }}</router-link
+              >
+            </td>
           </tr>
         </table>
       </div>
       <div class="w-fulloverflow-hidden md:w-4/6 p-10">
-        <h1 class="text-lg uppercase pb-2">More Information</h1>
-        <p class="pb-4">
-          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-          nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-          sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
-          rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
-          ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-          sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-          dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
-          et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-          takimata sanctus est Lorem ipsum dolor sit amet.
-        </p>
-        <h1 class="text-lg uppercase pb-2">More Information</h1>
-        <p class="pb-4">
-          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-          nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-          sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
-          rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
-          ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-          sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-          dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
-          et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-          takimata sanctus est Lorem ipsum dolor sit amet.
-        </p>
+        <div v-if="superheroJSON.superhero_api">
+          <h1 class="text-lg uppercase pb-2">Powerstats</h1>
+          <h2>Intelligence</h2>
+          <div class="bg-gray-300 w-full">
+            <div class="bg-red-500 text-white" :style="widthBarInt">
+              {{ superheroJSON.superhero_api.powerstats.intelligence }}
+            </div>
+          </div>
+          <h2>Strength</h2>
+          <div class="bg-gray-300 w-full">
+            <div class="bg-red-500 text-white" :style="widthBarStr">
+              {{ superheroJSON.superhero_api.powerstats.strength }}
+            </div>
+          </div>
+          <h2>Speed</h2>
+          <div class="bg-gray-300 w-full">
+            <div class="bg-red-500 text-white" :style="widthBarSpeed">
+              {{ superheroJSON.superhero_api.powerstats.speed }}
+            </div>
+          </div>
+          <h2>Durability</h2>
+          <div class="bg-gray-300 w-full">
+            <div class="bg-red-500 text-white" :style="widthBarDur">
+              {{ superheroJSON.superhero_api.powerstats.durability }}
+            </div>
+          </div>
+          <h2>Power</h2>
+          <div class="bg-gray-300 w-full">
+            <div class="bg-red-500 text-white" :style="widthBarPow">
+              {{ superheroJSON.superhero_api.powerstats.power }}
+            </div>
+          </div>
+          <h2>Combat</h2>
+          <div class="bg-gray-300 w-full">
+            <div class="bg-red-500 text-white" :style="widthBarCom">
+              {{ superheroJSON.superhero_api.powerstats.combat }}
+            </div>
+          </div>
+        </div>
+        <div v-if="superheroJSON.marvel_api">
+          <h1 class="text-lg uppercase pb-2">Description</h1>
+          {{ superheroJSON.marvel_api.description }}
+        </div>
         <h1 class="text-lg uppercase pb-2">More Information</h1>
         <p class="pb-4">
           Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
@@ -92,30 +153,47 @@
       </div>
     </div>
     <h1 class="uppercase text-2xl p-4 bg-red-500 text-white">
-      Movies about {{ superheroJSON[0]["name"] }}
+      Movies about {{ superheroJSON.comicvine_api.name }}
     </h1>
-    <div v-if="moviesJSON.length" class="grid grid-rows-6 gap-1 grid-flow-col">
-      <div v-for="item in moviesJSON" :key="item.id">
+    <div
+      v-if="superheroJSON.comicvine_api.movies.length"
+      class="grid grid-rows-6 gap-1 grid-flow-col"
+    >
+      <div v-for="item in superheroJSON.comicvine_api.movies" :key="item.id">
         <overview-item
           :dataType="dataTypeMovie"
           :id="item.id"
           :name="item.name"
-          :imageURL="item.imageURL"
         />
       </div>
     </div>
+    <div v-else>
+      <h2 class="uppercase text-2xl p-4">
+        No movies about this character found
+      </h2>
+    </div>
     <h1 class="uppercase text-2xl p-4 bg-red-500 text-white">
-      Comics about {{ superheroJSON[0]["name"] }}
+      Comics about {{ superheroJSON.comicvine_api.name }}
     </h1>
-    <div v-if="comicsJSON.length" class="grid grid-rows-6 gap-1 grid-flow-col">
-      <div v-for="item in comicsJSON" :key="item.id">
+    <div
+      v-if="superheroJSON.comicvine_api.issue_credits.length"
+      class="grid grid-rows-6 gap-1 grid-flow-col"
+    >
+      <div
+        v-for="item in superheroJSON.comicvine_api.issue_credits"
+        :key="item.id"
+      >
         <overview-item
           :dataType="dataTypeComic"
           :id="item.id"
           :name="item.name"
-          :imageURL="item.imageURL"
         />
       </div>
+    </div>
+    <div v-else>
+      <h2 class="uppercase text-2xl p-4">
+        No comics about this character found
+      </h2>
     </div>
   </div>
 </template>
@@ -137,6 +215,12 @@ export default {
       comicsJSON: {},
       dataTypeMovie: "movie",
       dataTypeComic: "comic",
+      widthInt: "",
+      widthStr: "",
+      widthSpeed: "",
+      widthDur: "",
+      widthPow: "",
+      widthCom: "",
     };
   },
 
@@ -144,10 +228,13 @@ export default {
     try {
       const response = await axios.get(`/api/hero/${this.currentID}`);
       this.superheroJSON = response.data;
-      var name = this.superheroJSON[0]["name"];
-      this.superheroName = name.substr(0, name.indexOf(" "));
-      if (this.superheroName == "") {
-        this.superheroName = this.superheroJSON[0]["name"];
+      if (this.superheroJSON.superhero_api) {
+        this.widthInt = this.superheroJSON.superhero_api.powerstats.intelligence;
+        this.widthStr = this.superheroJSON.superhero_api.powerstats.strength;
+        this.widthSpeed = this.superheroJSON.superhero_api.powerstats.speed;
+        this.widthDur = this.superheroJSON.superhero_api.powerstats.durability;
+        this.widthPow = this.superheroJSON.superhero_api.powerstats.power;
+        this.widthCom = this.superheroJSON.superhero_api.powerstats.combat;
       }
     } catch (error) {
       console.error(error);
@@ -170,7 +257,38 @@ export default {
     }
   },
 
-  methods: {},
+  computed: {
+    widthBarInt() {
+      return {
+        width: `${this.widthInt}%`,
+      };
+    },
+    widthBarSpeed() {
+      return {
+        width: `${this.widthSpeed}%`,
+      };
+    },
+    widthBarStr() {
+      return {
+        width: `${this.widthStr}%`,
+      };
+    },
+    widthBarDur() {
+      return {
+        width: `${this.widthDur}%`,
+      };
+    },
+    widthBarPow() {
+      return {
+        width: `${this.widthPow}%`,
+      };
+    },
+    widthBarCom() {
+      return {
+        width: `${this.widthCom}%`,
+      };
+    },
+  },
 };
 </script>
 
