@@ -25,10 +25,63 @@ export const getHeroByID = (req, res) => {
     .then((response) => {
       comicVinesAPIResponse = response.data.results;
 
-      Object.defineProperty(responseObject, "comicvine_api", {
-        enumerable: true,
-        value: comicVinesAPIResponse,
+      delete comicVinesAPIResponse.api_detail_url;
+      delete comicVinesAPIResponse.date_added;
+      delete comicVinesAPIResponse.date_last_updated;
+      delete comicVinesAPIResponse.site_detail_url;
+      delete comicVinesAPIResponse.story_arc_credits;
+      delete comicVinesAPIResponse.volume_credits;
+      delete comicVinesAPIResponse.team_enemies;
+      delete comicVinesAPIResponse.team_friends;
+      delete comicVinesAPIResponse.first_appeared_in_issue.api_detail_url;
+      comicVinesAPIResponse.origin = comicVinesAPIResponse.origin.name;
+      delete comicVinesAPIResponse.publisher.api_detail_url;
+
+      comicVinesAPIResponse.character_enemies.forEach((enemy) => {
+        delete enemy.api_detail_url;
+        delete enemy.site_detail_url;
       });
+
+      comicVinesAPIResponse.character_friends.forEach((enemy) => {
+        delete enemy.api_detail_url;
+        delete enemy.site_detail_url;
+      });
+      comicVinesAPIResponse.creators.forEach((enemy) => {
+        delete enemy.api_detail_url;
+        delete enemy.site_detail_url;
+      });
+
+      comicVinesAPIResponse.issue_credits.forEach((enemy) => {
+        delete enemy.api_detail_url;
+        delete enemy.site_detail_url;
+      });
+      comicVinesAPIResponse.issues_died_in.forEach((enemy) => {
+        delete enemy.api_detail_url;
+        delete enemy.site_detail_url;
+      });
+      comicVinesAPIResponse.movies.forEach((enemy) => {
+        delete enemy.api_detail_url;
+        delete enemy.site_detail_url;
+      });
+
+      const filteredCreators = comicVinesAPIResponse.creators.map(
+        (item) => item.name
+      );
+      comicVinesAPIResponse.creators = filteredCreators;
+
+      const filteredPowers = comicVinesAPIResponse.powers.map(
+        (item) => item.name
+      );
+      comicVinesAPIResponse.powers = filteredPowers;
+
+      const filteredTeams = comicVinesAPIResponse.teams.map(
+        (item) => item.name
+      );
+      comicVinesAPIResponse.teams = filteredTeams;
+
+      comicVinesAPIResponse.image = comicVinesAPIResponse.image.medium_url;
+
+      Object.assign(responseObject, comicVinesAPIResponse);
 
       const marvel_api_request_url = `http://gateway.marvel.com/v1/public/characters?name=${comicVinesAPIResponse.name}&limit=1&ts=${timestamp}&apikey=${publicKey}&hash=${hash}`;
       const superheroes_api_request_url = `https://superheroapi.com/api/${credentials.superhero_api.access_token}/search/${comicVinesAPIResponse.name}`;
@@ -46,19 +99,24 @@ export const getHeroByID = (req, res) => {
         filteredResponse.forEach((item) => {
           if (item.value.config.url === marvel_api_request_url) {
             if (item.value.data.data.results[0] !== undefined) {
-              Object.defineProperty(responseObject, "marvel_api", {
-                enumerable: true,
-                value: item.value.data.data.results[0],
-              });
+              responseObject.description =
+                item.value.data.data.results[0].description;
             }
           } else if (item.value.config.url === superheroes_api_request_url) {
             const filteredHero = item.value.data.results.filter(
               (hero) => hero.name === comicVinesAPIResponse.name
             )[0];
-            Object.defineProperty(responseObject, "superhero_api", {
-              enumerable: true,
-              value: filteredHero,
-            });
+
+            responseObject.powerstats = filteredHero.powerstats;
+            responseObject.appearance = filteredHero.appearance;
+            responseObject.work = filteredHero.work;
+            responseObject.connections = filteredHero.connections;
+            responseObject.biography = filteredHero.biography;
+
+            // Object.defineProperty(responseObject, "superhero_api", {
+            //   enumerable: true,
+            //   value: filteredHero,
+            // });
           } else {
             throw new Error("API request not defined");
           }
