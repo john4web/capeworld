@@ -1,172 +1,181 @@
 <template>
   <div class="max-w-7xl">
-    <h1 class="uppercase text-2xl p-4 bg-red-500 text-white">
-      {{ superheroJSON.name }}
-    </h1>
+    <rotate-square2 :class="{ hidden: isHiddenLoader }"></rotate-square2>
+    <div :class="{ hidden: isHiddenContent }">
+      <h1 class="uppercase text-2xl p-4 bg-red-500 text-white">
+        {{ superheroJSON.name }}
+      </h1>
 
-    <div class="flex flex-wrap overflow-hidden">
-      <div class="w-full overflow-hidden md:w-2/6 bg-gray-300 p-10">
-        <div class="w-full overflow-hidden flex justify-center mb-10">
-          <img :src="superheroJSON.image" class="max-h-80" alt="image" />
-        </div>
-        <table class="">
-          <tr>
-            <th class="uppercase">Name</th>
-            <td>{{ superheroJSON.name }}</td>
-          </tr>
+      <div class="flex flex-wrap overflow-hidden">
+        <div class="w-full overflow-hidden md:w-2/6 bg-gray-300 p-10">
+          <div class="w-full overflow-hidden flex justify-center mb-10">
+            <img :src="superheroJSON.image" class="max-h-80" alt="image" />
+          </div>
+          <table class="">
+            <tr>
+              <th class="uppercase">Name</th>
+              <td>{{ superheroJSON.name }}</td>
+            </tr>
 
-          <tr>
-            <th class="uppercase">Real Name</th>
-            <td>{{ superheroJSON.real_name }}</td>
-          </tr>
-          <tr>
-            <th class="uppercase">Aliases</th>
+            <tr>
+              <th class="uppercase">Real Name</th>
+              <td>{{ superheroJSON.real_name }}</td>
+            </tr>
+            <tr>
+              <th class="uppercase">Aliases</th>
 
-            <td>{{ superheroJSON.aliases }}</td>
-          </tr>
-          <tr>
-            <th class="uppercase">Place of Birth</th>
-            <td>{{ superheroJSON.birth }}</td>
-          </tr>
-          <tr>
-            <th class="uppercase">First Appearance in Issue</th>
-            <td v-if="superheroJSON.first_appeared_in_issue !== undefined">
-              {{ superheroJSON.first_appeared_in_issue.name }}
-            </td>
-          </tr>
-          <tr>
-            <th class="uppercase">Gender</th>
-            <td>{{ superheroJSON.gender }}</td>
-          </tr>
-          <tr>
-            <th class="uppercase">Friends</th>
-            <td v-if="superheroJSON.character_friends">
-              <p v-for="item in superheroJSON.character_friends" :key="item.id">
-                <router-link :to="`/superhero/${item.id}`">
-                  {{ item.name }}</router-link
+              <td>{{ superheroJSON.aliases }}</td>
+            </tr>
+            <tr>
+              <th class="uppercase">Place of Birth</th>
+              <td>{{ superheroJSON.birth }}</td>
+            </tr>
+            <tr>
+              <th class="uppercase">First Appearance in Issue</th>
+              <td v-if="superheroJSON.first_appeared_in_issue !== undefined">
+                {{ superheroJSON.first_appeared_in_issue.name }}
+              </td>
+            </tr>
+            <tr>
+              <th class="uppercase">Gender</th>
+              <td>{{ superheroJSON.gender }}</td>
+            </tr>
+            <tr>
+              <th class="uppercase">Friends</th>
+              <td v-if="superheroJSON.character_friends">
+                <p
+                  v-for="item in superheroJSON.character_friends"
+                  :key="item.id"
                 >
-              </p>
-            </td>
-            <td v-else>
-              <router-link
-                :to="`/superhero/${superheroJSON.character_friends.id}`"
-                v-if="superheroJSON.character_friends !== undefined"
-              >
-                {{ superheroJSON.character_friends.name }}</router-link
-              >
-            </td>
-          </tr>
-          <tr>
-            <th class="uppercase">Enemies</th>
-            <td v-if="superheroJSON.character_enemies">
-              <p v-for="item in superheroJSON.character_enemies" :key="item.id">
-                <router-link :to="`/superhero/${item.id}`">
-                  {{ item.name }}</router-link
+                  <router-link :to="`/superhero/${item.id}`">
+                    {{ item.name }}</router-link
+                  >
+                </p>
+              </td>
+              <td v-else>
+                <router-link
+                  :to="`/superhero/${superheroJSON.character_friends.id}`"
+                  v-if="superheroJSON.character_friends !== undefined"
                 >
-              </p>
-            </td>
-            <td v-else>
-              <router-link
-                :to="`/superhero/${superheroJSON.character_enemies.id}`"
-                v-if="superheroJSON.character_enemies !== undefined"
-              >
-                {{ superheroJSON.character_enemies.name }}</router-link
-              >
-            </td>
-          </tr>
-        </table>
-      </div>
-      <div class="w-fulloverflow-hidden md:w-4/6 p-10">
-        <div v-if="superheroJSON.superhero_api">
-          <h1 class="text-lg uppercase pb-2">Powerstats</h1>
-          <h2>Intelligence</h2>
-          <div class="bg-gray-300 w-full">
-            <div class="bg-red-500 text-white" :style="widthBarInt">
-              {{ superheroJSON.superhero_api.powerstats.intelligence }}
-            </div>
-          </div>
-          <h2>Strength</h2>
-          <div class="bg-gray-300 w-full">
-            <div class="bg-red-500 text-white" :style="widthBarStr">
-              {{ superheroJSON.superhero_api.powerstats.strength }}
-            </div>
-          </div>
-          <h2>Speed</h2>
-          <div class="bg-gray-300 w-full">
-            <div class="bg-red-500 text-white" :style="widthBarSpeed">
-              {{ superheroJSON.superhero_api.powerstats.speed }}
-            </div>
-          </div>
-          <h2>Durability</h2>
-          <div class="bg-gray-300 w-full">
-            <div class="bg-red-500 text-white" :style="widthBarDur">
-              {{ superheroJSON.superhero_api.powerstats.durability }}
-            </div>
-          </div>
-          <h2>Power</h2>
-          <div class="bg-gray-300 w-full">
-            <div class="bg-red-500 text-white" :style="widthBarPow">
-              {{ superheroJSON.superhero_api.powerstats.power }}
-            </div>
-          </div>
-          <h2>Combat</h2>
-          <div class="bg-gray-300 w-full">
-            <div class="bg-red-500 text-white" :style="widthBarCom">
-              {{ superheroJSON.superhero_api.powerstats.combat }}
-            </div>
-          </div>
+                  {{ superheroJSON.character_friends.name }}</router-link
+                >
+              </td>
+            </tr>
+            <tr>
+              <th class="uppercase">Enemies</th>
+              <td v-if="superheroJSON.character_enemies">
+                <p
+                  v-for="item in superheroJSON.character_enemies"
+                  :key="item.id"
+                >
+                  <router-link :to="`/superhero/${item.id}`">
+                    {{ item.name }}</router-link
+                  >
+                </p>
+              </td>
+              <td v-else>
+                <router-link
+                  :to="`/superhero/${superheroJSON.character_enemies.id}`"
+                  v-if="superheroJSON.character_enemies !== undefined"
+                >
+                  {{ superheroJSON.character_enemies.name }}</router-link
+                >
+              </td>
+            </tr>
+          </table>
         </div>
-        <div>
-          <h1 class="text-lg uppercase pb-2">Description Short:</h1>
+        <div class="w-fulloverflow-hidden md:w-4/6 p-10">
+          <div v-if="superheroJSON.superhero_api">
+            <h1 class="text-lg uppercase pb-2">Powerstats</h1>
+            <h2>Intelligence</h2>
+            <div class="bg-gray-300 w-full">
+              <div class="bg-red-500 text-white" :style="widthBarInt">
+                {{ superheroJSON.superhero_api.powerstats.intelligence }}
+              </div>
+            </div>
+            <h2>Strength</h2>
+            <div class="bg-gray-300 w-full">
+              <div class="bg-red-500 text-white" :style="widthBarStr">
+                {{ superheroJSON.superhero_api.powerstats.strength }}
+              </div>
+            </div>
+            <h2>Speed</h2>
+            <div class="bg-gray-300 w-full">
+              <div class="bg-red-500 text-white" :style="widthBarSpeed">
+                {{ superheroJSON.superhero_api.powerstats.speed }}
+              </div>
+            </div>
+            <h2>Durability</h2>
+            <div class="bg-gray-300 w-full">
+              <div class="bg-red-500 text-white" :style="widthBarDur">
+                {{ superheroJSON.superhero_api.powerstats.durability }}
+              </div>
+            </div>
+            <h2>Power</h2>
+            <div class="bg-gray-300 w-full">
+              <div class="bg-red-500 text-white" :style="widthBarPow">
+                {{ superheroJSON.superhero_api.powerstats.power }}
+              </div>
+            </div>
+            <h2>Combat</h2>
+            <div class="bg-gray-300 w-full">
+              <div class="bg-red-500 text-white" :style="widthBarCom">
+                {{ superheroJSON.superhero_api.powerstats.combat }}
+              </div>
+            </div>
+          </div>
           <div>
-            {{ superheroJSON.description_short }}
+            <h1 class="text-lg uppercase pb-2">Description Short:</h1>
+            <div>
+              {{ superheroJSON.description_short }}
+            </div>
           </div>
+          <h1 class="text-lg uppercase pb-2">More Information</h1>
+          <p class="pb-4">
+            {{ superheroJSON.description }}
+          </p>
         </div>
-        <h1 class="text-lg uppercase pb-2">More Information</h1>
-        <p class="pb-4">
-          {{ superheroJSON.description }}
-        </p>
       </div>
-    </div>
-    <h1 class="uppercase text-2xl p-4 bg-red-500 text-white">
-      Movies about {{ superheroJSON.name }}
-    </h1>
-    <div
-      v-if="superheroJSON.movies"
-      class="grid grid-rows-6 gap-1 grid-flow-col"
-    >
-      <div v-for="item in superheroJSON.movies" :key="item.id">
-        <overview-item
-          :dataType="dataTypeMovie"
-          :id="item.id"
-          :name="item.name"
-        />
+      <h1 class="uppercase text-2xl p-4 bg-red-500 text-white">
+        Movies about {{ superheroJSON.name }}
+      </h1>
+      <div
+        v-if="superheroJSON.movies"
+        class="grid grid-rows-6 gap-1 grid-flow-col"
+      >
+        <div v-for="item in superheroJSON.movies" :key="item.id">
+          <overview-item
+            :dataType="dataTypeMovie"
+            :id="item.id"
+            :name="item.name"
+          />
+        </div>
       </div>
-    </div>
-    <div v-else>
-      <h2 class="uppercase text-2xl p-4">
-        No movies about this character found
-      </h2>
-    </div>
-    <h1 class="uppercase text-2xl p-4 bg-red-500 text-white">
-      Comics about {{ superheroJSON.name }}
-    </h1>
-    <div
-      v-if="superheroJSON.issue_credits"
-      class="grid grid-rows-6 gap-1 grid-flow-col"
-    >
-      <div v-for="item in superheroJSON.issue_credits" :key="item.id">
-        <overview-item
-          :dataType="dataTypeComic"
-          :id="item.id"
-          :name="item.name"
-        />
+      <div v-else>
+        <h2 class="uppercase text-2xl p-4">
+          No movies about this character found
+        </h2>
       </div>
-    </div>
-    <div v-else>
-      <h2 class="uppercase text-2xl p-4">
-        No comics about this character found
-      </h2>
+      <h1 class="uppercase text-2xl p-4 bg-red-500 text-white">
+        Comics about {{ superheroJSON.name }}
+      </h1>
+      <div
+        v-if="superheroJSON.issue_credits"
+        class="grid grid-rows-6 gap-1 grid-flow-col"
+      >
+        <div v-for="item in superheroJSON.issue_credits" :key="item.id">
+          <overview-item
+            :dataType="dataTypeComic"
+            :id="item.id"
+            :name="item.name"
+          />
+        </div>
+      </div>
+      <div v-else>
+        <h2 class="uppercase text-2xl p-4">
+          No comics about this character found
+        </h2>
+      </div>
     </div>
   </div>
 </template>
@@ -174,9 +183,10 @@
 <script>
 import axios from "axios";
 import OverviewItem from "../components/OverviewItem.vue";
+import { RotateSquare2 } from "vue-loading-spinner";
 export default {
   name: "Superhero",
-  components: { OverviewItem },
+  components: { OverviewItem, RotateSquare2 },
   props: {},
   watch: {},
   data() {
@@ -196,12 +206,16 @@ export default {
       widthDur: "",
       widthPow: "",
       widthCom: "",
+      isHiddenLoader: false,
+      isHiddenContent: true,
     };
   },
 
   mounted: async function () {
     try {
       const response = await axios.get(`/api/hero/${this.currentID}`);
+      this.isHiddenLoader = true;
+      this.isHiddenContent = false;
       this.superheroJSON = response.data;
       if (this.superheroJSON.powerstats) {
         this.widthInt = this.superheroJSON.powerstats.intelligence;
@@ -289,5 +303,14 @@ table > tr:last-child > td {
 }
 table > tr:last-child > th {
   border-bottom: 0 !important;
+}
+
+.spinner[data-v-fa81853e]:after {
+  background: rgba(239, 68, 68);
+}
+
+.spinner {
+  margin-top: 20px;
+  margin-left: 50%;
 }
 </style>

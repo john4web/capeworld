@@ -14,6 +14,7 @@
         Send Axios Request
       </button>
     </div>
+    <rotate-square2 :class="{ hidden: isHidden }"></rotate-square2>
     <div
       v-if="superheroesJSON.length"
       class="grid grid-rows-6 gap-1 grid-flow-col"
@@ -33,9 +34,10 @@
 <script>
 import axios from "axios";
 import OverviewItem from "../components/OverviewItem.vue";
+import { RotateSquare2 } from "vue-loading-spinner";
 export default {
   name: "SuperheroesOverview",
-  components: { OverviewItem },
+  components: { OverviewItem, RotateSquare2 },
   props: {},
   watch: {},
   data() {
@@ -43,13 +45,16 @@ export default {
       superheroesJSON: {},
       inputText: "",
       dataType: "superhero",
+      isHidden: true,
     };
   },
   mounted() {},
   methods: {
     async getHeroesByName() {
+      this.isHidden = false;
       try {
         const response = await axios.get(`/api/hero/name/${this.inputText}`);
+        this.isHidden = true;
         this.superheroesJSON = response.data;
       } catch (error) {
         console.error(error);
@@ -60,4 +65,12 @@ export default {
 </script>
 
 <style scoped>
+.spinner[data-v-fa81853e]:after {
+  background: rgba(239, 68, 68);
+}
+
+.spinner {
+  margin-top: 20px;
+  margin-left: 40%;
+}
 </style>

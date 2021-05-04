@@ -11,9 +11,9 @@
       >
       <p class="mt-2 text-sm">{{ id }}</p>
     </div>
-    <div class="float-left justify-center overflow-hidden inline-block mr-4">
+    <!-- <div class="float-left justify-center overflow-hidden inline-block mr-4">
       <img :src="imageURL" class="max-w-xs max-h-7" alt="thumbnail" />
-    </div>
+    </div> -->
   </div>
 </template>
 
