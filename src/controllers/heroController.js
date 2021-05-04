@@ -51,10 +51,17 @@ export const getHeroByID = (req, res) => {
         delete enemy.site_detail_url;
       });
 
-      comicVinesAPIResponse.issue_credits.forEach((enemy) => {
-        delete enemy.api_detail_url;
-        delete enemy.site_detail_url;
+      const filteredIssues = comicVinesAPIResponse.issue_credits
+        .filter((issue) => issue.name)
+        .slice(0, 100);
+
+      filteredIssues.forEach((issue) => {
+        delete issue.api_detail_url;
+        delete issue.site_detail_url;
       });
+
+      comicVinesAPIResponse.issue_credits = filteredIssues;
+
       comicVinesAPIResponse.issues_died_in.forEach((enemy) => {
         delete enemy.api_detail_url;
         delete enemy.site_detail_url;
@@ -98,8 +105,11 @@ export const getHeroByID = (req, res) => {
 
         filteredResponse.forEach((item) => {
           if (item.value.config.url === marvel_api_request_url) {
-            if (item.value.data.data.results[0] !== undefined) {
-              responseObject.description =
+            if (
+              item.value.data.data.results[0] !== undefined &&
+              item.value.data.data.results[0].description !== ""
+            ) {
+              responseObject.description_short =
                 item.value.data.data.results[0].description;
             }
           } else if (item.value.config.url === superheroes_api_request_url) {
@@ -112,11 +122,6 @@ export const getHeroByID = (req, res) => {
             responseObject.work = filteredHero.work;
             responseObject.connections = filteredHero.connections;
             responseObject.biography = filteredHero.biography;
-
-            // Object.defineProperty(responseObject, "superhero_api", {
-            //   enumerable: true,
-            //   value: filteredHero,
-            // });
           } else {
             throw new Error("API request not defined");
           }
