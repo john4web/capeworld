@@ -30,7 +30,7 @@
             <th class="uppercase">Volume</th>
             <td>{{ comicJSON[0]["volume"] }}</td>
           </tr>
-          <tr>
+          <tr v-if="personCredits">
             <th class="uppercase">Persons</th>
             <td v-if="personCredits">
               <p v-for="item in personCredits" :key="item.id">
@@ -43,9 +43,7 @@
       </div>
       <div class="w-fulloverflow-hidden md:w-4/6 p-10">
         <h1 class="text-lg uppercase pb-2">Story</h1>
-        <p class="pb-4">
-          {{ comicJSON[0]["story"] }}
-        </p>
+        <p class="pb-4" v-html="story"></p>
         <!-- TODO: check if field is empty and maybe add placeholder text or links to other comics,... -->
         <h1 class="text-lg uppercase pb-2">More Information</h1>
         <p class="pb-4">
@@ -76,6 +74,7 @@ export default {
       currentID: this.$route.params.id,
       comicJSON: {},
       personCredits: {},
+      story: "",
     };
   },
 
@@ -84,6 +83,7 @@ export default {
       const response = await axios.get(`/api/comic/${this.currentID}`);
       this.comicJSON = response.data;
       this.personCredits = this.comicJSON[0]["personCredits"];
+      this.story = this.comicJSON[0]["story"];
     } catch (error) {
       console.error(error);
     }

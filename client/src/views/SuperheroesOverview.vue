@@ -56,14 +56,12 @@ export default {
       rows25: false,
       rows20: false,
       rows10: false,
-
       rows6: true,
     };
   },
   mounted() {},
   methods: {
     async getHeroesByName() {
-      console.log(this.inputText.length);
       if (this.inputText.length > 2) {
         this.isHidden = false;
         try {

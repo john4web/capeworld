@@ -31,7 +31,7 @@
             <th class="uppercase">Runtime</th>
             <td>{{ movieJSON[0]["runtime"] }}</td>
           </tr>
-          <tr>
+          <tr v-if="studios">
             <th class="uppercase">Studios</th>
             <td v-if="studios">
               <p v-for="item in studios" :key="item.id">
@@ -40,7 +40,7 @@
             </td>
             <td v-else></td>
           </tr>
-          <tr>
+          <tr v-if="writers">
             <th class="uppercase">Writers</th>
             <td v-if="writers">
               <p v-for="item in writers" :key="item.id">
@@ -53,9 +53,7 @@
       </div>
       <div class="w-fulloverflow-hidden md:w-4/6 p-10">
         <h1 class="text-lg uppercase pb-2">Story</h1>
-        <p class="pb-4">
-          {{ movieJSON[0]["story"] }}
-        </p>
+        <p class="pb-4" v-html="story"></p>
         <!-- TODO: check if field is empty and maybe add placeholder text or links to other movies,... -->
         <h1 class="text-lg uppercase pb-2">More Information</h1>
         <p class="pb-4">
@@ -87,6 +85,7 @@ export default {
       movieJSON: {},
       studios: {},
       writers: {},
+      story: "",
     };
   },
 
@@ -96,6 +95,7 @@ export default {
       this.movieJSON = response.data;
       this.studios = this.movieJSON.studios;
       this.writers = this.movieJSON.writers;
+      this.story = this.movieJSON[0]["story"];
     } catch (error) {
       console.error(error);
     }

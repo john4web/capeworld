@@ -53,7 +53,7 @@ export const getHeroByID = (req, res) => {
 
       const filteredIssues = comicVinesAPIResponse.issue_credits
         .filter((issue) => issue.name)
-        .slice(0, 24);
+        .slice(0, 40);
 
       filteredIssues.forEach((issue) => {
         delete issue.api_detail_url;
@@ -66,6 +66,7 @@ export const getHeroByID = (req, res) => {
         delete enemy.api_detail_url;
         delete enemy.site_detail_url;
       });
+
       comicVinesAPIResponse.movies.forEach((enemy) => {
         delete enemy.api_detail_url;
         delete enemy.site_detail_url;

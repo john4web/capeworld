@@ -135,16 +135,19 @@
               v-if="superheroJSON.description_short"
               class="text-lg uppercase pb-2"
             >
-              Description Short:
+              Description Short
             </h1>
             <div>
               {{ superheroJSON.description_short }}
             </div>
           </div>
-          <h1 v-if="superheroJSON.description" class="text-lg uppercase pb-2">
+          <h1 v-if="description" class="text-lg uppercase pb-2">
             More Information
           </h1>
           <p class="pb-4" v-html="description"></p>
+          <p v-if="!description && !superheroJSON.description_short">
+            Sorry, there is no further information available for this chaarcter!
+          </p>
         </div>
       </div>
       <h1
@@ -158,7 +161,12 @@
       </h1>
       <div
         v-if="superheroJSON.movies"
-        class="grid grid-rows-6 gap-1 grid-flow-col"
+        class="grid gap-1 grid-flow-col"
+        :class="{
+          'grid-rows-3': rows3,
+          'grid-rows-6': rows6,
+          'grid-rows-10': rows10,
+        }"
       >
         <div v-for="item in superheroJSON.movies" :key="item.id">
           <overview-item
@@ -185,6 +193,10 @@
       <div
         v-if="superheroJSON.issue_credits"
         class="grid grid-rows-6 gap-1 grid-flow-col"
+        :class="{
+          'grid-rows-6': rows6Comic,
+          'grid-rows-10': rows10Comic,
+        }"
       >
         <div v-for="item in superheroJSON.issue_credits" :key="item.id">
           <overview-item
@@ -232,6 +244,11 @@ export default {
       isHiddenLoader: false,
       isHiddenContent: true,
       description: "",
+      rows10: false,
+      rows6: false,
+      rows3: true,
+      rows10Comic: false,
+      rows6Comic: true,
     };
   },
 
@@ -241,6 +258,7 @@ export default {
       this.isHiddenLoader = true;
       this.isHiddenContent = false;
       this.superheroJSON = response.data;
+      this.description = this.superheroJSON.description;
       if (this.superheroJSON.powerstats) {
         this.widthInt = this.superheroJSON.powerstats.intelligence;
         this.widthStr = this.superheroJSON.powerstats.strength;
@@ -248,7 +266,29 @@ export default {
         this.widthDur = this.superheroJSON.powerstats.durability;
         this.widthPow = this.superheroJSON.powerstats.power;
         this.widthCom = this.superheroJSON.powerstats.combat;
-        this.description = this.superheroJSON.description;
+      }
+      if (this.superheroJSON.issue_credits.length > 24) {
+        this.rows10Comic = true;
+        this.rows6Comic = false;
+      } else {
+        this.rows10Comic = false;
+        this.rows6Comic = true;
+      }
+      if (this.superheroJSON.movies.length > 24) {
+        this.rows10 = true;
+        this.rows6 = false;
+        this.rows3 = false;
+      } else if (
+        this.superheroJSON.movies.length > 12 &&
+        this.superheroJSON.movies.length <= 24
+      ) {
+        this.rows10 = false;
+        this.rows6 = true;
+        this.rows3 = false;
+      } else {
+        this.rows10 = false;
+        this.rows6 = false;
+        this.rows3 = true;
       }
     } catch (error) {
       console.error(error);
@@ -337,5 +377,8 @@ table > tr:last-child > th {
 .spinner {
   margin-top: 20px;
   margin-left: 50%;
+}
+.grid-rows-10 {
+  grid-template-rows: repeat(10, minmax(0, 1fr));
 }
 </style>
