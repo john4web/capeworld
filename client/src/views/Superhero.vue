@@ -2,7 +2,10 @@
   <div class="max-w-7xl">
     <rotate-square2 :class="{ hidden: isHiddenLoader }"></rotate-square2>
     <div :class="{ hidden: isHiddenContent }">
-      <h1 class="uppercase text-2xl p-4 bg-red-500 text-white">
+      <h1
+        class="uppercase text-2xl p-4 bg-red-500 text-white"
+        v-if="superheroJSON.name"
+      >
         {{ superheroJSON.name }}
       </h1>
 
@@ -11,34 +14,37 @@
           <div class="w-full overflow-hidden flex justify-center mb-10">
             <img :src="superheroJSON.image" class="max-h-80" alt="image" />
           </div>
-          <table class="">
-            <tr>
+          <table class="profileInfo">
+            <tr v-if="superheroJSON.name">
               <th class="uppercase">Name</th>
               <td>{{ superheroJSON.name }}</td>
             </tr>
-
-            <tr>
+            <tr v-if="superheroJSON.real_name">
               <th class="uppercase">Real Name</th>
               <td>{{ superheroJSON.real_name }}</td>
             </tr>
-            <tr>
+            <tr v-if="superheroJSON.aliases">
               <th class="uppercase">Aliases</th>
-
               <td>{{ superheroJSON.aliases }}</td>
             </tr>
-            <tr>
+            <tr v-if="superheroJSON.birth">
               <th class="uppercase">Place of Birth</th>
               <td>{{ superheroJSON.birth }}</td>
             </tr>
-            <tr>
+            <tr v-if="superheroJSON.first_appeared_in_issue">
               <th class="uppercase">First Appearance in Issue</th>
               <td v-if="superheroJSON.first_appeared_in_issue !== undefined">
                 {{ superheroJSON.first_appeared_in_issue.name }}
               </td>
             </tr>
-            <tr>
+            <tr v-if="superheroJSON.gender">
               <th class="uppercase">Gender</th>
-              <td>{{ superheroJSON.gender }}</td>
+              <td v-if="superheroJSON.gender == 1">
+                <p>Male</p>
+              </td>
+              <td v-if="superheroJSON.gender == 2">
+                <p>Female</p>
+              </td>
             </tr>
             <tr>
               <th class="uppercase">Friends</th>
@@ -85,59 +91,70 @@
           </table>
         </div>
         <div class="w-fulloverflow-hidden md:w-4/6 p-10">
-          <div v-if="superheroJSON.superhero_api">
+          <div v-if="superheroJSON.powerstats" class="mb-10">
             <h1 class="text-lg uppercase pb-2">Powerstats</h1>
             <h2>Intelligence</h2>
             <div class="bg-gray-300 w-full">
               <div class="bg-red-500 text-white" :style="widthBarInt">
-                {{ superheroJSON.superhero_api.powerstats.intelligence }}
+                {{ superheroJSON.powerstats.intelligence }}
               </div>
             </div>
             <h2>Strength</h2>
             <div class="bg-gray-300 w-full">
               <div class="bg-red-500 text-white" :style="widthBarStr">
-                {{ superheroJSON.superhero_api.powerstats.strength }}
+                {{ superheroJSON.powerstats.strength }}
               </div>
             </div>
             <h2>Speed</h2>
             <div class="bg-gray-300 w-full">
               <div class="bg-red-500 text-white" :style="widthBarSpeed">
-                {{ superheroJSON.superhero_api.powerstats.speed }}
+                {{ superheroJSON.powerstats.speed }}
               </div>
             </div>
             <h2>Durability</h2>
             <div class="bg-gray-300 w-full">
               <div class="bg-red-500 text-white" :style="widthBarDur">
-                {{ superheroJSON.superhero_api.powerstats.durability }}
+                {{ superheroJSON.powerstats.durability }}
               </div>
             </div>
             <h2>Power</h2>
             <div class="bg-gray-300 w-full">
               <div class="bg-red-500 text-white" :style="widthBarPow">
-                {{ superheroJSON.superhero_api.powerstats.power }}
+                {{ superheroJSON.powerstats.power }}
               </div>
             </div>
             <h2>Combat</h2>
             <div class="bg-gray-300 w-full">
               <div class="bg-red-500 text-white" :style="widthBarCom">
-                {{ superheroJSON.superhero_api.powerstats.combat }}
+                {{ superheroJSON.powerstats.combat }}
               </div>
             </div>
           </div>
           <div>
-            <h1 class="text-lg uppercase pb-2">Description Short:</h1>
+            <h1
+              v-if="superheroJSON.description_short"
+              class="text-lg uppercase pb-2"
+            >
+              Description Short:
+            </h1>
             <div>
               {{ superheroJSON.description_short }}
             </div>
           </div>
-          <h1 class="text-lg uppercase pb-2">More Information</h1>
-          <p class="pb-4">
-            {{ superheroJSON.description }}
-          </p>
+          <h1 v-if="superheroJSON.description" class="text-lg uppercase pb-2">
+            More Information
+          </h1>
+          <p class="pb-4" v-html="description"></p>
         </div>
       </div>
-      <h1 class="uppercase text-2xl p-4 bg-red-500 text-white">
+      <h1
+        v-if="superheroJSON.name"
+        class="uppercase text-2xl p-4 bg-red-500 text-white"
+      >
         Movies about {{ superheroJSON.name }}
+      </h1>
+      <h1 v-else class="uppercase text-2xl p-4 bg-red-500 text-white">
+        Movies about this character
       </h1>
       <div
         v-if="superheroJSON.movies"
@@ -156,8 +173,14 @@
           No movies about this character found
         </h2>
       </div>
-      <h1 class="uppercase text-2xl p-4 bg-red-500 text-white">
+      <h1
+        v-if="superheroJSON.name"
+        class="uppercase text-2xl p-4 bg-red-500 text-white"
+      >
         Comics about {{ superheroJSON.name }}
+      </h1>
+      <h1 v-else class="uppercase text-2xl p-4 bg-red-500 text-white">
+        Comics about this character
       </h1>
       <div
         v-if="superheroJSON.issue_credits"
@@ -208,6 +231,7 @@ export default {
       widthCom: "",
       isHiddenLoader: false,
       isHiddenContent: true,
+      description: "",
     };
   },
 
@@ -224,6 +248,7 @@ export default {
         this.widthDur = this.superheroJSON.powerstats.durability;
         this.widthPow = this.superheroJSON.powerstats.power;
         this.widthCom = this.superheroJSON.powerstats.combat;
+        this.description = this.superheroJSON.description;
       }
     } catch (error) {
       console.error(error);
