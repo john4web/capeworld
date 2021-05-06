@@ -1,19 +1,24 @@
 <template>
   <div>
     <h1 class="uppercase">Superheroes Overview</h1>
-    <div>
-      <input
-        type="text"
-        class="border border-gray-500 py-2 px-4"
-        v-model="inputText"
-        @keyup="getHeroesByName"
-      />
-      <button
-        @click="getHeroesByName"
-        class="bg-red-500 hover:bg-red-700 text-white uppercase py-2 px-4 m-4 rounded"
-      >
-        Send Axios Request
-      </button>
+    <div class="flex">
+      <div>
+        <input
+          type="text"
+          class="border border-gray-500 py-2 px-4"
+          v-model="inputText"
+          @keyup="searchTimeOut"
+          @keyup.enter="searchTimeOut"
+        />
+      </div>
+      <div>
+        <button
+          @click="getHeroesByName"
+          class="bg-red-500 hover:bg-red-700 py-3 px-4 rounded"
+        >
+          <img class="search" src="../assets/search.svg" alt="logo" />
+        </button>
+      </div>
     </div>
     <rotate-square2 :class="{ hidden: isHidden }"></rotate-square2>
     <div
@@ -62,10 +67,16 @@ export default {
   mounted() {},
   methods: {
     async getHeroesByName() {
+      let timeout = null;
+      clearTimeout(timeout);
       if (this.inputText.length > 2) {
         this.isHidden = false;
+        const cancelTokenSource = axios.CancelToken.source();
         try {
-          const response = await axios.get(`/api/hero/name/${this.inputText}`);
+          const response = await axios.get(`/api/hero/name/${this.inputText}`, {
+            cancelToken: cancelTokenSource.token,
+          });
+          console.log("test");
           this.isHidden = true;
           this.superheroesJSON = response.data;
           if (this.superheroesJSON.length > 120) {
@@ -82,7 +93,7 @@ export default {
             this.rows10 = false;
             this.rows6 = false;
           } else if (
-            this.superheroesJSON.length > 36 &&
+            this.superheroesJSON.length > 30 &&
             this.superheroesJSON.length <= 60
           ) {
             this.rows25 = false;
@@ -95,10 +106,18 @@ export default {
             this.rows10 = false;
             this.rows6 = true;
           }
+          //cancelTokenSource.cancel();
         } catch (error) {
           console.error(error);
         }
       }
+    },
+    searchTimeOut() {
+      let timeout = null;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        this.getHeroesByName();
+      }, 2000);
     },
   },
 };
@@ -121,5 +140,9 @@ export default {
 }
 .grid-rows-25 {
   grid-template-rows: repeat(25, minmax(0, 1fr));
+}
+
+.search {
+  width: 18px;
 }
 </style>

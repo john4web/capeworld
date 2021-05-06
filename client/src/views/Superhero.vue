@@ -46,90 +46,118 @@
                 <p>Female</p>
               </td>
             </tr>
-            <tr>
-              <th class="uppercase">Friends</th>
-              <td v-if="superheroJSON.character_friends">
-                <p
-                  v-for="item in superheroJSON.character_friends"
-                  :key="item.id"
-                >
-                  <router-link :to="`/superhero/${item.id}`">
-                    {{ item.name }}</router-link
-                  >
-                </p>
-              </td>
-              <td v-else>
-                <router-link
-                  :to="`/superhero/${superheroJSON.character_friends.id}`"
-                  v-if="superheroJSON.character_friends !== undefined"
-                >
-                  {{ superheroJSON.character_friends.name }}</router-link
-                >
-              </td>
-            </tr>
-            <tr>
-              <th class="uppercase">Enemies</th>
-              <td v-if="superheroJSON.character_enemies">
-                <p
-                  v-for="item in superheroJSON.character_enemies"
-                  :key="item.id"
-                >
-                  <router-link :to="`/superhero/${item.id}`">
-                    {{ item.name }}</router-link
-                  >
-                </p>
-              </td>
-              <td v-else>
-                <router-link
-                  :to="`/superhero/${superheroJSON.character_enemies.id}`"
-                  v-if="superheroJSON.character_enemies !== undefined"
-                >
-                  {{ superheroJSON.character_enemies.name }}</router-link
-                >
-              </td>
-            </tr>
           </table>
         </div>
         <div class="w-fulloverflow-hidden md:w-4/6 p-10">
           <div v-if="superheroJSON.powerstats" class="mb-10">
             <h1 class="text-lg uppercase pb-2">Powerstats</h1>
             <h2>Intelligence</h2>
-            <div class="bg-gray-300 w-full">
-              <div class="bg-red-500 text-white" :style="widthBarInt">
-                {{ superheroJSON.powerstats.intelligence }}
-              </div>
+            <div class="meter bg-gray-300">
+              <span :style="widthBarInt">
+                <span class="progress bg-red-500 text-white">{{
+                  superheroJSON.powerstats.intelligence
+                }}</span></span
+              >
             </div>
             <h2>Strength</h2>
-            <div class="bg-gray-300 w-full">
-              <div class="bg-red-500 text-white" :style="widthBarStr">
-                {{ superheroJSON.powerstats.strength }}
-              </div>
+            <div class="meter bg-gray-300">
+              <span :style="widthBarStr">
+                <span class="progress bg-red-500 text-white">{{
+                  superheroJSON.powerstats.strength
+                }}</span></span
+              >
             </div>
             <h2>Speed</h2>
-            <div class="bg-gray-300 w-full">
-              <div class="bg-red-500 text-white" :style="widthBarSpeed">
-                {{ superheroJSON.powerstats.speed }}
-              </div>
+            <div class="meter bg-gray-300">
+              <span :style="widthBarSpeed">
+                <span class="progress bg-red-500 text-white">{{
+                  superheroJSON.powerstats.speed
+                }}</span></span
+              >
             </div>
             <h2>Durability</h2>
-            <div class="bg-gray-300 w-full">
-              <div class="bg-red-500 text-white" :style="widthBarDur">
-                {{ superheroJSON.powerstats.durability }}
-              </div>
+            <div class="meter bg-gray-300">
+              <span :style="widthBarDur">
+                <span class="progress bg-red-500 text-white">{{
+                  superheroJSON.powerstats.durability
+                }}</span></span
+              >
             </div>
             <h2>Power</h2>
-            <div class="bg-gray-300 w-full">
-              <div class="bg-red-500 text-white" :style="widthBarPow">
-                {{ superheroJSON.powerstats.power }}
-              </div>
+            <div class="meter bg-gray-300">
+              <span :style="widthBarPow">
+                <span class="progress bg-red-500 text-white">{{
+                  superheroJSON.powerstats.power
+                }}</span></span
+              >
             </div>
             <h2>Combat</h2>
-            <div class="bg-gray-300 w-full">
-              <div class="bg-red-500 text-white" :style="widthBarCom">
-                {{ superheroJSON.powerstats.combat }}
-              </div>
+            <div class="meter bg-gray-300">
+              <span :style="widthBarCom">
+                <span class="progress bg-red-500 text-white">{{
+                  superheroJSON.powerstats.combat
+                }}</span></span
+              >
             </div>
           </div>
+
+          <div class="mb-10">
+            <h2 class="uppercase">Friends</h2>
+            <div class="flex flex-wrap" v-if="superheroJSON.character_friends">
+              <div
+                class="text-green-500 border-2 rounded-lg border-green-500 p-2 m-2"
+                v-for="item in superheroJSON.character_friends"
+                :key="item.id"
+                @click="reloadPage()"
+              >
+                <router-link :to="`/superhero/${item.id}`">
+                  {{ item.name }}</router-link
+                >
+              </div>
+            </div>
+            <div
+              class="text-green-500 border-2 rounded-lg border-green-500 p-2 m-2"
+              v-else
+              @click="reloadPage()"
+            >
+              <router-link
+                :to="`/superhero/${superheroJSON.character_friends.id}`"
+                v-if="superheroJSON.character_friends !== undefined"
+                @click="reloadPage()"
+              >
+                {{ superheroJSON.character_friends.name }}</router-link
+              >
+            </div>
+          </div>
+
+          <div class="mb-10">
+            <h2 class="uppercase">Enemies</h2>
+            <div class="flex flex-wrap" v-if="superheroJSON.character_enemies">
+              <div
+                class="text-red-500 border-2 rounded-lg border-red-500 p-2 m-2"
+                v-for="item in superheroJSON.character_enemies"
+                :key="item.id"
+                @click="reloadPage()"
+              >
+                <router-link :to="`/superhero/${item.id}`">
+                  {{ item.name }}</router-link
+                >
+              </div>
+            </div>
+            <div
+              class="text-red-500 border-2 rounded-lg border-red-500 p-2 m-2"
+              v-else
+              @click="reloadPage()"
+            >
+              <router-link
+                :to="`/superhero/${superheroJSON.character_enemies.id}`"
+                v-if="superheroJSON.character_enemies !== undefined"
+              >
+                {{ superheroJSON.character_enemies.name }}</router-link
+              >
+            </div>
+          </div>
+
           <div>
             <h1
               v-if="superheroJSON.description_short"
@@ -137,7 +165,7 @@
             >
               Description Short
             </h1>
-            <div>
+            <div class="mb-10">
               {{ superheroJSON.description_short }}
             </div>
           </div>
@@ -311,6 +339,13 @@ export default {
     }*/
   },
 
+  methods: {
+    reloadPage() {
+      location.reload();
+      return false;
+    },
+  },
+
   computed: {
     widthBarInt() {
       return {
@@ -380,5 +415,29 @@ table > tr:last-child > th {
 }
 .grid-rows-10 {
   grid-template-rows: repeat(10, minmax(0, 1fr));
+}
+.meter {
+  height: 25px;
+  position: relative;
+  overflow: hidden;
+}
+
+.meter span {
+  display: block;
+  height: 100%;
+}
+
+.progress {
+  animation: progressBar 3s ease-in-out;
+  animation-fill-mode: both;
+}
+
+@keyframes progressBar {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
 }
 </style>
