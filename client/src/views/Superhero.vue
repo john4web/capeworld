@@ -104,8 +104,21 @@
           <div class="mb-10">
             <h2 class="uppercase">Friends</h2>
             <div class="flex flex-wrap" v-if="superheroJSON.character_friends">
+              <!-- TODO: Hide button when 5 or less items are available -->
               <div
                 class="text-green-500 border-2 rounded-lg border-green-500 p-2 m-2"
+                :class="{ hidden: !loadMoreHidden }"
+                v-for="item in superheroJSON.character_friends.slice(0, 5)"
+                :key="item.id"
+                @click="reloadPage()"
+              >
+                <router-link :to="`/superhero/${item.id}`">
+                  {{ item.name }}</router-link
+                >
+              </div>
+              <div
+                class="text-green-500 border-2 rounded-lg border-green-500 p-2 m-2"
+                :class="{ hidden: loadMoreHidden }"
                 v-for="item in superheroJSON.character_friends"
                 :key="item.id"
                 @click="reloadPage()"
@@ -117,6 +130,7 @@
             </div>
             <div
               class="text-green-500 border-2 rounded-lg border-green-500 p-2 m-2"
+              :class="{ hidden: loadMoreHidden }"
               v-else
               @click="reloadPage()"
             >
@@ -128,13 +142,40 @@
                 {{ superheroJSON.character_friends.name }}</router-link
               >
             </div>
+            <button
+              @click="loadMore()"
+              :class="{ hidden: !loadMoreHidden }"
+              class="bg-green-500 hover:bg-green-700 text-white py-3 px-4 rounded"
+            >
+              Show All
+            </button>
+            <button
+              @click="hideAll()"
+              :class="{ hidden: loadMoreHidden }"
+              class="bg-green-500 hover:bg-green-700 text-white py-3 px-4 rounded"
+            >
+              Hide
+            </button>
           </div>
 
           <div class="mb-10">
             <h2 class="uppercase">Enemies</h2>
             <div class="flex flex-wrap" v-if="superheroJSON.character_enemies">
+              <!-- TODO: Hide button when 5 or less items are available -->
               <div
                 class="text-red-500 border-2 rounded-lg border-red-500 p-2 m-2"
+                :class="{ hidden: !loadMoreHiddenEnemies }"
+                v-for="item in superheroJSON.character_enemies.slice(0, 5)"
+                :key="item.id"
+                @click="reloadPage()"
+              >
+                <router-link :to="`/superhero/${item.id}`">
+                  {{ item.name }}</router-link
+                >
+              </div>
+              <div
+                class="text-red-500 border-2 rounded-lg border-red-500 p-2 m-2"
+                :class="{ hidden: loadMoreHiddenEnemies }"
                 v-for="item in superheroJSON.character_enemies"
                 :key="item.id"
                 @click="reloadPage()"
@@ -146,16 +187,32 @@
             </div>
             <div
               class="text-red-500 border-2 rounded-lg border-red-500 p-2 m-2"
+              :class="{ hidden: loadMoreHiddenEnemies }"
               v-else
               @click="reloadPage()"
             >
               <router-link
                 :to="`/superhero/${superheroJSON.character_enemies.id}`"
                 v-if="superheroJSON.character_enemies !== undefined"
+                @click="reloadPage()"
               >
                 {{ superheroJSON.character_enemies.name }}</router-link
               >
             </div>
+            <button
+              @click="loadMoreEnemies()"
+              :class="{ hidden: !loadMoreHiddenEnemies }"
+              class="bg-red-500 hover:bg-red-700 text-white py-3 px-4 rounded"
+            >
+              Show All
+            </button>
+            <button
+              @click="hideAllEnemies()"
+              :class="{ hidden: loadMoreHiddenEnemies }"
+              class="bg-red-500 hover:bg-red-700 text-white py-3 px-4 rounded"
+            >
+              Hide
+            </button>
           </div>
 
           <div>
@@ -277,6 +334,8 @@ export default {
       rows3: true,
       rows10Comic: false,
       rows6Comic: true,
+      loadMoreHidden: true,
+      loadMoreHiddenEnemies: true,
     };
   },
 
@@ -343,6 +402,20 @@ export default {
     reloadPage() {
       location.reload();
       return false;
+    },
+
+    loadMore() {
+      this.loadMoreHidden = false;
+    },
+    hideAll() {
+      this.loadMoreHidden = true;
+    },
+
+    loadMoreEnemies() {
+      this.loadMoreHiddenEnemies = false;
+    },
+    hideAllEnemies() {
+      this.loadMoreHiddenEnemies = true;
     },
   },
 
