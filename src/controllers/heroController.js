@@ -2,6 +2,7 @@ import axios from "axios";
 import credentials from "../../api_credentials";
 import crypto from "crypto";
 import NodeCache from "node-cache";
+import { CharacterModel } from "../models/characterModel";
 
 const myCache = new NodeCache();
 const cacheTTL = 60; //60 Minuten
@@ -194,3 +195,39 @@ export const getHeroesByNameFilter = (req, res) => {
 export const getRandomHero = (req, res) => {};
 
 export const getRandomHeroes = (req, res) => {};
+
+//Function to insert all DC and Marvel Characters from the ComicVine-API in our database
+const insertAllCharactersInDatabase = (res) => {
+  //get data from APIs
+  const comicvines_MARVEL_request_url = `https://comicvine.gamespot.com/api/publisher/31/?api_key=${credentials.comic_vines_api.access_token}&field_list=characters&format=json`;
+  const comicvines_DC_request_url = `https://comicvine.gamespot.com/api/publisher/10/?api_key=${credentials.comic_vines_api.access_token}&field_list=characters&format=json`;
+
+  //fetch 39.208 characters from DC and Marvel
+  const promises = [
+    axios.get(comicvines_DC_request_url),
+    axios.get(comicvines_MARVEL_request_url),
+  ];
+
+  Promise.allSettled(promises) //returns a promise that resolves after all of the given promises have either fulfilled or rejected, with an array of objects that each describes the outcome of each promise.
+    .then((apiResponses) => {
+      //gets executed when all promises have either fulfilled or rejected
+
+      const responseArray = apiResponses
+        .filter((apiResponse) => apiResponse.status !== "rejected") //filter out rejected responses
+        .map((apiResponse) => apiResponse.value.data.results.characters); //show only the characters
+
+      const generatedResponse = [...responseArray[0], ...responseArray[1]] //create one Array with all characters in it
+        .map((character) => {
+          return { id: character.id, name: character.name }; //show only id and name of characters
+        });
+
+      // Insert
+      CharacterModel.insertMany(generatedResponse)
+        .then(function () {
+          console.log("Data Successfully Inserted"); // Success
+        })
+        .catch(function (error) {
+          console.log(error); // Failure
+        });
+    });
+};
