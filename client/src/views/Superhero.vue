@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-7xl">
+  <div class="w-full md:max-w-7xl">
     <rotate-square2 :class="{ hidden: isHiddenLoader }"></rotate-square2>
     <div :class="{ hidden: isHiddenContent }">
       <h1
@@ -14,7 +14,7 @@
           <div class="w-full overflow-hidden flex justify-center mb-10">
             <img :src="superheroJSON.image" class="max-h-80" alt="image" />
           </div>
-          <table class="profileInfo">
+          <table class="profileInfo w-full mr-auto ml-auto">
             <tr v-if="superheroJSON.name">
               <th class="uppercase">Name</th>
               <td>{{ superheroJSON.name }}</td>
@@ -48,7 +48,7 @@
             </tr>
           </table>
         </div>
-        <div class="w-fulloverflow-hidden md:w-4/6 p-10">
+        <div class="w-full overflow-hidden md:w-4/6 p-10 mr-auto ml-auto">
           <div v-if="superheroJSON.powerstats" class="mb-10">
             <h1 class="text-lg uppercase pb-2">Powerstats</h1>
             <h2>Intelligence</h2>
@@ -246,14 +246,13 @@
       </h1>
       <div
         v-if="superheroJSON.movies"
-        class="grid gap-1 grid-flow-col"
-        :class="{
-          'grid-rows-3': rows3,
-          'grid-rows-6': rows6,
-          'grid-rows-10': rows10,
-        }"
+        class="overview-cols mr-auto ml-auto mb-10"
       >
-        <div v-for="item in superheroJSON.movies" :key="item.id">
+        <div
+          class="flex justify-center"
+          v-for="item in superheroJSON.movies"
+          :key="item.id"
+        >
           <overview-item
             :dataType="dataTypeMovie"
             :id="item.id"
@@ -277,13 +276,13 @@
       </h1>
       <div
         v-if="superheroJSON.issue_credits"
-        class="grid grid-rows-6 gap-1 grid-flow-col"
-        :class="{
-          'grid-rows-6': rows6Comic,
-          'grid-rows-10': rows10Comic,
-        }"
+        class="overview-cols mr-auto ml-auto mb-10"
       >
-        <div v-for="item in superheroJSON.issue_credits" :key="item.id">
+        <div
+          class="flex justify-center"
+          v-for="item in superheroJSON.issue_credits"
+          :key="item.id"
+        >
           <overview-item
             :dataType="dataTypeComic"
             :id="item.id"
@@ -329,11 +328,6 @@ export default {
       isHiddenLoader: false,
       isHiddenContent: true,
       description: "",
-      rows10: false,
-      rows6: false,
-      rows3: true,
-      rows10Comic: false,
-      rows6Comic: true,
       loadMoreHidden: true,
       loadMoreHiddenEnemies: true,
     };
@@ -353,29 +347,6 @@ export default {
         this.widthDur = this.superheroJSON.powerstats.durability;
         this.widthPow = this.superheroJSON.powerstats.power;
         this.widthCom = this.superheroJSON.powerstats.combat;
-      }
-      if (this.superheroJSON.issue_credits.length > 24) {
-        this.rows10Comic = true;
-        this.rows6Comic = false;
-      } else {
-        this.rows10Comic = false;
-        this.rows6Comic = true;
-      }
-      if (this.superheroJSON.movies.length > 24) {
-        this.rows10 = true;
-        this.rows6 = false;
-        this.rows3 = false;
-      } else if (
-        this.superheroJSON.movies.length > 12 &&
-        this.superheroJSON.movies.length <= 24
-      ) {
-        this.rows10 = false;
-        this.rows6 = true;
-        this.rows3 = false;
-      } else {
-        this.rows10 = false;
-        this.rows6 = false;
-        this.rows3 = true;
       }
     } catch (error) {
       console.error(error);
@@ -455,6 +426,17 @@ export default {
 </script>
 
 <style scoped>
+.overview-cols {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-auto-rows: minmax(100px, auto);
+}
+@media (min-width: 768px) {
+  .overview-cols {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 th {
   padding: 10px;
   text-align: left;
@@ -485,9 +467,6 @@ table > tr:last-child > th {
 .spinner {
   margin-top: 20px;
   margin-left: 50%;
-}
-.grid-rows-10 {
-  grid-template-rows: repeat(10, minmax(0, 1fr));
 }
 .meter {
   height: 25px;

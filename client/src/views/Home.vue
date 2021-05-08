@@ -4,9 +4,13 @@
     <h2 class="uppercase">Random Movie</h2>
     <div
       v-if="randomMovieJSON.length"
-      class="grid grid-rows-6 gap-1 grid-flow-col"
+      class="overview-cols mr-auto ml-auto mb-10"
     >
-      <div v-for="item in randomMovieJSON" :key="item.id">
+      <div
+        class="flex justify-center"
+        v-for="item in randomMovieJSON"
+        :key="item.id"
+      >
         <overview-item
           :dataType="dataTypeMovie"
           :id="item.id"
@@ -18,9 +22,13 @@
     <h2 class="uppercase">Random Comic</h2>
     <div
       v-if="randomComicJSON.length"
-      class="grid grid-rows-6 gap-1 grid-flow-col"
+      class="overview-cols mr-auto ml-auto mb-10"
     >
-      <div v-for="item in randomComicJSON" :key="item.id">
+      <div
+        class="flex justify-center"
+        v-for="item in randomComicJSON"
+        :key="item.id"
+      >
         <overview-item
           :dataType="dataTypeComic"
           :id="item.id"

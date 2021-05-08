@@ -41,7 +41,7 @@
           </tr>
         </table>
       </div>
-      <div class="w-fulloverflow-hidden md:w-4/6 p-10">
+      <div class="w-full overflow-hidden md:w-4/6 p-10">
         <h1 class="text-lg uppercase pb-2">Story</h1>
         <p class="pb-4" v-html="story"></p>
         <!-- TODO: check if field is empty and maybe add placeholder text or links to other comics,... -->
