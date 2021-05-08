@@ -2,12 +2,20 @@
   <div class="w-full md:max-w-7xl">
     <rotate-square2 :class="{ hidden: isHiddenLoader }"></rotate-square2>
     <div :class="{ hidden: isHiddenContent }">
-      <h1
-        class="uppercase text-2xl p-4 bg-red-500 text-white"
-        v-if="superheroJSON.name"
-      >
-        {{ superheroJSON.name }}
-      </h1>
+      <div class="p-4 bg-red-500 headline">
+        <h1
+          class="uppercase inline-block text-2xl text-white mt-3"
+          v-if="superheroJSON.name"
+        >
+          {{ superheroJSON.name }}
+        </h1>
+
+        <p
+          class="uppercase text-white border-2 rounded-lg text-center border-white p-2 m-2"
+        >
+          Hero
+        </p>
+      </div>
 
       <div class="flex flex-wrap overflow-hidden">
         <div class="w-full overflow-hidden md:w-2/6 bg-gray-300 p-10">
@@ -245,7 +253,7 @@
         Movies about this character
       </h1>
       <div
-        v-if="superheroJSON.movies"
+        v-if="superheroJSON.movies.length"
         class="overview-cols mr-auto ml-auto mb-10"
       >
         <div
@@ -261,7 +269,7 @@
         </div>
       </div>
       <div v-else>
-        <h2 class="uppercase text-2xl p-4">
+        <h2 class="uppercase text-xl p-4">
           No movies about this character found
         </h2>
       </div>
@@ -275,7 +283,7 @@
         Comics about this character
       </h1>
       <div
-        v-if="superheroJSON.issue_credits"
+        v-if="superheroJSON.issue_credits.length"
         class="overview-cols mr-auto ml-auto mb-10"
       >
         <div
@@ -291,7 +299,7 @@
         </div>
       </div>
       <div v-else>
-        <h2 class="uppercase text-2xl p-4">
+        <h2 class="uppercase text-xl p-4">
           No comics about this character found
         </h2>
       </div>
@@ -490,6 +498,16 @@ table > tr:last-child > th {
   }
   100% {
     width: 100%;
+  }
+}
+.headline {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+}
+@media (min-width: 768px) {
+  .headline {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 85% 15%;
   }
 }
 </style>
