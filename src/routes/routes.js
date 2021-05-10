@@ -20,6 +20,7 @@ import {
   getRandomComic,
   getRandomComics,
 } from "../controllers/comicController";
+import { getRandomQuote } from "../controllers/quoteController";
 
 const router = express.Router();
 
@@ -37,6 +38,8 @@ router.get("/moviesrandom", getRandomMovies);
 
 router.get("/comicrandom", getRandomComic);
 router.get("/comicsrandom", getRandomComics);
+
+router.get("/quote", getRandomQuote);
 
 //const routes = (app) => {
 // app.route("/hero/:heroID").get(getHeroByID);

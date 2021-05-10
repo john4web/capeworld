@@ -110,9 +110,10 @@
           </div>
 
           <div class="mb-10">
-            <h2 class="uppercase">Friends</h2>
+            <h2 v-if="superheroJSON.character_friends.length" class="uppercase">
+              Friends
+            </h2>
             <div class="flex flex-wrap" v-if="superheroJSON.character_friends">
-              <!-- TODO: Hide button when 5 or less items are available -->
               <div
                 class="text-green-500 border-2 rounded-lg border-green-500 p-2 m-2"
                 :class="{ hidden: !loadMoreHidden }"
@@ -151,6 +152,7 @@
               >
             </div>
             <button
+              v-if="superheroJSON.character_friends.length > 5"
               @click="loadMore()"
               :class="{ hidden: !loadMoreHidden }"
               class="bg-green-500 hover:bg-green-700 text-white py-3 px-4 rounded"
@@ -158,6 +160,7 @@
               Show All
             </button>
             <button
+              v-if="superheroJSON.character_friends.length > 5"
               @click="hideAll()"
               :class="{ hidden: loadMoreHidden }"
               class="bg-green-500 hover:bg-green-700 text-white py-3 px-4 rounded"
@@ -167,9 +170,10 @@
           </div>
 
           <div class="mb-10">
-            <h2 class="uppercase">Enemies</h2>
+            <h2 v-if="superheroJSON.character_enemies.length" class="uppercase">
+              Enemies
+            </h2>
             <div class="flex flex-wrap" v-if="superheroJSON.character_enemies">
-              <!-- TODO: Hide button when 5 or less items are available -->
               <div
                 class="text-red-500 border-2 rounded-lg border-red-500 p-2 m-2"
                 :class="{ hidden: !loadMoreHiddenEnemies }"
@@ -208,6 +212,7 @@
               >
             </div>
             <button
+              v-if="superheroJSON.character_enemies.length > 5"
               @click="loadMoreEnemies()"
               :class="{ hidden: !loadMoreHiddenEnemies }"
               class="bg-red-500 hover:bg-red-700 text-white py-3 px-4 rounded"
@@ -215,6 +220,7 @@
               Show All
             </button>
             <button
+              v-if="superheroJSON.character_enemies.length > 5"
               @click="hideAllEnemies()"
               :class="{ hidden: loadMoreHiddenEnemies }"
               class="bg-red-500 hover:bg-red-700 text-white py-3 px-4 rounded"
@@ -239,7 +245,7 @@
           </h1>
           <p class="pb-4" v-html="description"></p>
           <p v-if="!description && !superheroJSON.description_short">
-            Sorry, there is no further information available for this chaarcter!
+            Sorry, there is no further information available for this character!
           </p>
         </div>
       </div>

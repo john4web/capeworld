@@ -61,19 +61,9 @@
       </div>
       <div class="w-full overflow-hidden md:w-4/6 p-10 mr-auto ml-auto">
         <h1 class="text-lg uppercase pb-2">Story</h1>
-        <p class="pb-4" v-html="story"></p>
-        <!-- TODO: check if field is empty and maybe add placeholder text or links to other movies,... -->
-        <h1 class="text-lg uppercase pb-2">More Information</h1>
-        <p class="pb-4">
-          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-          nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-          sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
-          rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
-          ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-          sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-          dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
-          et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-          takimata sanctus est Lorem ipsum dolor sit amet.
+        <p v-if="story" class="pb-4" v-html="story"></p>
+        <p v-else>
+          No additional information about the plot of this comic available
         </p>
       </div>
     </div>
