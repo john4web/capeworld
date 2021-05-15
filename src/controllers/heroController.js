@@ -26,12 +26,36 @@ export const getHeroByID = async (req, res) => {
       .digest("hex");
 
     const responseObject = {
+      //From marvel API
       description_short: null,
+      //From Superhero API
       powerstats: null,
       appearance: null,
       work: null,
       connections: null,
       biography: null,
+      //From comicvine API
+      id: null,
+      name: null,
+      aliases: null,
+      birth: null,
+      character_enemies: null,
+      character_friends: null,
+      count_of_issue_appearances: null,
+      creators: null,
+      deck: null,
+      description: null,
+      first_appeared_in_issue: null,
+      gender: null,
+      image: null,
+      issue_credits: null,
+      issues_died_in: null,
+      movies: null,
+      origin: null,
+      powers: null,
+      publisher: null,
+      real_name: null,
+      teams: null,
     };
 
     const marvel_api_request_url = `http://gateway.marvel.com/v1/public/characters?name=${heroName}&limit=1&ts=${timestamp}&apikey=${publicKey}&hash=${hash}`;
@@ -77,7 +101,7 @@ export const getHeroByID = async (req, res) => {
 
           case comicvines_api_request_url:
             //ToDo
-
+            //Insert data from comicvine api in response object
             break;
 
           default:
