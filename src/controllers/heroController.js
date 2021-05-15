@@ -7,18 +7,87 @@ import { CharacterModel } from "../models/characterModel";
 const myCache = new NodeCache();
 const cacheTTL = 60; //60 Minuten
 
-export const getHeroByID = (req, res) => {
+export const getHeroByID = async (req, res) => {
   const heroID = req.params.heroID;
-  const timestamp = String(Date.now());
-  const privateKey = credentials.marvel_api.private_key;
-  const publicKey = credentials.marvel_api.public_key;
-  const hash = crypto
-    .createHash("md5")
-    .update(timestamp + privateKey + publicKey)
-    .digest("hex");
+  const doc = await CharacterModel.findOne({ id: heroID }, "name").exec();
 
-  const comicvines_api_request_url = `https://comicvine.gamespot.com/api/character/4005-${heroID}/?api_key=${credentials.comic_vines_api.access_token}&format=json`;
-  let comicVinesAPIResponse = {};
+  if (doc === null) {
+    //requested hero is not persisted in database
+    res.json([]); //send empty array
+    return; //stop script execution
+  } else {
+    const heroName = doc.name;
+    const timestamp = String(Date.now());
+    const privateKey = credentials.marvel_api.private_key;
+    const publicKey = credentials.marvel_api.public_key;
+    const hash = crypto
+      .createHash("md5")
+      .update(timestamp + privateKey + publicKey)
+      .digest("hex");
+
+    const responseObject = {
+      description_short: null,
+      powerstats: null,
+      appearance: null,
+      work: null,
+      connections: null,
+      biography: null,
+    };
+
+    const marvel_api_request_url = `http://gateway.marvel.com/v1/public/characters?name=${heroName}&limit=1&ts=${timestamp}&apikey=${publicKey}&hash=${hash}`;
+    const superheroes_api_request_url = `https://superheroapi.com/api/${credentials.superhero_api.access_token}/search/${heroName}`;
+    const comicvines_api_request_url = `https://comicvine.gamespot.com/api/character/4005-${heroID}/?api_key=${credentials.comic_vines_api.access_token}&format=json`;
+
+    const promises = [
+      axios.get(marvel_api_request_url),
+      axios.get(superheroes_api_request_url),
+      axios.get(comicvines_api_request_url),
+    ];
+
+    Promise.allSettled(promises).then((apiResponses) => {
+      const a = apiResponses;
+      const filteredResponse = apiResponses
+        .filter((item) => item.status !== "rejected")
+        .filter((item) => item.value.data.response !== "error");
+
+      const b = a;
+
+      filteredResponse.forEach((item) => {
+        switch (item.value.config.url) {
+          case marvel_api_request_url:
+            if (
+              item.value.data.data.results[0] !== undefined &&
+              item.value.data.data.results[0].description !== ""
+            ) {
+              responseObject.description_short =
+                item.value.data.data.results[0].description;
+            }
+            break;
+
+          case superheroes_api_request_url:
+            const filteredHero = item.value.data.results.filter(
+              (hero) => hero.name === comicVinesAPIResponse.name
+            )[0];
+            responseObject.powerstats = filteredHero.powerstats;
+            responseObject.appearance = filteredHero.appearance;
+            responseObject.work = filteredHero.work;
+            responseObject.connections = filteredHero.connections;
+            responseObject.biography = filteredHero.biography;
+            break;
+
+          case comicvines_api_request_url:
+            //ToDo
+
+            break;
+
+          default:
+            throw new Error("API request not defined");
+        }
+      });
+    });
+  }
+
+  /*let comicVinesAPIResponse = {};
   const responseObject = {};
 
   axios
@@ -134,7 +203,7 @@ export const getHeroByID = (req, res) => {
     .catch((error) => {
       // handle error
       console.log(error);
-    });
+    });*/
 };
 
 export const getHeroesByNameFilter = (req, res) => {
@@ -144,7 +213,10 @@ export const getHeroesByNameFilter = (req, res) => {
   const regex = new RegExp(heroName, "i"); //selects all the heroes that have the substring the user typed in
 
   CharacterModel.find({ name: { $regex: regex } }, "id name", (err, docs) => {
-    res.json(docs);
+    const response = docs.map((item) => {
+      return { id: item.id, name: item.name };
+    });
+    res.json(response);
   });
 
   /*
