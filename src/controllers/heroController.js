@@ -139,8 +139,15 @@ export const getHeroByID = (req, res) => {
 
 export const getHeroesByNameFilter = (req, res) => {
   const heroName = req.params.heroName;
-  const cachedHeroesList = myCache.get("HeroesList");
 
+  // SQL Injection possible??
+  const regex = new RegExp(heroName, "i"); //selects all the heroes that have the substring the user typed in
+
+  CharacterModel.find({ name: { $regex: regex } }, "id name", (err, docs) => {
+    res.json(docs);
+  });
+
+  /*
   if (cachedHeroesList) {
     //This is executed when the cache is available
 
@@ -187,7 +194,7 @@ export const getHeroesByNameFilter = (req, res) => {
 
         res.json(generatedFilteredResponse);
       });
-  }
+  }*/
   // ToDo: Handle Promise Timeout. What if the API-Calls take 5 hours?
   // ToDo: Handle Promise Timeout on frontend
 };
