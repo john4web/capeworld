@@ -1,11 +1,11 @@
 import axios from "axios";
 import credentials from "../../api_credentials";
 import crypto from "crypto";
-import NodeCache from "node-cache";
+//import NodeCache from "node-cache";
 import { CharacterModel } from "../models/characterModel";
 
-const myCache = new NodeCache();
-const cacheTTL = 60; //60 Minuten
+//const myCache = new NodeCache();
+//const cacheTTL = 60; //60 Minuten
 
 export const getHeroByID = async (req, res) => {
   const heroID = req.params.heroID;
@@ -99,8 +99,6 @@ export const getHeroByID = async (req, res) => {
 
           case comicvines_api_request_url:
             const comicVinesAPIResponse = item.value.data.results;
-            let a = item;
-            let b = a;
 
             responseObject.id = heroID;
             responseObject.name = comicVinesAPIResponse.name || null;
@@ -140,50 +138,63 @@ export const getHeroByID = async (req, res) => {
             }
 
             // todo null überprüfung
-            responseObject.character_enemies =
-              comicVinesAPIResponse.character_enemies.map((enemy) => {
-                return { id: enemy.id, name: enemy.name };
-              });
+            responseObject.character_enemies = comicVinesAPIResponse
+              .character_enemies.length
+              ? comicVinesAPIResponse.character_enemies.map((enemy) => {
+                  return { id: enemy.id, name: enemy.name };
+                })
+              : null;
 
-            responseObject.character_friends =
-              comicVinesAPIResponse.character_friends.map((friend) => {
-                return { id: friend.id, name: friend.name };
-              });
+            responseObject.character_friends = comicVinesAPIResponse
+              .character_friends.length
+              ? comicVinesAPIResponse.character_friends.map((friend) => {
+                  return { id: friend.id, name: friend.name };
+                })
+              : null;
 
-            responseObject.creators = comicVinesAPIResponse.creators.map(
-              (creator) => {
-                return { id: creator.id, name: creator.name };
-              }
-            );
+            responseObject.creators = comicVinesAPIResponse.creators.length
+              ? comicVinesAPIResponse.creators.map((creator) => {
+                  return { id: creator.id, name: creator.name };
+                })
+              : null;
 
-            responseObject.teams = comicVinesAPIResponse.teams.map(
-              (team) => team.name
-            );
-            responseObject.powers = comicVinesAPIResponse.powers.map(
-              (power) => power.name
-            );
+            responseObject.teams = comicVinesAPIResponse.teams.length
+              ? comicVinesAPIResponse.teams.map((team) => team.name)
+              : null;
+            responseObject.powers = comicVinesAPIResponse.powers.length
+              ? comicVinesAPIResponse.powers.map((power) => power.name)
+              : null;
 
-            responseObject.movies = comicVinesAPIResponse.movies.map(
-              (movie) => {
-                return { id: movie.id, name: movie.name };
-              }
-            );
+            responseObject.movies = comicVinesAPIResponse.movies.length
+              ? comicVinesAPIResponse.movies.map((movie) => {
+                  return { id: movie.id, name: movie.name };
+                })
+              : null;
 
-            responseObject.issues_died_in =
-              comicVinesAPIResponse.issues_died_in.map((issue) => {
-                return { id: issue.id, name: issue.name };
-              });
+            responseObject.issues_died_in = comicVinesAPIResponse.issues_died_in
+              .length
+              ? comicVinesAPIResponse.issues_died_in.map((issue) => {
+                  return { id: issue.id, name: issue.name };
+                })
+              : null;
 
-            responseObject.issue_credits =
-              comicVinesAPIResponse.issue_credits.map((issue) => {
-                return { id: issue.id, name: issue.name };
-              });
+            responseObject.issue_credits = comicVinesAPIResponse.issue_credits
+              .length
+              ? comicVinesAPIResponse.issue_credits
+                  .filter((issue) => issue.name) //only show issues with a name
+                  .slice(0, 40) //only show first 40 issues
+                  .map((issue) => {
+                    return { id: issue.id, name: issue.name };
+                  })
+              : null;
+
             break;
 
           default:
             throw new Error("API request not defined");
         }
       });
+      res.json(responseObject);
     });
   }
 
