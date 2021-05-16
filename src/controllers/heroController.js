@@ -74,8 +74,6 @@ export const getHeroByID = async (req, res) => {
         .filter((item) => item.status !== "rejected")
         .filter((item) => item.value.data.response !== "error");
 
-      const b = a;
-
       filteredResponse.forEach((item) => {
         switch (item.value.config.url) {
           case marvel_api_request_url:
@@ -90,7 +88,7 @@ export const getHeroByID = async (req, res) => {
 
           case superheroes_api_request_url:
             const filteredHero = item.value.data.results.filter(
-              (hero) => hero.name === comicVinesAPIResponse.name
+              (hero) => hero.name === heroName
             )[0];
             responseObject.powerstats = filteredHero.powerstats;
             responseObject.appearance = filteredHero.appearance;
@@ -100,8 +98,86 @@ export const getHeroByID = async (req, res) => {
             break;
 
           case comicvines_api_request_url:
-            //ToDo
-            //Insert data from comicvine api in response object
+            const comicVinesAPIResponse = item.value.data.results;
+            let a = item;
+            let b = a;
+
+            responseObject.id = heroID;
+            responseObject.name = comicVinesAPIResponse.name || null;
+            responseObject.aliases = comicVinesAPIResponse.aliases || null;
+            responseObject.birth = comicVinesAPIResponse.birth || null;
+            responseObject.deck = comicVinesAPIResponse.deck || null;
+            responseObject.description =
+              comicVinesAPIResponse.description || null;
+            responseObject.origin = comicVinesAPIResponse.origin.name || null;
+            responseObject.real_name = comicVinesAPIResponse.real_name || null;
+            responseObject.publisher =
+              comicVinesAPIResponse.publisher.name || null;
+            responseObject.image =
+              comicVinesAPIResponse.image.medium_url || null;
+            responseObject.count_of_issue_appearances =
+              comicVinesAPIResponse.count_of_issue_appearances || null;
+            responseObject.first_appeared_in_issue =
+              comicVinesAPIResponse.first_appeared_in_issue
+                ? {
+                    id: comicVinesAPIResponse.first_appeared_in_issue.id,
+                    name: comicVinesAPIResponse.first_appeared_in_issue.name,
+                  }
+                : null;
+
+            switch (comicVinesAPIResponse.gender) {
+              case 0:
+                responseObject.gender = "other";
+                break;
+              case 1:
+                responseObject.gender = "male";
+                break;
+              case 2:
+                responseObject.gender = "female";
+                break;
+              default:
+                responseObject.gender = null;
+            }
+
+            // todo null überprüfung
+            responseObject.character_enemies =
+              comicVinesAPIResponse.character_enemies.map((enemy) => {
+                return { id: enemy.id, name: enemy.name };
+              });
+
+            responseObject.character_friends =
+              comicVinesAPIResponse.character_friends.map((friend) => {
+                return { id: friend.id, name: friend.name };
+              });
+
+            responseObject.creators = comicVinesAPIResponse.creators.map(
+              (creator) => {
+                return { id: creator.id, name: creator.name };
+              }
+            );
+
+            responseObject.teams = comicVinesAPIResponse.teams.map(
+              (team) => team.name
+            );
+            responseObject.powers = comicVinesAPIResponse.powers.map(
+              (power) => power.name
+            );
+
+            responseObject.movies = comicVinesAPIResponse.movies.map(
+              (movie) => {
+                return { id: movie.id, name: movie.name };
+              }
+            );
+
+            responseObject.issues_died_in =
+              comicVinesAPIResponse.issues_died_in.map((issue) => {
+                return { id: issue.id, name: issue.name };
+              });
+
+            responseObject.issue_credits =
+              comicVinesAPIResponse.issue_credits.map((issue) => {
+                return { id: issue.id, name: issue.name };
+              });
             break;
 
           default:
