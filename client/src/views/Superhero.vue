@@ -1,20 +1,28 @@
 <template>
-  <div class="max-w-7xl">
+  <div class="w-full md:max-w-7xl">
     <rotate-square2 :class="{ hidden: isHiddenLoader }"></rotate-square2>
     <div :class="{ hidden: isHiddenContent }">
-      <h1
-        class="uppercase text-2xl p-4 bg-red-500 text-white"
-        v-if="superheroJSON.name"
-      >
-        {{ superheroJSON.name }}
-      </h1>
+      <div class="p-4 bg-red-500 headline">
+        <h1
+          class="uppercase inline-block text-2xl text-white mt-3"
+          v-if="superheroJSON.name"
+        >
+          {{ superheroJSON.name }}
+        </h1>
+
+        <p
+          class="uppercase text-white border-2 rounded-lg text-center border-white p-2 m-2"
+        >
+          Hero
+        </p>
+      </div>
 
       <div class="flex flex-wrap overflow-hidden">
         <div class="w-full overflow-hidden md:w-2/6 bg-gray-300 p-10">
           <div class="w-full overflow-hidden flex justify-center mb-10">
             <img :src="superheroJSON.image" class="max-h-80" alt="image" />
           </div>
-          <table class="profileInfo">
+          <table class="profileInfo w-full mr-auto ml-auto">
             <tr v-if="superheroJSON.name">
               <th class="uppercase">Name</th>
               <td>{{ superheroJSON.name }}</td>
@@ -46,90 +54,181 @@
                 <p>Female</p>
               </td>
             </tr>
-            <tr>
-              <th class="uppercase">Friends</th>
-              <td v-if="superheroJSON.character_friends">
-                <p
-                  v-for="item in superheroJSON.character_friends"
-                  :key="item.id"
-                >
-                  <router-link :to="`/superhero/${item.id}`">
-                    {{ item.name }}</router-link
-                  >
-                </p>
-              </td>
-              <td v-else>
-                <router-link
-                  :to="`/superhero/${superheroJSON.character_friends.id}`"
-                  v-if="superheroJSON.character_friends !== undefined"
-                >
-                  {{ superheroJSON.character_friends.name }}</router-link
-                >
-              </td>
-            </tr>
-            <tr>
-              <th class="uppercase">Enemies</th>
-              <td v-if="superheroJSON.character_enemies">
-                <p
-                  v-for="item in superheroJSON.character_enemies"
-                  :key="item.id"
-                >
-                  <router-link :to="`/superhero/${item.id}`">
-                    {{ item.name }}</router-link
-                  >
-                </p>
-              </td>
-              <td v-else>
-                <router-link
-                  :to="`/superhero/${superheroJSON.character_enemies.id}`"
-                  v-if="superheroJSON.character_enemies !== undefined"
-                >
-                  {{ superheroJSON.character_enemies.name }}</router-link
-                >
-              </td>
-            </tr>
           </table>
         </div>
-        <div class="w-fulloverflow-hidden md:w-4/6 p-10">
+        <div class="w-full overflow-hidden md:w-4/6 p-10 mr-auto ml-auto">
           <div v-if="superheroJSON.powerstats" class="mb-10">
             <h1 class="text-lg uppercase pb-2">Powerstats</h1>
             <h2>Intelligence</h2>
-            <div class="bg-gray-300 w-full">
-              <div class="bg-red-500 text-white" :style="widthBarInt">
-                {{ superheroJSON.powerstats.intelligence }}
-              </div>
+            <div class="meter bg-gray-300">
+              <span :style="widthBarInt">
+                <span class="progress bg-red-500 text-white">{{
+                  superheroJSON.powerstats.intelligence
+                }}</span></span
+              >
             </div>
             <h2>Strength</h2>
-            <div class="bg-gray-300 w-full">
-              <div class="bg-red-500 text-white" :style="widthBarStr">
-                {{ superheroJSON.powerstats.strength }}
-              </div>
+            <div class="meter bg-gray-300">
+              <span :style="widthBarStr">
+                <span class="progress bg-red-500 text-white">{{
+                  superheroJSON.powerstats.strength
+                }}</span></span
+              >
             </div>
             <h2>Speed</h2>
-            <div class="bg-gray-300 w-full">
-              <div class="bg-red-500 text-white" :style="widthBarSpeed">
-                {{ superheroJSON.powerstats.speed }}
-              </div>
+            <div class="meter bg-gray-300">
+              <span :style="widthBarSpeed">
+                <span class="progress bg-red-500 text-white">{{
+                  superheroJSON.powerstats.speed
+                }}</span></span
+              >
             </div>
             <h2>Durability</h2>
-            <div class="bg-gray-300 w-full">
-              <div class="bg-red-500 text-white" :style="widthBarDur">
-                {{ superheroJSON.powerstats.durability }}
-              </div>
+            <div class="meter bg-gray-300">
+              <span :style="widthBarDur">
+                <span class="progress bg-red-500 text-white">{{
+                  superheroJSON.powerstats.durability
+                }}</span></span
+              >
             </div>
             <h2>Power</h2>
-            <div class="bg-gray-300 w-full">
-              <div class="bg-red-500 text-white" :style="widthBarPow">
-                {{ superheroJSON.powerstats.power }}
-              </div>
+            <div class="meter bg-gray-300">
+              <span :style="widthBarPow">
+                <span class="progress bg-red-500 text-white">{{
+                  superheroJSON.powerstats.power
+                }}</span></span
+              >
             </div>
             <h2>Combat</h2>
-            <div class="bg-gray-300 w-full">
-              <div class="bg-red-500 text-white" :style="widthBarCom">
-                {{ superheroJSON.powerstats.combat }}
-              </div>
+            <div class="meter bg-gray-300">
+              <span :style="widthBarCom">
+                <span class="progress bg-red-500 text-white">{{
+                  superheroJSON.powerstats.combat
+                }}</span></span
+              >
             </div>
           </div>
+
+          <div class="mb-10">
+            <h2 v-if="superheroJSON.character_friends.length" class="uppercase">
+              Friends
+            </h2>
+            <div class="flex flex-wrap" v-if="superheroJSON.character_friends">
+              <div
+                class="text-green-500 border-2 rounded-lg border-green-500 p-2 m-2"
+                :class="{ hidden: !loadMoreHidden }"
+                v-for="item in superheroJSON.character_friends.slice(0, 5)"
+                :key="item.id"
+                @click="reloadPage()"
+              >
+                <router-link :to="`/superhero/${item.id}`">
+                  {{ item.name }}</router-link
+                >
+              </div>
+              <div
+                class="text-green-500 border-2 rounded-lg border-green-500 p-2 m-2"
+                :class="{ hidden: loadMoreHidden }"
+                v-for="item in superheroJSON.character_friends"
+                :key="item.id"
+                @click="reloadPage()"
+              >
+                <router-link :to="`/superhero/${item.id}`">
+                  {{ item.name }}</router-link
+                >
+              </div>
+            </div>
+            <div
+              class="text-green-500 border-2 rounded-lg border-green-500 p-2 m-2"
+              :class="{ hidden: loadMoreHidden }"
+              v-else
+              @click="reloadPage()"
+            >
+              <router-link
+                :to="`/superhero/${superheroJSON.character_friends.id}`"
+                v-if="superheroJSON.character_friends !== undefined"
+                @click="reloadPage()"
+              >
+                {{ superheroJSON.character_friends.name }}</router-link
+              >
+            </div>
+            <button
+              v-if="superheroJSON.character_friends.length > 5"
+              @click="loadMore()"
+              :class="{ hidden: !loadMoreHidden }"
+              class="bg-green-500 hover:bg-green-700 text-white py-3 px-4 rounded"
+            >
+              Show All
+            </button>
+            <button
+              v-if="superheroJSON.character_friends.length > 5"
+              @click="hideAll()"
+              :class="{ hidden: loadMoreHidden }"
+              class="bg-green-500 hover:bg-green-700 text-white py-3 px-4 rounded"
+            >
+              Hide
+            </button>
+          </div>
+
+          <div class="mb-10">
+            <h2 v-if="superheroJSON.character_enemies.length" class="uppercase">
+              Enemies
+            </h2>
+            <div class="flex flex-wrap" v-if="superheroJSON.character_enemies">
+              <div
+                class="text-red-500 border-2 rounded-lg border-red-500 p-2 m-2"
+                :class="{ hidden: !loadMoreHiddenEnemies }"
+                v-for="item in superheroJSON.character_enemies.slice(0, 5)"
+                :key="item.id"
+                @click="reloadPage()"
+              >
+                <router-link :to="`/superhero/${item.id}`">
+                  {{ item.name }}</router-link
+                >
+              </div>
+              <div
+                class="text-red-500 border-2 rounded-lg border-red-500 p-2 m-2"
+                :class="{ hidden: loadMoreHiddenEnemies }"
+                v-for="item in superheroJSON.character_enemies"
+                :key="item.id"
+                @click="reloadPage()"
+              >
+                <router-link :to="`/superhero/${item.id}`">
+                  {{ item.name }}</router-link
+                >
+              </div>
+            </div>
+            <div
+              class="text-red-500 border-2 rounded-lg border-red-500 p-2 m-2"
+              :class="{ hidden: loadMoreHiddenEnemies }"
+              v-else
+              @click="reloadPage()"
+            >
+              <router-link
+                :to="`/superhero/${superheroJSON.character_enemies.id}`"
+                v-if="superheroJSON.character_enemies !== undefined"
+                @click="reloadPage()"
+              >
+                {{ superheroJSON.character_enemies.name }}</router-link
+              >
+            </div>
+            <button
+              v-if="superheroJSON.character_enemies.length > 5"
+              @click="loadMoreEnemies()"
+              :class="{ hidden: !loadMoreHiddenEnemies }"
+              class="bg-red-500 hover:bg-red-700 text-white py-3 px-4 rounded"
+            >
+              Show All
+            </button>
+            <button
+              v-if="superheroJSON.character_enemies.length > 5"
+              @click="hideAllEnemies()"
+              :class="{ hidden: loadMoreHiddenEnemies }"
+              class="bg-red-500 hover:bg-red-700 text-white py-3 px-4 rounded"
+            >
+              Hide
+            </button>
+          </div>
+
           <div>
             <h1
               v-if="superheroJSON.description_short"
@@ -137,7 +236,7 @@
             >
               Description Short
             </h1>
-            <div>
+            <div class="mb-10">
               {{ superheroJSON.description_short }}
             </div>
           </div>
@@ -146,7 +245,7 @@
           </h1>
           <p class="pb-4" v-html="description"></p>
           <p v-if="!description && !superheroJSON.description_short">
-            Sorry, there is no further information available for this chaarcter!
+            Sorry, there is no further information available for this character!
           </p>
         </div>
       </div>
@@ -160,15 +259,14 @@
         Movies about this character
       </h1>
       <div
-        v-if="superheroJSON.movies"
-        class="grid gap-1 grid-flow-col"
-        :class="{
-          'grid-rows-3': rows3,
-          'grid-rows-6': rows6,
-          'grid-rows-10': rows10,
-        }"
+        v-if="superheroJSON.movies.length"
+        class="overview-cols mr-auto ml-auto mb-10"
       >
-        <div v-for="item in superheroJSON.movies" :key="item.id">
+        <div
+          class="flex justify-center"
+          v-for="item in superheroJSON.movies"
+          :key="item.id"
+        >
           <overview-item
             :dataType="dataTypeMovie"
             :id="item.id"
@@ -177,7 +275,7 @@
         </div>
       </div>
       <div v-else>
-        <h2 class="uppercase text-2xl p-4">
+        <h2 class="uppercase text-xl p-4">
           No movies about this character found
         </h2>
       </div>
@@ -191,14 +289,14 @@
         Comics about this character
       </h1>
       <div
-        v-if="superheroJSON.issue_credits"
-        class="grid grid-rows-6 gap-1 grid-flow-col"
-        :class="{
-          'grid-rows-6': rows6Comic,
-          'grid-rows-10': rows10Comic,
-        }"
+        v-if="superheroJSON.issue_credits.length"
+        class="overview-cols mr-auto ml-auto mb-10"
       >
-        <div v-for="item in superheroJSON.issue_credits" :key="item.id">
+        <div
+          class="flex justify-center"
+          v-for="item in superheroJSON.issue_credits"
+          :key="item.id"
+        >
           <overview-item
             :dataType="dataTypeComic"
             :id="item.id"
@@ -207,7 +305,7 @@
         </div>
       </div>
       <div v-else>
-        <h2 class="uppercase text-2xl p-4">
+        <h2 class="uppercase text-xl p-4">
           No comics about this character found
         </h2>
       </div>
@@ -244,11 +342,8 @@ export default {
       isHiddenLoader: false,
       isHiddenContent: true,
       description: "",
-      rows10: false,
-      rows6: false,
-      rows3: true,
-      rows10Comic: false,
-      rows6Comic: true,
+      loadMoreHidden: true,
+      loadMoreHiddenEnemies: true,
     };
   },
 
@@ -266,29 +361,6 @@ export default {
         this.widthDur = this.superheroJSON.powerstats.durability;
         this.widthPow = this.superheroJSON.powerstats.power;
         this.widthCom = this.superheroJSON.powerstats.combat;
-      }
-      if (this.superheroJSON.issue_credits.length > 24) {
-        this.rows10Comic = true;
-        this.rows6Comic = false;
-      } else {
-        this.rows10Comic = false;
-        this.rows6Comic = true;
-      }
-      if (this.superheroJSON.movies.length > 24) {
-        this.rows10 = true;
-        this.rows6 = false;
-        this.rows3 = false;
-      } else if (
-        this.superheroJSON.movies.length > 12 &&
-        this.superheroJSON.movies.length <= 24
-      ) {
-        this.rows10 = false;
-        this.rows6 = true;
-        this.rows3 = false;
-      } else {
-        this.rows10 = false;
-        this.rows6 = false;
-        this.rows3 = true;
       }
     } catch (error) {
       console.error(error);
@@ -309,6 +381,27 @@ export default {
     } catch (error) {
       console.error(error);
     }*/
+  },
+
+  methods: {
+    reloadPage() {
+      location.reload();
+      return false;
+    },
+
+    loadMore() {
+      this.loadMoreHidden = false;
+    },
+    hideAll() {
+      this.loadMoreHidden = true;
+    },
+
+    loadMoreEnemies() {
+      this.loadMoreHiddenEnemies = false;
+    },
+    hideAllEnemies() {
+      this.loadMoreHiddenEnemies = true;
+    },
   },
 
   computed: {
@@ -347,6 +440,17 @@ export default {
 </script>
 
 <style scoped>
+.overview-cols {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-auto-rows: minmax(100px, auto);
+}
+@media (min-width: 768px) {
+  .overview-cols {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 th {
   padding: 10px;
   text-align: left;
@@ -378,7 +482,38 @@ table > tr:last-child > th {
   margin-top: 20px;
   margin-left: 50%;
 }
-.grid-rows-10 {
-  grid-template-rows: repeat(10, minmax(0, 1fr));
+.meter {
+  height: 25px;
+  position: relative;
+  overflow: hidden;
+}
+
+.meter span {
+  display: block;
+  height: 100%;
+}
+
+.progress {
+  animation: progressBar 3s ease-in-out;
+  animation-fill-mode: both;
+}
+
+@keyframes progressBar {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
+.headline {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+}
+@media (min-width: 768px) {
+  .headline {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 85% 15%;
+  }
 }
 </style>

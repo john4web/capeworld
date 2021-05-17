@@ -1,10 +1,18 @@
 <template>
-  <div class="max-w-7xl">
+  <div class="w-full md:max-w-7xl">
     <!-- TODO: format page different than heropage or give a hint that this is a movie -->
     <!-- TODO: maybe link publisher? -->
-    <h1 class="uppercase text-2xl p-4 bg-red-500 text-white">
-      {{ movieJSON[0]["name"] }}
-    </h1>
+    <div class="p-4 bg-green-500 headline">
+      <h1 class="uppercase inline-block text-2xl text-white mt-3">
+        {{ movieJSON[0]["name"] }}
+      </h1>
+
+      <p
+        class="uppercase text-white border-2 rounded-lg text-center border-white p-2 m-2"
+      >
+        Movie
+      </p>
+    </div>
     <div class="flex flex-wrap overflow-hidden">
       <div class="w-full overflow-hidden md:w-2/6 bg-gray-300 p-10">
         <div class="w-full overflow-hidden flex justify-center mb-10">
@@ -14,7 +22,7 @@
             </div>
           </div>
         </div>
-        <table class="">
+        <table class="profileInfo w-full mr-auto ml-auto">
           <tr>
             <th class="uppercase">Name</th>
             <td>{{ movieJSON[0]["name"] }}</td>
@@ -51,21 +59,11 @@
           </tr>
         </table>
       </div>
-      <div class="w-fulloverflow-hidden md:w-4/6 p-10">
+      <div class="w-full overflow-hidden md:w-4/6 p-10 mr-auto ml-auto">
         <h1 class="text-lg uppercase pb-2">Story</h1>
-        <p class="pb-4" v-html="story"></p>
-        <!-- TODO: check if field is empty and maybe add placeholder text or links to other movies,... -->
-        <h1 class="text-lg uppercase pb-2">More Information</h1>
-        <p class="pb-4">
-          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-          nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-          sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
-          rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
-          ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-          sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-          dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
-          et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-          takimata sanctus est Lorem ipsum dolor sit amet.
+        <p v-if="story" class="pb-4" v-html="story"></p>
+        <p v-else>
+          No additional information about the plot of this comic available
         </p>
       </div>
     </div>
@@ -126,6 +124,16 @@ table > tr:last-child > td {
 }
 table > tr:last-child > th {
   border-bottom: 0 !important;
+}
+.headline {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+}
+@media (min-width: 768px) {
+  .headline {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 85% 15%;
+  }
 }
 </style>
 

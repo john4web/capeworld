@@ -1,12 +1,19 @@
 <template>
   <div>
     <h1 class="uppercase">Home</h1>
+    <h2 class="uppercase">Random Quote</h2>
+    <p class="text-lg mt-4 italic">{{ randomQuoteJSON[0]["quote"] }}</p>
+    <p class="text-red-500 mb-4">- {{ randomQuoteJSON[0]["author"] }}</p>
     <h2 class="uppercase">Random Movie</h2>
     <div
       v-if="randomMovieJSON.length"
-      class="grid grid-rows-6 gap-1 grid-flow-col"
+      class="overview-cols mr-auto ml-auto mb-10"
     >
-      <div v-for="item in randomMovieJSON" :key="item.id">
+      <div
+        class="flex justify-center"
+        v-for="item in randomMovieJSON"
+        :key="item.id"
+      >
         <overview-item
           :dataType="dataTypeMovie"
           :id="item.id"
@@ -18,9 +25,13 @@
     <h2 class="uppercase">Random Comic</h2>
     <div
       v-if="randomComicJSON.length"
-      class="grid grid-rows-6 gap-1 grid-flow-col"
+      class="overview-cols mr-auto ml-auto mb-10"
     >
-      <div v-for="item in randomComicJSON" :key="item.id">
+      <div
+        class="flex justify-center"
+        v-for="item in randomComicJSON"
+        :key="item.id"
+      >
         <overview-item
           :dataType="dataTypeComic"
           :id="item.id"
@@ -44,6 +55,7 @@ export default {
       dataTypeComic: "comic",
       randomMovieJSON: {},
       randomComicJSON: {},
+      randomQuoteJSON: {},
     };
   },
   // data: () => ({
@@ -83,6 +95,8 @@ export default {
     //     console.log(error);
     //   });
     try {
+      const responseRandomQuote = await axios.get(`/api/quote`);
+      this.randomQuoteJSON = responseRandomQuote.data;
       const responseRandomComic = await axios.get(`/api/comicrandom`);
       this.randomComicJSON = responseRandomComic.data;
       const responseRandomMovie = await axios.get(`/api/movierandom`);
