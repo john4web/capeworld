@@ -87,14 +87,27 @@ export const getHeroByID = async (req, res) => {
             break;
 
           case superheroes_api_request_url:
-            const filteredHero = item.value.data.results.filter(
-              (hero) => hero.name === heroName
-            )[0];
-            responseObject.powerstats = filteredHero.powerstats;
-            responseObject.appearance = filteredHero.appearance;
-            responseObject.work = filteredHero.work;
-            responseObject.connections = filteredHero.connections;
-            responseObject.biography = filteredHero.biography;
+            const filteredHero =
+              item.value.data.results.filter(
+                (hero) => hero.name === heroName
+              )[0] || null;
+            responseObject.powerstats = filteredHero
+              ? filteredHero.powerstats
+              : null;
+
+            responseObject.appearance = filteredHero
+              ? replaceDashInObjectKeys(filteredHero.appearance)
+              : null;
+
+            responseObject.work = filteredHero ? filteredHero.work : null;
+
+            responseObject.connections = filteredHero
+              ? replaceDashInObjectKeys(filteredHero.connections)
+              : null;
+
+            responseObject.biography = filteredHero
+              ? replaceDashInObjectKeys(filteredHero.biography)
+              : null;
             break;
 
           case comicvines_api_request_url:
@@ -119,7 +132,9 @@ export const getHeroByID = async (req, res) => {
               comicVinesAPIResponse.first_appeared_in_issue
                 ? {
                     id: comicVinesAPIResponse.first_appeared_in_issue.id,
-                    name: comicVinesAPIResponse.first_appeared_in_issue.name,
+                    name:
+                      comicVinesAPIResponse.first_appeared_in_issue.name ||
+                      "issue name unknown",
                   }
                 : null;
 
@@ -174,7 +189,10 @@ export const getHeroByID = async (req, res) => {
             responseObject.issues_died_in = comicVinesAPIResponse.issues_died_in
               .length
               ? comicVinesAPIResponse.issues_died_in.map((issue) => {
-                  return { id: issue.id, name: issue.name };
+                  return {
+                    id: issue.id,
+                    name: issue.name || "issue name unknown",
+                  };
                 })
               : null;
 
@@ -197,6 +215,18 @@ export const getHeroByID = async (req, res) => {
       res.json(responseObject);
     });
   }
+
+  const replaceDashInObjectKeys = (object) => {
+    const keys = Object.keys(object);
+    keys.forEach((key) => {
+      const keyAfter = key.replace(/-/g, "_");
+      if (key.includes("-")) {
+        object[keyAfter] = object[key];
+        delete object[key];
+      }
+    });
+    return object;
+  };
 
   /*let comicVinesAPIResponse = {};
   const responseObject = {};

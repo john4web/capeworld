@@ -1,7 +1,7 @@
 <template>
   <div class="w-full md:max-w-7xl">
-    <rotate-square2 :class="{ hidden: isHiddenLoader }"></rotate-square2>
-    <div :class="{ hidden: isHiddenContent }">
+    <rotate-square2 :class="{ hidden: !showLoader }"></rotate-square2>
+    <div :class="{ hidden: showLoader }">
       <div class="p-4 bg-red-500 headline">
         <h1
           class="uppercase inline-block text-2xl text-white mt-3"
@@ -35,23 +35,29 @@
               <th class="uppercase">Aliases</th>
               <td>{{ superheroJSON.aliases }}</td>
             </tr>
-            <tr v-if="superheroJSON.birth">
+            <tr
+              v-if="
+                superheroJSON.biography &&
+                superheroJSON.biography.place_of_birth
+              "
+            >
               <th class="uppercase">Place of Birth</th>
-              <td>{{ superheroJSON.birth }}</td>
+              <td>{{ superheroJSON.biography.place_of_birth }}</td>
             </tr>
             <tr v-if="superheroJSON.first_appeared_in_issue">
               <th class="uppercase">First Appearance in Issue</th>
-              <td v-if="superheroJSON.first_appeared_in_issue !== undefined">
-                {{ superheroJSON.first_appeared_in_issue.name }}
+              <td>
+                <router-link
+                  :to="`/comic/${superheroJSON.first_appeared_in_issue.id}`"
+                >
+                  {{ superheroJSON.first_appeared_in_issue.name }}</router-link
+                >
               </td>
             </tr>
             <tr v-if="superheroJSON.gender">
               <th class="uppercase">Gender</th>
-              <td v-if="superheroJSON.gender == 1">
-                <p>Male</p>
-              </td>
-              <td v-if="superheroJSON.gender == 2">
-                <p>Female</p>
+              <td>
+                <p>{{ superheroJSON.gender }}</p>
               </td>
             </tr>
           </table>
@@ -110,16 +116,15 @@
           </div>
 
           <div class="mb-10">
-            <h2 v-if="superheroJSON.character_friends.length" class="uppercase">
+            <h2 v-if="superheroJSON.character_friends" class="uppercase">
               Friends
             </h2>
             <div class="flex flex-wrap" v-if="superheroJSON.character_friends">
               <div
                 class="text-green-500 border-2 rounded-lg border-green-500 p-2 m-2"
-                :class="{ hidden: !loadMoreHidden }"
+                :class="{ hidden: !moreFriendsAreHidden }"
                 v-for="item in superheroJSON.character_friends.slice(0, 5)"
                 :key="item.id"
-                @click="reloadPage()"
               >
                 <router-link :to="`/superhero/${item.id}`">
                   {{ item.name }}</router-link
@@ -127,10 +132,9 @@
               </div>
               <div
                 class="text-green-500 border-2 rounded-lg border-green-500 p-2 m-2"
-                :class="{ hidden: loadMoreHidden }"
+                :class="{ hidden: moreFriendsAreHidden }"
                 v-for="item in superheroJSON.character_friends"
-                :key="item.id"
-                @click="reloadPage()"
+                :key="item.id + 'more_friends'"
               >
                 <router-link :to="`/superhero/${item.id}`">
                   {{ item.name }}</router-link
@@ -139,30 +143,34 @@
             </div>
             <div
               class="text-green-500 border-2 rounded-lg border-green-500 p-2 m-2"
-              :class="{ hidden: loadMoreHidden }"
+              :class="{ hidden: moreFriendsAreHidden }"
               v-else
-              @click="reloadPage()"
             >
               <router-link
                 :to="`/superhero/${superheroJSON.character_friends.id}`"
-                v-if="superheroJSON.character_friends !== undefined"
-                @click="reloadPage()"
+                v-if="superheroJSON.character_friends"
               >
                 {{ superheroJSON.character_friends.name }}</router-link
               >
             </div>
             <button
-              v-if="superheroJSON.character_friends.length > 5"
-              @click="loadMore()"
-              :class="{ hidden: !loadMoreHidden }"
+              v-if="
+                superheroJSON.character_friends &&
+                superheroJSON.character_friends.length > 5
+              "
+              @click="moreFriendsAreHidden = false"
+              :class="{ hidden: !moreFriendsAreHidden }"
               class="bg-green-500 hover:bg-green-700 text-white py-3 px-4 rounded"
             >
               Show All
             </button>
             <button
-              v-if="superheroJSON.character_friends.length > 5"
-              @click="hideAll()"
-              :class="{ hidden: loadMoreHidden }"
+              v-if="
+                superheroJSON.character_friends &&
+                superheroJSON.character_friends.length > 5
+              "
+              @click="moreFriendsAreHidden = true"
+              :class="{ hidden: moreFriendsAreHidden }"
               class="bg-green-500 hover:bg-green-700 text-white py-3 px-4 rounded"
             >
               Hide
@@ -170,16 +178,15 @@
           </div>
 
           <div class="mb-10">
-            <h2 v-if="superheroJSON.character_enemies.length" class="uppercase">
+            <h2 v-if="superheroJSON.character_enemies" class="uppercase">
               Enemies
             </h2>
             <div class="flex flex-wrap" v-if="superheroJSON.character_enemies">
               <div
                 class="text-red-500 border-2 rounded-lg border-red-500 p-2 m-2"
-                :class="{ hidden: !loadMoreHiddenEnemies }"
+                :class="{ hidden: !moreEnemiesAreHidden }"
                 v-for="item in superheroJSON.character_enemies.slice(0, 5)"
                 :key="item.id"
-                @click="reloadPage()"
               >
                 <router-link :to="`/superhero/${item.id}`">
                   {{ item.name }}</router-link
@@ -187,10 +194,9 @@
               </div>
               <div
                 class="text-red-500 border-2 rounded-lg border-red-500 p-2 m-2"
-                :class="{ hidden: loadMoreHiddenEnemies }"
+                :class="{ hidden: moreEnemiesAreHidden }"
                 v-for="item in superheroJSON.character_enemies"
-                :key="item.id"
-                @click="reloadPage()"
+                :key="item.id + 'more_enemies'"
               >
                 <router-link :to="`/superhero/${item.id}`">
                   {{ item.name }}</router-link
@@ -199,30 +205,34 @@
             </div>
             <div
               class="text-red-500 border-2 rounded-lg border-red-500 p-2 m-2"
-              :class="{ hidden: loadMoreHiddenEnemies }"
+              :class="{ hidden: moreEnemiesAreHidden }"
               v-else
-              @click="reloadPage()"
             >
               <router-link
                 :to="`/superhero/${superheroJSON.character_enemies.id}`"
-                v-if="superheroJSON.character_enemies !== undefined"
-                @click="reloadPage()"
+                v-if="superheroJSON.character_enemies"
               >
                 {{ superheroJSON.character_enemies.name }}</router-link
               >
             </div>
             <button
-              v-if="superheroJSON.character_enemies.length > 5"
-              @click="loadMoreEnemies()"
-              :class="{ hidden: !loadMoreHiddenEnemies }"
+              v-if="
+                superheroJSON.character_enemies &&
+                superheroJSON.character_enemies.length > 5
+              "
+              @click="moreEnemiesAreHidden = false"
+              :class="{ hidden: !moreEnemiesAreHidden }"
               class="bg-red-500 hover:bg-red-700 text-white py-3 px-4 rounded"
             >
               Show All
             </button>
             <button
-              v-if="superheroJSON.character_enemies.length > 5"
-              @click="hideAllEnemies()"
-              :class="{ hidden: loadMoreHiddenEnemies }"
+              v-if="
+                superheroJSON.character_enemies &&
+                superheroJSON.character_enemies.length > 5
+              "
+              @click="moreEnemiesAreHidden = true"
+              :class="{ hidden: moreEnemiesAreHidden }"
               class="bg-red-500 hover:bg-red-700 text-white py-3 px-4 rounded"
             >
               Hide
@@ -259,7 +269,7 @@
         Movies about this character
       </h1>
       <div
-        v-if="superheroJSON.movies.length"
+        v-if="superheroJSON.movies"
         class="overview-cols mr-auto ml-auto mb-10"
       >
         <div
@@ -289,7 +299,7 @@
         Comics about this character
       </h1>
       <div
-        v-if="superheroJSON.issue_credits.length"
+        v-if="superheroJSON.issue_credits"
         class="overview-cols mr-auto ml-auto mb-10"
       >
         <div
@@ -321,10 +331,13 @@ export default {
   name: "Superhero",
   components: { OverviewItem, RotateSquare2 },
   props: {},
-  watch: {},
+  watch: {
+    "$route.path"() {
+      this.requestPageContent(this.$route.params.id);
+    },
+  },
   data() {
     return {
-      currentID: this.$route.params.id,
       superheroName: "",
       superheroJSON: {
         name: "",
@@ -339,68 +352,39 @@ export default {
       widthDur: "",
       widthPow: "",
       widthCom: "",
-      isHiddenLoader: false,
-      isHiddenContent: true,
+      showLoader: true,
       description: "",
-      loadMoreHidden: true,
-      loadMoreHiddenEnemies: true,
+      moreFriendsAreHidden: true,
+      moreEnemiesAreHidden: true,
     };
   },
 
-  mounted: async function () {
-    try {
-      const response = await axios.get(`/api/hero/${this.currentID}`);
-      this.isHiddenLoader = true;
-      this.isHiddenContent = false;
-      this.superheroJSON = response.data;
-      this.description = this.superheroJSON.description;
-      if (this.superheroJSON.powerstats) {
-        this.widthInt = this.superheroJSON.powerstats.intelligence;
-        this.widthStr = this.superheroJSON.powerstats.strength;
-        this.widthSpeed = this.superheroJSON.powerstats.speed;
-        this.widthDur = this.superheroJSON.powerstats.durability;
-        this.widthPow = this.superheroJSON.powerstats.power;
-        this.widthCom = this.superheroJSON.powerstats.combat;
-      }
-    } catch (error) {
-      console.error(error);
-    }
-    /*try {
-      const responseMovie = await axios.get(
-        `/api/movie/name/${this.superheroName}`
-      );
-      this.moviesJSON = responseMovie.data;
-    } catch (error) {
-      console.error(error);
-    }
-    try {
-      const responseComic = await axios.get(
-        `/api/comic/name/${this.superheroName}`
-      );
-      this.comicsJSON = responseComic.data;
-    } catch (error) {
-      console.error(error);
-    }*/
+  mounted: function () {
+    this.requestPageContent(this.$route.params.id);
   },
 
   methods: {
-    reloadPage() {
-      location.reload();
-      return false;
-    },
-
-    loadMore() {
-      this.loadMoreHidden = false;
-    },
-    hideAll() {
-      this.loadMoreHidden = true;
-    },
-
-    loadMoreEnemies() {
-      this.loadMoreHiddenEnemies = false;
-    },
-    hideAllEnemies() {
-      this.loadMoreHiddenEnemies = true;
+    async requestPageContent(heroID) {
+      try {
+        this.showLoader = true;
+        const response = await axios.get(`/api/hero/${heroID}`);
+        this.superheroJSON = response.data;
+        this.description = this.superheroJSON.description;
+        if (this.superheroJSON.powerstats) {
+          this.widthInt = this.superheroJSON.powerstats.intelligence;
+          this.widthStr = this.superheroJSON.powerstats.strength;
+          this.widthSpeed = this.superheroJSON.powerstats.speed;
+          this.widthDur = this.superheroJSON.powerstats.durability;
+          this.widthPow = this.superheroJSON.powerstats.power;
+          this.widthCom = this.superheroJSON.powerstats.combat;
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.showLoader = false;
+        this.moreFriendsAreHidden = true;
+        this.moreEnemiesAreHidden = true;
+      }
     },
   },
 
