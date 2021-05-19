@@ -6,8 +6,7 @@
           type="text"
           class="border border-gray-500 py-2 px-4"
           v-model="inputText"
-          @keyup="searchTimeOut"
-          @keyup.enter="searchTimeOut"
+          @keyup="getResultsByName"
         />
       </div>
       <div>
@@ -34,6 +33,7 @@
         />
       </div>
     </div>
+    <div v-else>No Heroes found!</div>
   </div>
 </template>
 
@@ -41,6 +41,10 @@
 import axios from "axios";
 import OverviewItem from "../components/OverviewItem.vue";
 import { RotateSquare2 } from "vue-loading-spinner";
+
+let cancel;
+let CancelToken = axios.CancelToken;
+
 export default {
   name: "Search",
   components: { OverviewItem, RotateSquare2 },
@@ -63,32 +67,33 @@ export default {
       } else {
         this.responseType = this.type;
       }
-      let timeout = null;
-      clearTimeout(timeout);
+
       if (this.inputText.length > 2) {
         this.isHidden = false;
-        const cancelTokenSource = axios.CancelToken.source();
+
         try {
+          //only call cancel() if cancel is true
+          cancel && cancel();
           const response = await axios.get(
             `/api/${this.responseType}/name/${this.inputText}`,
             {
-              cancelToken: cancelTokenSource.token,
+              cancelToken: new CancelToken((c) => {
+                cancel = c;
+              }),
             }
           );
           this.isHidden = true;
           this.resultsJSON = response.data;
-          //cancelTokenSource.cancel();
         } catch (error) {
-          console.error(error);
+          if (axios.isCancel(error)) {
+            console.log("Request Cancelled");
+          } else {
+            console.error(error);
+          }
         }
+      } else {
+        this.resultsJSON = {};
       }
-    },
-    searchTimeOut() {
-      let timeout = null;
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        this.getResultsByName();
-      }, 2000);
     },
   },
 };
