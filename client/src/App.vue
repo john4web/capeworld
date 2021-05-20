@@ -97,6 +97,10 @@
 .title {
   margin-top: 75%;
 }
+
+a.router-link-exact-active {
+  color: rgba(239, 68, 68);
+}
 </style>
 
 <script>
