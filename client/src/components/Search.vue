@@ -29,7 +29,7 @@
           :dataType="type"
           :id="item.id"
           :name="item.name"
-          :imageURL="item.imageURL"
+          :imageURL="item.image"
         />
       </div>
     </div>

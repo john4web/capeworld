@@ -208,7 +208,18 @@ export const getHeroByID = async (req, res) => {
             throw new Error("API request not defined");
         }
       });
-      res.json(responseObject);
+
+      CharacterModel.find(
+        { id: responseObject.id },
+        "id image",
+        (err, docs) => {
+          if (!Boolean(docs[0].image)) {
+            docs[0].image = responseObject.image;
+            docs[0].save();
+          }
+          res.json(responseObject);
+        }
+      );
     });
   }
 
@@ -230,12 +241,16 @@ export const getHeroesByNameFilter = (req, res) => {
 
   const regex = new RegExp(heroName, "i"); //selects all the heroes that have the substring the user typed in
 
-  CharacterModel.find({ name: { $regex: regex } }, "id name", (err, docs) => {
-    const response = docs.map((item) => {
-      return { id: item.id, name: item.name };
-    });
-    res.json(response);
-  });
+  CharacterModel.find(
+    { name: { $regex: regex } },
+    "id name image",
+    (err, docs) => {
+      const response = docs.map((item) => {
+        return { id: item.id, name: item.name, image: item.image };
+      });
+      res.json(response);
+    }
+  );
 };
 
 export const getRandomHero = (req, res) => {};
@@ -243,7 +258,7 @@ export const getRandomHero = (req, res) => {};
 export const getRandomHeroes = (req, res) => {};
 
 //Function to insert all DC and Marvel Characters from the ComicVine-API in our database
-const insertAllCharactersInDatabase = (res) => {
+const insertAllCharactersInDatabase = () => {
   //get data from APIs
   const comicvines_MARVEL_request_url = `https://comicvine.gamespot.com/api/publisher/31/?api_key=${credentials.comic_vines_api.access_token}&field_list=characters&format=json`;
   const comicvines_DC_request_url = `https://comicvine.gamespot.com/api/publisher/10/?api_key=${credentials.comic_vines_api.access_token}&field_list=characters&format=json`;
@@ -264,7 +279,7 @@ const insertAllCharactersInDatabase = (res) => {
 
       const generatedResponse = [...responseArray[0], ...responseArray[1]] //create one Array with all characters in it
         .map((character) => {
-          return { id: character.id, name: character.name }; //show only id and name of characters
+          return { id: character.id, name: character.name, image: null }; //show only id and name of characters
         });
 
       // Insert
