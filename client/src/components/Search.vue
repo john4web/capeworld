@@ -33,7 +33,10 @@
         />
       </div>
     </div>
-    <div v-else>No Heroes found!</div>
+    <div v-else>
+      <div v-if="dataType === 'superhero'">No Heroes found!</div>
+      <div v-if="dataType === 'comic'">No Comics found!</div>
+    </div>
   </div>
 </template>
 

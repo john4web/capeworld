@@ -1,60 +1,115 @@
 <template>
   <div class="w-full md:max-w-7xl">
-    <!-- TODO: format page different than heropage or give a hint that this is a comic -->
-    <div class="p-4 bg-yellow-500 headline">
-      <h1 class="uppercase flex text-2xl text-white mt-3">
-        {{ comicJSON[0]["name"] }}
-      </h1>
+    <rotate-square2 :class="{ hidden: !showLoader }"></rotate-square2>
+    <div :class="{ hidden: showLoader }">
+      <div class="p-4 bg-yellow-500 headline">
+        <h1
+          class="uppercase flex text-2xl text-white mt-3"
+          v-if="comicJSON.name"
+        >
+          {{ comicJSON.name }}
+        </h1>
 
-      <p
-        class="uppercase text-white border-2 rounded-lg text-center border-white p-2 m-2"
-      >
-        Comic
-      </p>
-    </div>
-    <div class="flex flex-wrap overflow-hidden">
-      <div class="w-full overflow-hidden md:w-2/6 bg-gray-300 p-10">
-        <div class="w-full overflow-hidden flex justify-center mb-10">
-          <div v-if="comicJSON.length">
-            <div v-for="item in comicJSON" :key="item.id">
-              <img :src="item.imageURL" class="max-h-80" alt="image" />
+        <p
+          class="uppercase text-white border-2 rounded-lg text-center border-white p-2 m-2"
+        >
+          Comic
+        </p>
+      </div>
+      <div class="flex flex-wrap overflow-hidden">
+        <div class="w-full overflow-hidden md:w-2/6 bg-gray-300 p-10">
+          <div class="w-full overflow-hidden flex justify-center mb-10">
+            <div v-if="comicJSON.image">
+              <div>
+                <img :src="comicJSON.image" class="max-h-80" alt="image" />
+              </div>
             </div>
           </div>
+          <table class="profileInfo w-full mr-auto ml-auto">
+            <tr v-if="comicJSON.name">
+              <th class="uppercase">Name</th>
+              <td>{{ comicJSON.name }}</td>
+            </tr>
+            <tr v-if="comicJSON.issue_number">
+              <th class="uppercase">Issue Number</th>
+              <td>{{ comicJSON.issue_number }}</td>
+            </tr>
+            <tr v-if="comicJSON.cover_date">
+              <th class="uppercase">Cover Date</th>
+              <td>{{ comicJSON.cover_date }}</td>
+            </tr>
+            <tr v-if="comicJSON.store_date">
+              <th class="uppercase">Store Date</th>
+              <td>{{ comicJSON.store_date }}</td>
+            </tr>
+            <tr v-if="comicJSON.volume_name">
+              <th class="uppercase">Volume</th>
+              <td>{{ comicJSON.volume_name }}</td>
+            </tr>
+            <tr v-if="comicJSON.person_credits">
+              <th class="uppercase">Persons</th>
+              <td>
+                <p v-for="item in comicJSON.person_credits" :key="item.id">
+                  {{ item.name + " role:" + item.role }}
+                </p>
+              </td>
+            </tr>
+            <tr v-if="comicJSON.character_died_in">
+              <th class="uppercase">Characters died in this issue:</th>
+              <td>
+                <p v-for="item in comicJSON.character_died_in" :key="item.id">
+                  <router-link :to="`/superhero/${item.id}`">
+                    {{ item.name }}</router-link
+                  >
+                </p>
+              </td>
+            </tr>
+            <tr v-if="comicJSON.character_credits">
+              <th class="uppercase">Characters participating in this issue:</th>
+              <td>
+                <p v-for="item in comicJSON.character_credits" :key="item.id">
+                  <router-link :to="`/superhero/${item.id}`">
+                    {{ item.name }}</router-link
+                  >
+                </p>
+              </td>
+            </tr>
+
+            <tr v-if="comicJSON.first_appearance_characters">
+              <th class="uppercase">
+                Characters first appeared in this issue:
+              </th>
+              <td>
+                <p
+                  v-for="item in comicJSON.first_appearance_characters"
+                  :key="item.id"
+                >
+                  <router-link :to="`/superhero/${item.id}`">
+                    {{ item.name }}</router-link
+                  >
+                </p>
+              </td>
+            </tr>
+
+            <!-- Diese Sachen auch noch anzeigen. Aber auf null überprüfen!
+      comicJSON.deck
+      comicJSON.team_credits
+      comicJSON.aliases
+      comicJSON.first_appearance_teams
+ -->
+          </table>
         </div>
-        <table class="profileInfo w-full mr-auto ml-auto">
-          <tr>
-            <th class="uppercase">Name</th>
-            <td>{{ comicJSON[0]["name"] }}</td>
-          </tr>
-          <tr>
-            <th class="uppercase">Issue Number</th>
-            <td>{{ comicJSON[0]["issueNumber"] }}</td>
-          </tr>
-          <tr>
-            <th class="uppercase">Cover Date</th>
-            <td>{{ comicJSON[0]["coverDate"] }}</td>
-          </tr>
-          <tr>
-            <th class="uppercase">Volume</th>
-            <td>{{ comicJSON[0]["volume"] }}</td>
-          </tr>
-          <tr v-if="personCredits">
-            <th class="uppercase">Persons</th>
-            <td v-if="personCredits">
-              <p v-for="item in personCredits" :key="item.id">
-                {{ item.name }}
-              </p>
-            </td>
-            <td v-else></td>
-          </tr>
-        </table>
-      </div>
-      <div class="w-full overflow-hidden md:w-4/6 p-10 mr-auto ml-auto">
-        <h1 class="text-lg uppercase pb-2">Story</h1>
-        <p v-if="story" class="pb-4" v-html="story"></p>
-        <p v-else>
-          No additional information about the plot of this comic available
-        </p>
+        <div class="w-full overflow-hidden md:w-4/6 p-10 mr-auto ml-auto">
+          <h1 class="text-lg uppercase pb-2">Story:</h1>
+          <p
+            v-if="comicJSON.description"
+            class="pb-4"
+            v-html="comicJSON.description"
+          ></p>
+          <p v-else>
+            No additional information about the plot of this comic available
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -62,28 +117,29 @@
 
 <script>
 import axios from "axios";
+import { RotateSquare2 } from "vue-loading-spinner";
 export default {
   name: "Comic",
-  components: {},
+  components: { RotateSquare2 },
   props: {},
   watch: {},
   data() {
     return {
       currentID: this.$route.params.id,
       comicJSON: {},
-      personCredits: {},
-      story: "",
+      showLoader: true,
     };
   },
 
   mounted: async function () {
     try {
+      this.showLoader = true;
       const response = await axios.get(`/api/comic/${this.currentID}`);
       this.comicJSON = response.data;
-      this.personCredits = this.comicJSON[0]["personCredits"];
-      this.story = this.comicJSON[0]["story"];
     } catch (error) {
       console.error(error);
+    } finally {
+      this.showLoader = false;
     }
   },
   methods: {},
@@ -91,6 +147,10 @@ export default {
 </script>
 
 <style scoped>
+.spinner[data-v-fa81853e]:after {
+  background: #f59e0b;
+}
+
 th {
   padding: 10px;
   text-align: left;

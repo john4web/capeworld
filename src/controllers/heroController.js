@@ -257,6 +257,10 @@ export const getRandomHero = (req, res) => {};
 
 export const getRandomHeroes = (req, res) => {};
 
+export const getTrendiestHero = (req, res) => {};
+
+export const getFirstThreeTrendiestHeroes = (req, res) => {};
+
 //Function to insert all DC and Marvel Characters from the ComicVine-API in our database
 const insertAllCharactersInDatabase = () => {
   //get data from APIs

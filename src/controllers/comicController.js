@@ -1,26 +1,90 @@
 import axios from "axios";
 import credentials from "../../api_credentials";
+import { ComicModel } from "../models/comicModel";
 
 export const getComicByID = async (req, res) => {
-  var comicID = req.params.comicID;
+  const comicID = req.params.comicID;
+
   try {
-    const response = await axios.get(
+    const request = await axios.get(
       `https://comicvine.gamespot.com/api/issue/4000-${comicID}/?api_key=${credentials.comic_vines_api.access_token}&format=json`
     );
-    const responseArray = [];
 
-    responseArray.push({
-      id: response.data.results.id,
-      name: response.data.results.name,
-      imageURL: response.data.results.image.medium_url,
-      issueNumber: response.data.results.issue_number,
-      coverDate: response.data.results.cover_date,
-      volume: response.data.results.volume.name,
-      personCredits: response.data.results.person_credits,
-      story: response.data.results.description,
+    const response = request.data.results;
+
+    const responseObject = {
+      id: null,
+      name: null,
+      image: null,
+      issue_number: null,
+      store_date: null,
+      volume_name: null,
+      cover_date: null,
+      description: null,
+      deck: null,
+      character_died_in: null,
+      character_credits: null,
+      person_credits: null,
+      team_credits: null,
+      aliases: null,
+      first_appearance_characters: null,
+      first_appearance_teams: null,
+    };
+
+    responseObject.id = response.id;
+    responseObject.name = response.name || "issue name unknown";
+    responseObject.image = response.image.medium_url;
+    responseObject.issue_number = response.issue_number;
+    responseObject.store_date = response.store_date;
+    responseObject.volume_name = response.volume.name;
+    responseObject.cover_date = response.cover_date;
+    responseObject.description = response.description;
+    responseObject.deck = response.deck;
+
+    responseObject.character_died_in =
+      response.character_died_in.map((character) => {
+        return { id: character.id, name: character.name };
+      }) || null;
+
+    if (!responseObject.character_died_in.length) {
+      responseObject.character_died_in = null;
+    }
+
+    responseObject.character_credits =
+      response.character_credits.map((character) => {
+        return { id: character.id, name: character.name };
+      }) || null;
+
+    responseObject.person_credits =
+      response.person_credits.map((person) => {
+        return { name: person.name, role: person.role };
+      }) || null;
+
+    responseObject.team_credits =
+      response.team_credits.map((team) => team.name) || null;
+
+    if (!responseObject.team_credits.length) {
+      responseObject.team_credits = null;
+    }
+
+    responseObject.aliases = response.aliases;
+
+    responseObject.first_appearance_characters =
+      response.first_appearance_characters;
+    responseObject.first_appearance_teams = response.first_appearance_teams;
+
+    //Save comic into database when it does not exist in the database
+    ComicModel.findOne({ id: responseObject.id }, (err, comic) => {
+      if (!comic) {
+        ComicModel.create({
+          id: responseObject.id,
+          name: responseObject.name,
+          image: responseObject.image,
+        });
+      }
     });
 
-    res.json(responseArray);
+    res.json(responseObject);
   } catch (error) {
     console.error(error);
   }
@@ -28,6 +92,17 @@ export const getComicByID = async (req, res) => {
 
 export const getComicsByNameFilter = (req, res) => {
   const comicName = req.params.comicName;
+
+  const regex = new RegExp(comicName, "i"); //selects all the heroes that have the substring the user typed in
+
+  ComicModel.find({ name: { $regex: regex } }, "id name image", (err, docs) => {
+    const response = docs.map((item) => {
+      return { id: item.id, name: item.name, image: item.image };
+    });
+    res.json(response);
+  });
+
+  /* const comicName = req.params.comicName;
 
   const comicvines_api_request_url = `https://comicvine.gamespot.com/api/issues/?api_key=${credentials.comic_vines_api.access_token}&filter=name:${comicName}&field_list=id,name,image,api_detail_url&format=json`;
 
@@ -53,13 +128,14 @@ export const getComicsByNameFilter = (req, res) => {
 
     res.json(responseArray);
   });
+  */
   // ToDo: Handle Promise Timeout. What if the API-Calls take 5 hours?
   // ToDo: Handle Promise Timeout on frontend
 };
 
 export const getRandomComic = async (req, res) => {
   //TODO test if id is valid
-  var comicID = Math.floor(Math.random() * 18000) + 1;
+  const comicID = Math.floor(Math.random() * 18000) + 1;
 
   try {
     const response = await axios.get(
@@ -80,3 +156,16 @@ export const getRandomComic = async (req, res) => {
 };
 
 export const getRandomComics = (req, res) => {};
+
+export const getRandomImages = async (req, res) => {
+  // returns random comic cover images
+  const imageCount = req.params.number;
+  const imageArray = [];
+  const count = await ComicModel.estimatedDocumentCount();
+  for (let i = 0; i < imageCount; i++) {
+    const random = Math.floor(Math.random() * count);
+    const comic = await ComicModel.findOne().skip(random).exec();
+    imageArray.push(comic.image);
+  }
+  res.json(imageArray);
+};
