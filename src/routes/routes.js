@@ -3,10 +3,12 @@ import express from "express";
 import {
   getHeroByID,
   getHeroesByNameFilter,
+  getTrendiestHero,
 } from "../controllers/heroController";
 import {
   getComicByID,
   getComicsByNameFilter,
+  getTrendiestComic,
 } from "../controllers/comicController";
 import {
   getMovieByID,
@@ -27,9 +29,11 @@ const router = express.Router();
 
 router.get("/hero/:heroID", getHeroByID);
 router.get("/hero/name/:heroName", getHeroesByNameFilter);
+router.get("/hero-trendiest", getTrendiestHero);
 
 router.get("/comic/:comicID", getComicByID);
 router.get("/comic/name/:comicName", getComicsByNameFilter);
+router.get("/comic-trendiest", getTrendiestComic);
 
 router.get("/movie/:movieID", getMovieByID);
 router.get("/movie/name/:movieName", getMoviesByNameFilter);

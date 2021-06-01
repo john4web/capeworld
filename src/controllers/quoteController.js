@@ -5,14 +5,11 @@ export const getRandomQuote = async (req, res) => {
     const response = await axios.get(
       `https://superhero-quotes.herokuapp.com/random`
     );
-    const responseArray = [];
 
-    responseArray.push({
+    res.json({
       author: response.data.Stuff.data.author,
       quote: response.data.Stuff.data.quote,
     });
-
-    res.json(responseArray);
   } catch (error) {
     console.error(error);
   }

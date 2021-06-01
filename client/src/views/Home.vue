@@ -1,9 +1,11 @@
 <template>
   <div>
     <h1 class="uppercase">Home</h1>
-    <h2 class="uppercase">Random Quote</h2>
-    <p class="text-lg mt-4 italic">{{ randomQuoteJSON[0]["quote"] }}</p>
-    <p class="text-red-500 mb-4">- {{ randomQuoteJSON[0]["author"] }}</p>
+    <div v-if="randomQuote">
+      <h2 class="uppercase">Random Quote</h2>
+      <p class="text-lg mt-4 italic">{{ randomQuote.quote }}</p>
+      <p class="text-red-500 mb-4">- {{ randomQuote.author }}</p>
+    </div>
     <h2 class="uppercase">Random Movie</h2>
     <div
       v-if="randomMovieJSON.length"
@@ -40,6 +42,32 @@
         />
       </div>
     </div>
+
+    <h2 class="uppercase">Trendiest Hero:</h2>
+    <div v-if="trendiestHero" class="overview-cols mr-auto ml-auto mb-10">
+      <div class="flex justify-center">
+        <overview-item
+          dataType="superhero"
+          :id="trendiestHero.id"
+          :name="trendiestHero.name"
+          :imageURL="trendiestHero.image"
+        />
+        <span>User accesses: {{ trendiestHero.accesscount }}</span>
+      </div>
+    </div>
+
+    <h2 class="uppercase">Trendiest Comic:</h2>
+    <div v-if="trendiestComic" class="overview-cols mr-auto ml-auto mb-10">
+      <div class="flex justify-center">
+        <overview-item
+          dataType="comic"
+          :id="trendiestComic.id"
+          :name="trendiestComic.name"
+          :imageURL="trendiestComic.image"
+        />
+        <span>User accesses: {{ trendiestComic.accesscount }}</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -55,7 +83,9 @@ export default {
       dataTypeComic: "comic",
       randomMovieJSON: {},
       randomComicJSON: {},
-      randomQuoteJSON: {},
+      randomQuote: null,
+      trendiestHero: null,
+      trendiestComic: null,
     };
   },
   // data: () => ({
@@ -96,11 +126,15 @@ export default {
     //   });
     try {
       const responseRandomQuote = await axios.get(`/api/quote`);
-      this.randomQuoteJSON = responseRandomQuote.data;
+      this.randomQuote = responseRandomQuote.data;
       const responseRandomComic = await axios.get(`/api/comicrandom`);
       this.randomComicJSON = responseRandomComic.data;
       const responseRandomMovie = await axios.get(`/api/movierandom`);
       this.randomMovieJSON = responseRandomMovie.data;
+      const responseTrendiestHero = await axios.get(`/api/hero-trendiest`);
+      this.trendiestHero = responseTrendiestHero.data;
+      const responseTrendiestComic = await axios.get(`/api/comic-trendiest`);
+      this.trendiestComic = responseTrendiestComic.data;
     } catch (error) {
       console.error(error);
     }

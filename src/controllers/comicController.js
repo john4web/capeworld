@@ -80,7 +80,11 @@ export const getComicByID = async (req, res) => {
           id: responseObject.id,
           name: responseObject.name,
           image: responseObject.image,
+          accesscount: 1,
         });
+      } else {
+        comic.accesscount++;
+        comic.save();
       }
     });
 
@@ -146,7 +150,9 @@ export const getRandomComic = async (req, res) => {
     responseArray.push({
       id: response.data.results.id,
       name: response.data.results.name,
-      imageURL: response.data.results.image.icon_url,
+      imageURL: response.data.results.image
+        ? response.data.results.image.icon_url
+        : null,
     });
 
     res.json(responseArray);
@@ -156,6 +162,12 @@ export const getRandomComic = async (req, res) => {
 };
 
 export const getRandomComics = (req, res) => {};
+
+export const getTrendiestComic = (req, res) => {
+  ComicModel.findTrendiest((err, comic) => {
+    res.json(comic);
+  });
+};
 
 export const getRandomImages = async (req, res) => {
   // returns random comic cover images

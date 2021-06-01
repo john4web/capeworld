@@ -209,14 +209,15 @@ export const getHeroByID = async (req, res) => {
         }
       });
 
-      CharacterModel.find(
+      CharacterModel.findOne(
         { id: responseObject.id },
-        "id image",
+        "id image accesscount",
         (err, docs) => {
-          if (!Boolean(docs[0].image)) {
-            docs[0].image = responseObject.image;
-            docs[0].save();
+          if (!Boolean(docs.image)) {
+            docs.image = responseObject.image;
           }
+          docs.accesscount++;
+          docs.save();
           res.json(responseObject);
         }
       );
@@ -257,7 +258,11 @@ export const getRandomHero = (req, res) => {};
 
 export const getRandomHeroes = (req, res) => {};
 
-export const getTrendiestHero = (req, res) => {};
+export const getTrendiestHero = (req, res) => {
+  CharacterModel.findTrendiest((err, character) => {
+    res.json(character);
+  });
+};
 
 export const getFirstThreeTrendiestHeroes = (req, res) => {};
 
@@ -283,7 +288,12 @@ const insertAllCharactersInDatabase = () => {
 
       const generatedResponse = [...responseArray[0], ...responseArray[1]] //create one Array with all characters in it
         .map((character) => {
-          return { id: character.id, name: character.name, image: null }; //show only id and name of characters
+          return {
+            id: character.id,
+            name: character.name,
+            image: null,
+            accesscount: 0,
+          }; //show only id and name of characters
         });
 
       // Insert

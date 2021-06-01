@@ -15,6 +15,17 @@ const ComicSchema = new Schema({
     type: String,
     required: true,
   },
+  accesscount: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
 });
+
+ComicSchema.statics.findTrendiest = function (callback) {
+  this.findOne() // 'this' now refers to the Comic class
+    .sort("-accesscount")
+    .exec(callback);
+};
 
 export const ComicModel = mongoose.model("Comic", ComicSchema);
