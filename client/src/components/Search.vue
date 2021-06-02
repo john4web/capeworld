@@ -2,20 +2,13 @@
   <div>
     <div class="flex">
       <div>
+        <img class="search" src="../assets/search.svg" alt="search" />
         <input
           type="text"
-          class="border border-gray-500 py-2 px-4"
+          class="border border-gray-400 py-2 px-4 input-field rounded-full"
           v-model="inputText"
           @keyup="getResultsByName"
         />
-      </div>
-      <div>
-        <button
-          @click="getResultsByName"
-          class="bg-red-500 hover:bg-red-700 py-3 px-4 rounded"
-        >
-          <img class="search" src="../assets/search.svg" alt="logo" />
-        </button>
       </div>
     </div>
     <rotate-square2 :class="{ hidden: isHidden }"></rotate-square2>
@@ -33,7 +26,10 @@
         />
       </div>
     </div>
-    <div v-else>No Heroes found!</div>
+    <div v-else>
+      <p v-if="type === 'superhero'">No {{ type }}es found!</p>
+      <p v-else>No {{ type }}s found!</p>
+    </div>
   </div>
 </template>
 
@@ -120,5 +116,13 @@ export default {
   .overview-cols {
     grid-template-columns: repeat(3, 1fr);
   }
+}
+.search {
+  position: absolute;
+  margin-top: 12px;
+  margin-left: 10px;
+}
+.input-field {
+  padding-left: 35px;
 }
 </style>
