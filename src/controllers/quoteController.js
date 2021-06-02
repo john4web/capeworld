@@ -1,13 +1,22 @@
 import axios from "axios";
+import { CharacterModel } from "../models/characterModel";
 
 export const getRandomQuote = async (req, res) => {
   try {
-    const response = await axios.get(
-      `https://superhero-quotes.herokuapp.com/random`
-    );
+    let response;
+    let hero;
+    while (!hero) {
+      response = await axios.get(
+        `https://superhero-quotes.herokuapp.com/random`
+      );
+
+      hero = await CharacterModel.findMostFamousByName(
+        response.data.Stuff.data.author
+      );
+    }
 
     res.json({
-      author: response.data.Stuff.data.author,
+      author: hero,
       quote: response.data.Stuff.data.quote,
     });
   } catch (error) {

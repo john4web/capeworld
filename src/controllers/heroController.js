@@ -54,9 +54,19 @@ export const getHeroByID = async (req, res) => {
       teams: null,
     };
 
-    const marvel_api_request_url = `http://gateway.marvel.com/v1/public/characters?name=${heroName}&limit=1&ts=${timestamp}&apikey=${publicKey}&hash=${hash}`;
-    const superheroes_api_request_url = `https://superheroapi.com/api/${credentials.superhero_api.access_token}/search/${heroName}`;
+    const isMostFamousHero = await CharacterModel.isMostFamousHero(
+      heroID,
+      heroName
+    );
+
     const comicvines_api_request_url = `https://comicvine.gamespot.com/api/character/4005-${heroID}/?api_key=${credentials.comic_vines_api.access_token}&format=json`;
+    let marvel_api_request_url = "";
+    let superheroes_api_request_url = "";
+
+    if (isMostFamousHero) {
+      marvel_api_request_url = `http://gateway.marvel.com/v1/public/characters?name=${heroName}&limit=1&ts=${timestamp}&apikey=${publicKey}&hash=${hash}`;
+      superheroes_api_request_url = `https://superheroapi.com/api/${credentials.superhero_api.access_token}/search/${heroName}`;
+    }
 
     const promises = [
       axios.get(marvel_api_request_url),
@@ -211,12 +221,14 @@ export const getHeroByID = async (req, res) => {
 
       CharacterModel.findOne(
         { id: responseObject.id },
-        "id image accesscount",
+        "id image accesscount issue_appearance_count",
         (err, docs) => {
           if (!Boolean(docs.image)) {
             docs.image = responseObject.image;
           }
           docs.accesscount++;
+          docs.issue_appearance_count =
+            responseObject.count_of_issue_appearances;
           docs.save();
           res.json(responseObject);
         }
