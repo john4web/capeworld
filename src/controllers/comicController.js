@@ -139,7 +139,7 @@ export const getComicsByNameFilter = (req, res) => {
 
 export const getRandomComic = async (req, res) => {
   //TODO test if id is valid
-  const comicID = Math.floor(Math.random() * 18000) + 1;
+  /* const comicID = Math.floor(Math.random() * 18000) + 1;
 
   try {
     const response = await axios.get(
@@ -158,7 +158,11 @@ export const getRandomComic = async (req, res) => {
     res.json(responseArray);
   } catch (error) {
     console.error(error);
-  }
+  }*/
+
+  ComicModel.getRandomComic((err, comic) => {
+    res.json(comic);
+  });
 };
 
 export const getRandomComics = (req, res) => {};

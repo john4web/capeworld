@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const ComicSchema = new Schema({
+const MovieSchema = new Schema({
   id: {
     type: Number,
     required: true,
@@ -13,7 +13,7 @@ const ComicSchema = new Schema({
   },
   image: {
     type: String,
-    required: true,
+    required: false,
   },
   accesscount: {
     type: Number,
@@ -22,13 +22,7 @@ const ComicSchema = new Schema({
   },
 });
 
-ComicSchema.statics.findTrendiest = function (callback) {
-  this.findOne() // 'this' now refers to the Comic class
-    .sort("-accesscount")
-    .exec(callback);
-};
-
-ComicSchema.statics.getRandomComic = function (callback) {
+MovieSchema.statics.getRandomMovie = function (callback) {
   this.estimatedDocumentCount(
     function (err, count) {
       if (err) {
@@ -40,4 +34,4 @@ ComicSchema.statics.getRandomComic = function (callback) {
   );
 };
 
-export const ComicModel = mongoose.model("Comic", ComicSchema);
+export const MovieModel = mongoose.model("Movie", MovieSchema);

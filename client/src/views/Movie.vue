@@ -1,70 +1,110 @@
 <template>
   <div class="w-full md:max-w-7xl">
-    <!-- TODO: format page different than heropage or give a hint that this is a movie -->
-    <!-- TODO: maybe link publisher? -->
-    <div class="p-4 bg-green-500 headline">
-      <h1 class="uppercase inline-block text-2xl text-white mt-3">
-        {{ movieJSON[0]["name"] }}
-      </h1>
+    <rotate-square2 :class="{ hidden: !showLoader }"></rotate-square2>
+    <div :class="{ hidden: showLoader }">
+      <div class="p-4 bg-green-500 headline" v-if="movie">
+        <h1 class="uppercase inline-block text-2xl text-white mt-3">
+          {{ movie.name }}
+        </h1>
 
-      <p
-        class="uppercase text-white border-2 rounded-lg text-center border-white p-2 m-2"
-      >
-        Movie
-      </p>
-    </div>
-    <div class="flex flex-wrap overflow-hidden">
-      <div class="w-full overflow-hidden md:w-2/6 bg-gray-300 p-10">
-        <div class="w-full overflow-hidden flex justify-center mb-10">
-          <div v-if="movieJSON.length">
-            <div v-for="item in movieJSON" :key="item.id">
-              <img :src="item.imageURL" class="max-h-80" alt="image" />
+        <p
+          class="uppercase text-white border-2 rounded-lg text-center border-white p-2 m-2"
+        >
+          Movie
+        </p>
+      </div>
+      <div class="flex flex-wrap overflow-hidden" v-if="movie">
+        <div class="w-full overflow-hidden md:w-2/6 bg-gray-300 p-10">
+          <div class="w-full overflow-hidden flex justify-center mb-10">
+            <div>
+              <div>
+                <img :src="movie.image" class="max-h-80" alt="image" />
+              </div>
             </div>
           </div>
+          <table class="profileInfo w-full mr-auto ml-auto">
+            <tr>
+              <th class="uppercase">Name</th>
+              <td>{{ movie.name }}</td>
+            </tr>
+            <tr>
+              <th class="uppercase">Rating</th>
+              <td>{{ movie.rating }}</td>
+            </tr>
+            <tr>
+              <th class="uppercase">Budget</th>
+              <td>{{ movie.budget }}</td>
+            </tr>
+            <tr>
+              <th class="uppercase">Deck</th>
+              <td>{{ movie.deck }}</td>
+            </tr>
+            <tr>
+              <th class="uppercase">Release Date</th>
+              <td>{{ movie.release_date }}</td>
+            </tr>
+            <tr>
+              <th class="uppercase">Runtime</th>
+              <td>{{ movie.runtime }}</td>
+            </tr>
+            <tr>
+              <th class="uppercase">Box Office Revenue</th>
+              <td>{{ movie.box_office_revenue }}</td>
+            </tr>
+            <tr>
+              <th class="uppercase">Total Revenue</th>
+              <td>{{ movie.total_revenue }}</td>
+            </tr>
+            <tr v-if="writers">
+              <th class="uppercase">Writers</th>
+              <td>
+                <p v-for="(writer, index) in writers" :key="'writer' + index">
+                  {{ writer }}
+                </p>
+              </td>
+            </tr>
+            <tr v-if="characters">
+              <th class="uppercase">Characters</th>
+              <td>
+                <p v-for="character in characters" :key="character.id">
+                  <router-link :to="`/superhero/${character.id}`">
+                    {{ character.name }}</router-link
+                  >
+                </p>
+              </td>
+            </tr>
+            <tr v-if="producers">
+              <th class="uppercase">Producers</th>
+              <td>
+                <p
+                  v-for="(producer, index) in producers"
+                  :key="'producer' + index"
+                >
+                  {{ producer }}
+                </p>
+              </td>
+            </tr>
+            <tr v-if="studios">
+              <th class="uppercase">Studios</th>
+              <td>
+                <p v-for="(studio, index) in studios" :key="'studio' + index">
+                  {{ studio }}
+                </p>
+              </td>
+            </tr>
+          </table>
         </div>
-        <table class="profileInfo w-full mr-auto ml-auto">
-          <tr>
-            <th class="uppercase">Name</th>
-            <td>{{ movieJSON[0]["name"] }}</td>
-          </tr>
-          <tr>
-            <th class="uppercase">Rating</th>
-            <td>{{ movieJSON[0]["rating"] }}</td>
-          </tr>
-          <tr>
-            <th class="uppercase">Release Date</th>
-            <td>{{ movieJSON[0]["releaseDate"] }}</td>
-          </tr>
-          <tr>
-            <th class="uppercase">Runtime</th>
-            <td>{{ movieJSON[0]["runtime"] }}</td>
-          </tr>
-          <tr v-if="studios">
-            <th class="uppercase">Studios</th>
-            <td v-if="studios">
-              <p v-for="item in studios" :key="item.id">
-                {{ item.name }}
-              </p>
-            </td>
-            <td v-else></td>
-          </tr>
-          <tr v-if="writers">
-            <th class="uppercase">Writers</th>
-            <td v-if="writers">
-              <p v-for="item in writers" :key="item.id">
-                {{ item.name }}
-              </p>
-            </td>
-            <td v-else></td>
-          </tr>
-        </table>
-      </div>
-      <div class="w-full overflow-hidden md:w-4/6 p-10 mr-auto ml-auto">
-        <h1 class="text-lg uppercase pb-2">Story</h1>
-        <p v-if="story" class="pb-4" v-html="story"></p>
-        <p v-else>
-          No additional information about the plot of this comic available
-        </p>
+        <div class="w-full overflow-hidden md:w-4/6 p-10 mr-auto ml-auto">
+          <h1 class="text-lg uppercase pb-2">Story</h1>
+          <p
+            v-if="movie.description"
+            class="pb-4"
+            v-html="movie.description"
+          ></p>
+          <p v-else>
+            No additional information about the plot of this comic available
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -72,30 +112,37 @@
 
 <script>
 import axios from "axios";
+import { RotateSquare2 } from "vue-loading-spinner";
 export default {
   name: "Movie",
-  components: {},
+  components: { RotateSquare2 },
   props: {},
   watch: {},
   data() {
     return {
       currentID: this.$route.params.id,
-      movieJSON: {},
-      studios: {},
-      writers: {},
-      story: "",
+      movie: null,
+      writers: null,
+      characters: null,
+      producers: null,
+      studios: null,
+      showLoader: true,
     };
   },
 
   mounted: async function () {
     try {
+      this.showLoader = true;
       const response = await axios.get(`/api/movie/${this.currentID}`);
-      this.movieJSON = response.data;
-      this.studios = this.movieJSON.studios;
-      this.writers = this.movieJSON.writers;
-      this.story = this.movieJSON[0]["story"];
+      this.movie = response.data;
+      this.writers = response.data.writers;
+      this.characters = response.data.characters;
+      this.producers = response.data.producers;
+      this.studios = response.data.studios;
     } catch (error) {
       console.error(error);
+    } finally {
+      this.showLoader = false;
     }
   },
   methods: {},

@@ -10,38 +10,24 @@
       <img :src="randomQuote.author.image" alt="" />
     </div>
     <h2 class="uppercase">Random Movie</h2>
-    <div
-      v-if="randomMovieJSON.length"
-      class="overview-cols mr-auto ml-auto mb-10"
-    >
-      <div
-        class="flex justify-center"
-        v-for="item in randomMovieJSON"
-        :key="item.id"
-      >
+    <div v-if="randomMovie" class="overview-cols mr-auto ml-auto mb-10">
+      <div class="flex justify-center">
         <overview-item
           :dataType="dataTypeMovie"
-          :id="item.id"
-          :name="item.name"
-          :imageURL="item.imageURL"
+          :id="randomMovie.id"
+          :name="randomMovie.name"
+          :imageURL="randomMovie.image"
         />
       </div>
     </div>
     <h2 class="uppercase">Random Comic</h2>
-    <div
-      v-if="randomComicJSON.length"
-      class="overview-cols mr-auto ml-auto mb-10"
-    >
-      <div
-        class="flex justify-center"
-        v-for="item in randomComicJSON"
-        :key="item.id"
-      >
+    <div v-if="randomComic" class="overview-cols mr-auto ml-auto mb-10">
+      <div class="flex justify-center">
         <overview-item
           :dataType="dataTypeComic"
-          :id="item.id"
-          :name="item.name"
-          :imageURL="item.imageURL"
+          :id="randomComic.id"
+          :name="randomComic.name"
+          :imageURL="randomComic.image"
         />
       </div>
     </div>
@@ -84,8 +70,8 @@ export default {
     return {
       dataTypeMovie: "movie",
       dataTypeComic: "comic",
-      randomMovieJSON: {},
-      randomComicJSON: {},
+      randomMovie: null,
+      randomComic: null,
       randomQuote: null,
       trendiestHero: null,
       trendiestComic: null,
@@ -131,9 +117,9 @@ export default {
       const responseRandomQuote = await axios.get(`/api/quote`);
       this.randomQuote = responseRandomQuote.data;
       const responseRandomComic = await axios.get(`/api/comicrandom`);
-      this.randomComicJSON = responseRandomComic.data;
+      this.randomComic = responseRandomComic.data;
       const responseRandomMovie = await axios.get(`/api/movierandom`);
-      this.randomMovieJSON = responseRandomMovie.data;
+      this.randomMovie = responseRandomMovie.data;
       const responseTrendiestHero = await axios.get(`/api/hero-trendiest`);
       this.trendiestHero = responseTrendiestHero.data;
       const responseTrendiestComic = await axios.get(`/api/comic-trendiest`);
