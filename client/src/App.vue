@@ -59,17 +59,41 @@
           >
         </div>
       </nav>
-      <div class="banner w-full flex justify-center">
-        <div class="items-center title-container">
-          <h1 class="title uppercase text-5xl font-bold text-white text-center">
+      <div class="banner bg-black w-full flex justify-center">
+        <div class="items-center w-full flex justify-center">
+          <h1
+            class="title z-50 absolute uppercase text-5xl font-bold text-white text-center"
+          >
             Capeworld
           </h1>
+          <div class="banner grid headerimages">
+            <div
+              class="bg-red-500 one images"
+              :style="{ backgroundImage: 'url(' + headerImages[0] + ')' }"
+            ></div>
+            <div
+              class="bg-green-500 two images"
+              :style="{ backgroundImage: 'url(' + headerImages[1] + ')' }"
+            ></div>
+            <div
+              class="bg-blue-500 three images"
+              :style="{ backgroundImage: 'url(' + headerImages[2] + ')' }"
+            ></div>
+            <div
+              class="bg-red-500 four images"
+              :style="{ backgroundImage: 'url(' + headerImages[3] + ')' }"
+            ></div>
+            <div
+              class="bg-green-500 five images"
+              :style="{ backgroundImage: 'url(' + headerImages[4] + ')' }"
+            ></div>
+          </div>
           <router-link
             to="/superheroes"
-            class="uppercase text-white hover:text-red-500 m-4 flex justify-center"
+            class="uppercase text-white hover:text-red-500 m-8 flex justify-center z-50 absolute"
           >
             <button
-              class="bg-gray-900 hover:bg-gray-800 text-white uppercase py-2 px-4 m-4 rounded"
+              class="bg-red-500 hover:bg-red-700 text-white uppercase py-2 px-4 m-8 rounded z-50 absolute"
             >
               Find Superhero
             </button></router-link
@@ -91,24 +115,41 @@
 }
 .banner {
   height: 500px;
-  background: url("./assets/header.jpg") rgba(239, 68, 68, 0.5);
-  background-size: cover;
-  background-blend-mode: multiply;
-  background-position: right;
+  width: 100%;
 }
 .title-container {
   width: 300px;
 }
-.title {
-  margin-top: 75%;
-}
-
 a.router-link-exact-active {
   color: rgba(239, 68, 68);
+}
+
+.headerimages {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(5, 115px);
+  gap: 10px;
+}
+
+.one {
+  grid-column: 1/3;
+  grid-row: 1/4;
+}
+.two {
+  grid-row: 1/3;
+}
+.five {
+  grid-column: 4/2;
+}
+.images {
+  filter: grayscale(100%);
+  background-size: cover;
+  background-blend-mode: multiply;
+  background-position: right;
 }
 </style>
 
 <script>
+import axios from "axios";
 export default {
   name: "App",
   components: {},
@@ -117,7 +158,16 @@ export default {
       isOpen: false,
       isHidden: true,
       isFlex: false,
+      headerImages: {},
     };
+  },
+  mounted: async function () {
+    try {
+      const response = await axios.get(`api/randomcomicimages/5`);
+      this.headerImages = response.data;
+    } catch (error) {
+      console.error(error);
+    }
   },
   methods: {
     navToggle: function () {
