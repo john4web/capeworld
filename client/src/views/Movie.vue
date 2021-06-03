@@ -23,35 +23,31 @@
             </div>
           </div>
           <table class="profileInfo w-full mr-auto ml-auto">
-            <tr>
+            <tr v-if="movie.name">
               <th class="uppercase">Name</th>
               <td>{{ movie.name }}</td>
             </tr>
-            <tr>
+            <tr v-if="movie.ratinge">
               <th class="uppercase">Rating</th>
               <td>{{ movie.rating }}</td>
             </tr>
-            <tr>
+            <tr v-if="movie.budget">
               <th class="uppercase">Budget</th>
               <td>{{ movie.budget }}</td>
             </tr>
-            <tr>
-              <th class="uppercase">Deck</th>
-              <td>{{ movie.deck }}</td>
-            </tr>
-            <tr>
+            <tr v-if="movie.release_date">
               <th class="uppercase">Release Date</th>
               <td>{{ movie.release_date }}</td>
             </tr>
-            <tr>
+            <tr v-if="movie.runtime">
               <th class="uppercase">Runtime</th>
               <td>{{ movie.runtime }}</td>
             </tr>
-            <tr>
+            <tr v-if="movie.box_office_revenue">
               <th class="uppercase">Box Office Revenue</th>
               <td>{{ movie.box_office_revenue }}</td>
             </tr>
-            <tr>
+            <tr v-if="movie.total_revenue">
               <th class="uppercase">Total Revenue</th>
               <td>{{ movie.total_revenue }}</td>
             </tr>
@@ -60,16 +56,6 @@
               <td>
                 <p v-for="(writer, index) in writers" :key="'writer' + index">
                   {{ writer }}
-                </p>
-              </td>
-            </tr>
-            <tr v-if="characters">
-              <th class="uppercase">Characters</th>
-              <td>
-                <p v-for="character in characters" :key="character.id">
-                  <router-link :to="`/superhero/${character.id}`">
-                    {{ character.name }}</router-link
-                  >
                 </p>
               </td>
             </tr>
@@ -95,6 +81,9 @@
           </table>
         </div>
         <div class="w-full overflow-hidden md:w-4/6 p-10 mr-auto ml-auto">
+          <h1 class="text-lg uppercase pb-2">Deck</h1>
+          <p v-if="movie.deck" class="pb-4" v-html="movie.deck"></p>
+
           <h1 class="text-lg uppercase pb-2">Story</h1>
           <p
             v-if="movie.description"
@@ -104,6 +93,60 @@
           <p v-else>
             No additional information about the plot of this comic available
           </p>
+
+          <div class="mb-10">
+            <h2 v-if="characters" class="uppercase">Characters</h2>
+            <div class="flex flex-wrap" v-if="characters">
+              <div
+                class="text-green-500 border-2 rounded-lg border-green-500 p-2 m-2"
+                :class="{ hidden: !moreCharactersAreHidden }"
+                v-for="item in characters.slice(0, 5)"
+                :key="item.id"
+              >
+                <router-link :to="`/superhero/${item.id}`">
+                  {{ item.name }}</router-link
+                >
+              </div>
+              <div
+                class="text-green-500 border-2 rounded-lg border-green-500 p-2 m-2"
+                :class="{ hidden: moreCharactersAreHidden }"
+                v-for="item in characters"
+                :key="item.id + 'more_friends'"
+              >
+                <router-link :to="`/superhero/${item.id}`">
+                  {{ item.name }}</router-link
+                >
+              </div>
+            </div>
+            <div
+              class="text-green-500 border-2 rounded-lg border-green-500 p-2 m-2"
+              :class="{ hidden: moreCharactersAreHidden }"
+              v-else
+            >
+              <router-link
+                :to="`/superhero/${characters.id}`"
+                v-if="characters"
+              >
+                {{ characters.name }}</router-link
+              >
+            </div>
+            <button
+              v-if="characters && characters.length > 5"
+              @click="moreCharactersAreHidden = false"
+              :class="{ hidden: !moreCharactersAreHidden }"
+              class="bg-green-500 hover:bg-green-700 text-white py-3 px-4 rounded"
+            >
+              Show All
+            </button>
+            <button
+              v-if="characters && characters.length > 5"
+              @click="moreCharactersAreHidden = true"
+              :class="{ hidden: moreCharactersAreHidden }"
+              class="bg-green-500 hover:bg-green-700 text-white py-3 px-4 rounded"
+            >
+              Hide
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -127,6 +170,7 @@ export default {
       producers: null,
       studios: null,
       showLoader: true,
+      moreCharactersAreHidden: true,
     };
   },
 
@@ -143,6 +187,7 @@ export default {
       console.error(error);
     } finally {
       this.showLoader = false;
+      this.moreCharactersAreHidden = true;
     }
   },
   methods: {},
