@@ -6,13 +6,13 @@
         class="p-4 flex flex-col sm:flex-row w-full justify-between items-center bg-gray-900 border-b-2 border-red-500"
       >
         <div
-          class="w-full sm:w-auto flex flex-row sm:flex-none flex-no-wrap justify-between items-center"
+          class="w-full md:w-auto flex flex-row md:flex-none flex-no-wrap justify-between items-center"
         >
           <router-link to="/">
             <img class="logo" src="./assets/cape.svg" alt="logo" />
           </router-link>
           <button
-            class="hamburger block sm:hidden"
+            class="hamburger block md:hidden"
             :class="{ open: isOpen }"
             @click="navToggle"
           >
@@ -51,6 +51,11 @@
             to="/legal"
             class="uppercase text-white hover:text-red-500 m-4"
             >Legal Notice</router-link
+          >
+          <router-link
+            to="/quiz"
+            class="uppercase text-white hover:text-red-500 m-4"
+            >Quiz</router-link
           >
         </div>
       </nav>
