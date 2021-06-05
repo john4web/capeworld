@@ -277,7 +277,7 @@
           v-for="item in superheroJSON.movies"
           :key="item.id"
         >
-          <overview-item
+          <overview-item-simple
             :dataType="dataTypeMovie"
             :id="item.id"
             :name="item.name"
@@ -307,7 +307,7 @@
           v-for="item in superheroJSON.issue_credits"
           :key="item.id"
         >
-          <overview-item
+          <overview-item-simple
             :dataType="dataTypeComic"
             :id="item.id"
             :name="item.name"
@@ -325,11 +325,11 @@
 
 <script>
 import axios from "axios";
-import OverviewItem from "../components/OverviewItem.vue";
+import OverviewItemSimple from "../components/OverviewItemSimple.vue";
 import { RotateSquare2 } from "vue-loading-spinner";
 export default {
   name: "Superhero",
-  components: { OverviewItem, RotateSquare2 },
+  components: { OverviewItemSimple, RotateSquare2 },
   props: {},
   watch: {
     "$route.path"() {

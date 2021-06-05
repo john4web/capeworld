@@ -1,14 +1,13 @@
 <template>
   <div>
-    <h1 class="uppercase">Home</h1>
-    <div v-if="randomQuote">
+    <!-- <div v-if="randomQuote">
       <h2 class="uppercase">Random Quote</h2>
       <p class="text-lg mt-4 italic">{{ randomQuote.quote }}</p>
       <router-link :to="`/superhero/${randomQuote.author.id}`">
         <p class="text-red-500 mb-4">- {{ randomQuote.author.name }}</p>
       </router-link>
       <img :src="randomQuote.author.image" alt="" />
-    </div>
+    </div> -->
     <h2 class="uppercase">Random Movie</h2>
     <div v-if="randomMovie" class="overview-cols mr-auto ml-auto mb-10">
       <div class="flex justify-center">

@@ -62,10 +62,18 @@
       <div class="banner bg-black w-full flex justify-center">
         <div class="items-center w-full flex justify-center">
           <h1
-            class="title z-50 absolute uppercase text-5xl font-bold text-white text-center"
+            class="z-50 absolute uppercase text-5xl font-bold text-white text-center"
           >
             Capeworld
           </h1>
+          <div v-if="randomQuote" class="z-50 absolute text-center quote">
+            <p class="text-lg mt-4 italic font-bold text-white">
+              {{ randomQuote.quote }}
+            </p>
+            <router-link :to="`/superhero/${randomQuote.author.id}`">
+              <p class="text-red-500 mb-4">- {{ randomQuote.author.name }}</p>
+            </router-link>
+          </div>
           <div class="banner grid headerimages">
             <div
               class="bg-red-500 one images"
@@ -90,10 +98,10 @@
           </div>
           <router-link
             to="/superheroes"
-            class="uppercase text-white hover:text-red-500 m-8 flex justify-center z-50 absolute"
+            class="uppercase text-white hover:text-red-500 m-8 flex justify-center z-50 absolute header-button"
           >
             <button
-              class="bg-red-500 hover:bg-red-700 text-white uppercase py-2 px-4 m-8 rounded z-50 absolute"
+              class="bg-red-500 hover:bg-red-700 text-white uppercase py-2 px-4 rounded"
             >
               Find Superhero
             </button></router-link
@@ -146,6 +154,14 @@ a.router-link-exact-active {
   background-blend-mode: multiply;
   background-position: right;
 }
+
+.quote {
+  margin-top: 110px;
+}
+
+.header-button {
+  margin-top: 260px !important;
+}
 </style>
 
 <script>
@@ -158,13 +174,16 @@ export default {
       isOpen: false,
       isHidden: true,
       isFlex: false,
-      headerImages: {},
+      headerImages: null,
+      randomQuote: null,
     };
   },
   mounted: async function () {
     try {
       const response = await axios.get(`api/randomcomicimages/5`);
       this.headerImages = response.data;
+      const responseRandomQuote = await axios.get(`/api/quote`);
+      this.randomQuote = responseRandomQuote.data;
     } catch (error) {
       console.error(error);
     }

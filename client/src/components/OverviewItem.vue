@@ -9,8 +9,8 @@
       >
         <h1 class="uppercase">{{ name }}</h1></router-link
       >
-      <p class="mt-2 text-sm">{{ id }}</p>
-      <img :src="imageURL" alt="" />
+      <!-- <p class="mt-2 text-sm">{{ id }}</p> -->
+      <img class="overview-image" :src="imageURL" alt="" />
     </div>
     <!-- <div class="float-left justify-center overflow-hidden inline-block mr-4">
       <img :src="imageURL" class="max-w-xs max-h-7" alt="thumbnail" />
@@ -31,4 +31,7 @@ export default {
 </script>
 
 <style scoped>
+.overview-image {
+  width: 80px;
+}
 </style>
