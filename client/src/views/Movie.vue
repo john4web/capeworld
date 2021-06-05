@@ -195,6 +195,10 @@ export default {
 </script>
 
 <style scoped>
+.spinner {
+  margin-top: 20px;
+  margin-left: 50%;
+}
 th {
   padding: 10px;
   text-align: left;

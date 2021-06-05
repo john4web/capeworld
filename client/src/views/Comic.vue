@@ -287,6 +287,11 @@ export default {
   background: #f59e0b;
 }
 
+.spinner {
+  margin-top: 20px;
+  margin-left: 50%;
+}
+
 th {
   padding: 10px;
   text-align: left;
