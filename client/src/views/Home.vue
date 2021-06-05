@@ -8,52 +8,53 @@
       </router-link>
       <img :src="randomQuote.author.image" alt="" />
     </div> -->
-    <h2 class="uppercase">Random Movie</h2>
-    <div v-if="randomMovie" class="overview-cols mr-auto ml-auto mb-10">
-      <div class="flex justify-center">
-        <overview-item
+
+    <div v-if="randomMovie" class="mb-10">
+      <div>
+        <trending-item
           :dataType="dataTypeMovie"
           :id="randomMovie.id"
           :name="randomMovie.name"
           :imageURL="randomMovie.image"
+          :trending="false"
         />
       </div>
     </div>
-    <h2 class="uppercase">Random Comic</h2>
-    <div v-if="randomComic" class="overview-cols mr-auto ml-auto mb-10">
-      <div class="flex justify-center">
-        <overview-item
+    <div v-if="randomComic" class="mb-10">
+      <div>
+        <trending-item
           :dataType="dataTypeComic"
           :id="randomComic.id"
           :name="randomComic.name"
           :imageURL="randomComic.image"
+          :trending="false"
         />
       </div>
     </div>
 
-    <h2 class="uppercase">Trendiest Hero:</h2>
-    <div v-if="trendiestHero" class="overview-cols mr-auto ml-auto mb-10">
-      <div class="flex justify-center">
-        <overview-item
+    <div v-if="trendiestHero" class="mb-10">
+      <div>
+        <trending-item
           dataType="superhero"
           :id="trendiestHero.id"
           :name="trendiestHero.name"
           :imageURL="trendiestHero.image"
+          :trending="true"
         />
-        <span>User accesses: {{ trendiestHero.accesscount }}</span>
+        <!-- <span>User accesses: {{ trendiestHero.accesscount }}</span> -->
       </div>
     </div>
 
-    <h2 class="uppercase">Trendiest Comic:</h2>
-    <div v-if="trendiestComic" class="overview-cols mr-auto ml-auto mb-10">
-      <div class="flex justify-center">
-        <overview-item
+    <div v-if="trendiestComic" class="mb-10">
+      <div>
+        <trending-item
           dataType="comic"
           :id="trendiestComic.id"
           :name="trendiestComic.name"
           :imageURL="trendiestComic.image"
+          :trending="true"
         />
-        <span>User accesses: {{ trendiestComic.accesscount }}</span>
+        <!-- <span>User accesses: {{ trendiestComic.accesscount }}</span> -->
       </div>
     </div>
   </div>
@@ -61,10 +62,10 @@
 
 <script>
 const axios = require("axios");
-import OverviewItem from "../components/OverviewItem.vue";
+import TrendingItem from "../components/TrendingItem.vue";
 export default {
   name: "Home",
-  components: { OverviewItem },
+  components: { TrendingItem },
   data() {
     return {
       dataTypeMovie: "movie",
