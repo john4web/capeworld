@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-row items-stretch mt-0">
-    <div class="ml-0 overview-image-container mr-4">
+  <div class="lg:flex lg:flex-row items-stretch mt-0">
+    <div class="ml-0 overview-image-container lg:mr-4">
       <div
         class="overview-image-container"
         :style="{ backgroundImage: 'url(' + imageURL + ')' }"
@@ -50,10 +50,39 @@ export default {
   width: 500px;
   height: 300px;
   background-position-y: 50%;
+  background-position-x: 50%;
 }
 
 .overview-text-container {
   width: 400px;
   height: 300px;
+}
+
+@media (max-width: 1024px) {
+  .overview-text-container {
+    width: 500px;
+    height: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .overview-text-container {
+    width: 320px;
+    height: 300px;
+  }
+  .overview-image-container {
+    width: 320px;
+    height: 300px;
+  }
+}
+@media (max-width: 319px) {
+  .overview-text-container {
+    width: 250px;
+    height: 300px;
+  }
+  .overview-image-container {
+    width: 250px;
+    height: 300px;
+  }
 }
 </style>

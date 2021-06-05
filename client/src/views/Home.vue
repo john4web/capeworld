@@ -10,7 +10,7 @@
     </div> -->
 
     <div v-if="randomMovie" class="mb-10">
-      <div>
+      <div class="justify-center">
         <trending-item
           :dataType="dataTypeMovie"
           :id="randomMovie.id"
@@ -21,7 +21,7 @@
       </div>
     </div>
     <div v-if="randomComic" class="mb-10">
-      <div>
+      <div class="flex justify-center">
         <trending-item
           :dataType="dataTypeComic"
           :id="randomComic.id"
@@ -33,7 +33,7 @@
     </div>
 
     <div v-if="trendiestHero" class="mb-10">
-      <div>
+      <div class="flex justify-center">
         <trending-item
           dataType="superhero"
           :id="trendiestHero.id"
@@ -46,7 +46,7 @@
     </div>
 
     <div v-if="trendiestComic" class="mb-10">
-      <div>
+      <div class="flex justify-center">
         <trending-item
           dataType="comic"
           :id="trendiestComic.id"
