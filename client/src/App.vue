@@ -174,13 +174,13 @@ export default {
       isOpen: false,
       isHidden: true,
       isFlex: false,
-      headerImages: null,
+      headerImages: [],
       randomQuote: null,
     };
   },
   mounted: async function () {
     try {
-      const response = await axios.get(`api/randomcomicimages/5`);
+      const response = await axios.get(`/api/randomcomicimages/5`);
       this.headerImages = response.data;
       const responseRandomQuote = await axios.get(`/api/quote`);
       this.randomQuote = responseRandomQuote.data;
