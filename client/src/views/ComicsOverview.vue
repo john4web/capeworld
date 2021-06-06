@@ -1,17 +1,19 @@
 <template>
   <div>
-    <h1 class="uppercase">Comics Overview</h1>
-    <search :dataType="dataType" />
-    <div
-      v-if="randomComicJSON.length"
-      class="grid grid-rows-6 gap-1 grid-flow-col"
-    >
-      <div v-for="item in randomComicJSON" :key="item.id">
-        <overview-item
-          :dataType="dataType"
-          :id="item.id"
-          :name="item.name"
-          :imageURL="item.imageURL"
+    <h1 class="uppercase text-3xl text-red-500 font-bold mb-2 text-center">
+      Find a Comic
+    </h1>
+    <div class="text-center">
+      <search :dataType="dataType" />
+    </div>
+    <div v-if="trendiestComic" class="mb-10 mt-16">
+      <div class="flex justify-center">
+        <trending-item
+          dataType="comic"
+          :id="trendiestComic.id"
+          :name="trendiestComic.name"
+          :imageURL="trendiestComic.image"
+          :trending="true"
         />
       </div>
     </div>
@@ -20,23 +22,23 @@
 
 <script>
 import axios from "axios";
-import OverviewItem from "../components/OverviewItem.vue";
+import TrendingItem from "../components/TrendingItem.vue";
 import Search from "../components/Search.vue";
 export default {
   name: "ComicsOverview",
-  components: { OverviewItem, Search },
+  components: { TrendingItem, Search },
   props: {},
   watch: {},
   data() {
     return {
       dataType: "comic",
-      randomComicJSON: {},
+      trendiestComic: null,
     };
   },
   mounted: async function () {
     try {
-      const responseRandomComic = await axios.get(`/api/comicrandom`);
-      this.randomComicJSON = responseRandomComic.data;
+      const responseTrendiestComic = await axios.get(`/api/comic-trendiest`);
+      this.trendiestComic = responseTrendiestComic.data;
     } catch (error) {
       console.error(error);
     }

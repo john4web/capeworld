@@ -1,10 +1,9 @@
 <template>
   <div id="quiz" class="w-full md:max-w-7xl">
-    <div class="p-4 bg-red-500 headline">
-      <h1 class="uppercase inline-block text-2xl text-white mt-3">
-        {{ title }}
-      </h1>
-    </div>
+    <h1 class="uppercase text-3xl text-red-500 font-bold mb-2 text-center">
+      {{ title }}
+    </h1>
+
     <div v-if="started">
       <div v-for="(question, index) in questions" :key="question.id">
         <div v-show="index === questionIndex">
@@ -13,7 +12,15 @@
             <li
               v-for="response in question.responses"
               :key="response.id"
-              class="border border-red-500 py-2 px-4 input-field rounded-full mt-4 mb-4"
+              class="
+                border border-red-500
+                py-2
+                px-4
+                input-field
+                rounded-full
+                mt-4
+                mb-4
+              "
             >
               <label>
                 <input
@@ -27,7 +34,15 @@
             </li>
           </ol>
           <button
-            class="bg-red-500 hover:bg-red-700 text-white py-3 px-4 rounded mr-4"
+            class="
+              bg-red-500
+              hover:bg-red-700
+              text-white
+              py-3
+              px-4
+              rounded
+              mr-4
+            "
             v-if="questionIndex > 0"
             v-on:click="prev"
           >
@@ -54,7 +69,15 @@
         <p v-if="finished() > 16">You are Hero 5</p>
         <p>
           <button
-            class="bg-red-500 hover:bg-red-700 text-white py-3 px-4 rounded mt-10"
+            class="
+              bg-red-500
+              hover:bg-red-700
+              text-white
+              py-3
+              px-4
+              rounded
+              mt-10
+            "
             v-on:click="restart"
           >
             RESTART

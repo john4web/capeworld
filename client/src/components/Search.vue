@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex">
+    <div class="flex justify-center">
       <div>
         <img class="search" src="../assets/search.svg" alt="search" />
         <input
@@ -26,7 +26,7 @@
         />
       </div>
     </div>
-    <div v-else>
+    <div class="mt-4" v-else>
       <div v-if="dataType === 'superhero'">No Heroes found!</div>
       <div v-if="dataType === 'comic'">No Comics found!</div>
       <div v-if="dataType === 'movie'">No Movies found!</div>
@@ -103,7 +103,7 @@ export default {
 
 .spinner {
   margin-top: 20px;
-  margin-left: 40%;
+  margin-left: 47%;
 }
 .search {
   width: 18px;

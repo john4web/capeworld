@@ -1,17 +1,19 @@
 <template>
   <div>
-    <h1 class="uppercase">Movies Overview</h1>
-    <search :dataType="dataType" />
-    <div
-      v-if="randomMovieJSON.length"
-      class="grid grid-rows-6 gap-1 grid-flow-col"
-    >
-      <div v-for="item in randomMovieJSON" :key="item.id">
-        <overview-item
-          :dataType="dataType"
-          :id="item.id"
-          :name="item.name"
-          :imageURL="item.imageURL"
+    <h1 class="uppercase text-3xl text-red-500 font-bold mb-2 text-center">
+      Find a Movie
+    </h1>
+    <div class="text-center">
+      <search :dataType="dataType" />
+    </div>
+    <div v-if="randomMovie" class="mb-10 mt-16">
+      <div class="flex justify-center">
+        <trending-item
+          dataType="movie"
+          :id="randomMovie.id"
+          :name="randomMovie.name"
+          :imageURL="randomMovie.image"
+          :trending="false"
         />
       </div>
     </div>
@@ -20,23 +22,23 @@
 
 <script>
 import axios from "axios";
-import OverviewItem from "../components/OverviewItem.vue";
+import TrendingItem from "../components/TrendingItem.vue";
 import Search from "../components/Search.vue";
 export default {
   name: "MoviesOverview",
-  components: { OverviewItem, Search },
+  components: { TrendingItem, Search },
   props: {},
   watch: {},
   data() {
     return {
       dataType: "movie",
-      randomMovieJSON: {},
+      randomMovie: null,
     };
   },
   mounted: async function () {
     try {
       const responseRandomMovie = await axios.get(`/api/movierandom`);
-      this.randomMovieJSON = responseRandomMovie.data;
+      this.randomMovie = responseRandomMovie.data;
     } catch (error) {
       console.error(error);
     }
