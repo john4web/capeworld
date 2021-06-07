@@ -11,7 +11,16 @@
         </h1>
 
         <p
-          class="uppercase text-white border-2 rounded-lg text-center border-white p-2 m-2"
+          class="
+            uppercase
+            text-white
+            border-2
+            rounded-lg
+            text-center
+            border-white
+            p-2
+            m-2
+          "
         >
           Comic
         </p>
@@ -77,10 +86,11 @@
             <tr v-if="comicJSON.team_credits">
               <th class="uppercase">Team Credits</th>
               <td>
-                <p v-for="item in comicJSON.team_credits" :key="item.id">
-                  <router-link :to="`/superhero/${item.id}`">
-                    {{ item.name }}</router-link
-                  >
+                <p
+                  v-for="(credit, index) in comicJSON.team_credits"
+                  :key="'credit' + index"
+                >
+                  {{ credit }}
                 </p>
               </td>
             </tr>
@@ -118,7 +128,14 @@
             </h2>
             <div class="flex flex-wrap" v-if="comicJSON.character_credits">
               <div
-                class="text-yellow-500 border-2 rounded-lg border-yellow-500 p-2 m-2"
+                class="
+                  text-yellow-500
+                  border-2
+                  rounded-lg
+                  border-yellow-500
+                  p-2
+                  m-2
+                "
                 :class="{ hidden: !moreCharactersAreHidden }"
                 v-for="item in comicJSON.character_credits.slice(0, 5)"
                 :key="item.id"
@@ -128,7 +145,14 @@
                 >
               </div>
               <div
-                class="text-yellow-500 border-2 rounded-lg border-yellow-500 p-2 m-2"
+                class="
+                  text-yellow-500
+                  border-2
+                  rounded-lg
+                  border-yellow-500
+                  p-2
+                  m-2
+                "
                 :class="{ hidden: moreCharactersAreHidden }"
                 v-for="item in comicJSON.character_credits"
                 :key="item.id + 'more_friends'"
@@ -139,7 +163,14 @@
               </div>
             </div>
             <div
-              class="text-yellow-500 border-2 rounded-lg border-yellow-500 p-2 m-2"
+              class="
+                text-yellow-500
+                border-2
+                rounded-lg
+                border-yellow-500
+                p-2
+                m-2
+              "
               :class="{ hidden: moreCharactersAreHidden }"
               v-else
             >
@@ -157,7 +188,14 @@
               "
               @click="moreCharactersAreHidden = false"
               :class="{ hidden: !moreCharactersAreHidden }"
-              class="bg-yellow-500 hover:bg-yellow-700 text-white py-3 px-4 rounded"
+              class="
+                bg-yellow-500
+                hover:bg-yellow-700
+                text-white
+                py-3
+                px-4
+                rounded
+              "
             >
               Show All
             </button>
@@ -168,7 +206,14 @@
               "
               @click="moreCharactersAreHidden = true"
               :class="{ hidden: moreCharactersAreHidden }"
-              class="bg-yellow-500 hover:bg-yellow-700 text-white py-3 px-4 rounded"
+              class="
+                bg-yellow-500
+                hover:bg-yellow-700
+                text-white
+                py-3
+                px-4
+                rounded
+              "
             >
               Hide
             </button>
@@ -183,7 +228,14 @@
               v-if="comicJSON.first_appearance_characters"
             >
               <div
-                class="text-yellow-500 border-2 rounded-lg border-yellow-500 p-2 m-2"
+                class="
+                  text-yellow-500
+                  border-2
+                  rounded-lg
+                  border-yellow-500
+                  p-2
+                  m-2
+                "
                 :class="{ hidden: !moreFirstCharactersAreHidden }"
                 v-for="item in comicJSON.first_appearance_characters.slice(
                   0,
@@ -196,7 +248,14 @@
                 >
               </div>
               <div
-                class="text-yellow-500 border-2 rounded-lg border-yellow-500 p-2 m-2"
+                class="
+                  text-yellow-500
+                  border-2
+                  rounded-lg
+                  border-yellow-500
+                  p-2
+                  m-2
+                "
                 :class="{ hidden: moreFirstCharactersAreHidden }"
                 v-for="item in comicJSON.first_appearance_characters"
                 :key="item.id + 'more_friends'"
@@ -207,7 +266,14 @@
               </div>
             </div>
             <div
-              class="text-yellow-500 border-2 rounded-lg border-yellow-500 p-2 m-2"
+              class="
+                text-yellow-500
+                border-2
+                rounded-lg
+                border-yellow-500
+                p-2
+                m-2
+              "
               :class="{ hidden: moreFirstCharactersAreHidden }"
               v-else
             >
@@ -225,7 +291,14 @@
               "
               @click="moreFirstCharactersAreHidden = false"
               :class="{ hidden: !moreFirstCharactersAreHidden }"
-              class="bg-yellow-500 hover:bg-yellow-700 text-white py-3 px-4 rounded"
+              class="
+                bg-yellow-500
+                hover:bg-yellow-700
+                text-white
+                py-3
+                px-4
+                rounded
+              "
             >
               Show All
             </button>
@@ -236,7 +309,14 @@
               "
               @click="moreFirstCharactersAreHidden = true"
               :class="{ hidden: moreFirstCharactersAreHidden }"
-              class="bg-yellow-500 hover:bg-yellow-700 text-white py-3 px-4 rounded"
+              class="
+                bg-yellow-500
+                hover:bg-yellow-700
+                text-white
+                py-3
+                px-4
+                rounded
+              "
             >
               Hide
             </button>

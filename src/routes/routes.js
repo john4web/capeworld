@@ -19,6 +19,10 @@ import {
   getRandomMovies,
 } from "../controllers/movieController";
 import {
+  getPersonByID,
+  getPeopleByNameFilter,
+} from "../controllers/personController";
+import {
   getRandomComic,
   getRandomComics,
 } from "../controllers/comicController";
@@ -38,6 +42,9 @@ router.get("/comic-trendiest", getTrendiestComic);
 router.get("/movie/:movieID", getMovieByID);
 router.get("/movie/name/:movieName", getMoviesByNameFilter);
 
+router.get("/person/:personID", getPersonByID);
+router.get("/person/name/:personName", getPeopleByNameFilter);
+
 router.get("/movierandom", getRandomMovie);
 router.get("/moviesrandom", getRandomMovies);
 
@@ -46,26 +53,5 @@ router.get("/comicsrandom", getRandomComics);
 router.get("/randomcomicimages/:number", getRandomImages);
 
 router.get("/quote", getRandomQuote);
-
-//const routes = (app) => {
-// app.route("/hero/:heroID").get(getHeroByID);
-//app.route("/hero/name/:heroName").get(getHeroesByNameFilter);
-
-// app.route("/").get((req, res) => {
-//   res.json({
-//     message: "Root",
-//   });
-// });
-
-// app.route("/testCollection").get((req, res) => {
-//   res.json({ messages: "abc" });
-// });
-
-// //route for post request
-// app.route("/contact").post(addNewContact);
-
-// //route for get request
-// app.route("/contacts").get(getContacts);
-//};
 
 module.exports = router;
