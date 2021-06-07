@@ -11,7 +11,16 @@
         </h1>
 
         <p
-          class="uppercase text-white border-2 rounded-lg text-center border-white p-2 m-2"
+          class="
+            uppercase
+            text-white
+            border-2
+            rounded-lg
+            text-center
+            border-white
+            p-2
+            m-2
+          "
         >
           Hero
         </p>
@@ -121,7 +130,14 @@
             </h2>
             <div class="flex flex-wrap" v-if="superheroJSON.character_friends">
               <div
-                class="text-green-500 border-2 rounded-lg border-green-500 p-2 m-2"
+                class="
+                  text-green-500
+                  border-2
+                  rounded-lg
+                  border-green-500
+                  p-2
+                  m-2
+                "
                 :class="{ hidden: !moreFriendsAreHidden }"
                 v-for="item in superheroJSON.character_friends.slice(0, 5)"
                 :key="item.id"
@@ -131,7 +147,14 @@
                 >
               </div>
               <div
-                class="text-green-500 border-2 rounded-lg border-green-500 p-2 m-2"
+                class="
+                  text-green-500
+                  border-2
+                  rounded-lg
+                  border-green-500
+                  p-2
+                  m-2
+                "
                 :class="{ hidden: moreFriendsAreHidden }"
                 v-for="item in superheroJSON.character_friends"
                 :key="item.id + 'more_friends'"
@@ -142,7 +165,14 @@
               </div>
             </div>
             <div
-              class="text-green-500 border-2 rounded-lg border-green-500 p-2 m-2"
+              class="
+                text-green-500
+                border-2
+                rounded-lg
+                border-green-500
+                p-2
+                m-2
+              "
               :class="{ hidden: moreFriendsAreHidden }"
               v-else
             >
@@ -160,7 +190,14 @@
               "
               @click="moreFriendsAreHidden = false"
               :class="{ hidden: !moreFriendsAreHidden }"
-              class="bg-green-500 hover:bg-green-700 text-white py-3 px-4 rounded"
+              class="
+                bg-green-500
+                hover:bg-green-700
+                text-white
+                py-3
+                px-4
+                rounded
+              "
             >
               Show All
             </button>
@@ -171,7 +208,14 @@
               "
               @click="moreFriendsAreHidden = true"
               :class="{ hidden: moreFriendsAreHidden }"
-              class="bg-green-500 hover:bg-green-700 text-white py-3 px-4 rounded"
+              class="
+                bg-green-500
+                hover:bg-green-700
+                text-white
+                py-3
+                px-4
+                rounded
+              "
             >
               Hide
             </button>
@@ -338,7 +382,6 @@ export default {
   },
   data() {
     return {
-      superheroName: "",
       superheroJSON: {
         name: "",
       },

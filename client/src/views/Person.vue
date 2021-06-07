@@ -48,7 +48,14 @@
             </tr>
             <tr v-if="person.website">
               <th class="uppercase">Website</th>
-              <td>{{ person.website }}</td>
+              <td>
+                <a
+                  :href="person.website"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  >{{ person.website }}</a
+                >
+              </td>
             </tr>
             <tr v-if="person.email">
               <th class="uppercase">Email address</th>

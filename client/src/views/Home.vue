@@ -77,42 +77,8 @@ export default {
       trendiestComic: null,
     };
   },
-  // data: () => ({
-  //   error: "",
-  //   output: [],
-  // }),
 
-  // mounted() {
-  //   fetch(API_URL)
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       console.log(result);
-  //     });
-  //   // axios
-  //   //   .post(API_URL, {
-  //   //     firstName: "Johannes",
-  //   //     lastName: "Gerstbauer",
-  //   //     email: "test@example.com",
-  //   //     company: "FH-HGB",
-  //   //     phone: "12345678",
-  //   //   })
-  //   //   .then(function (response) {
-  //   //     console.log(response);
-  //   //   })
-  //   //   .catch(function (error) {
-  //   //     console.log(error);
-  //   //   });
-  // },
-  // methods: {},
   mounted: async function () {
-    // axios
-    //   .get("/api/hero/1")
-    //   .then(function (response) {
-    //     console.log(response);
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
     try {
       const responseRandomQuote = await axios.get(`/api/quote`);
       this.randomQuote = responseRandomQuote.data;

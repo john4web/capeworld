@@ -69,7 +69,9 @@
               <th class="uppercase">Persons</th>
               <td>
                 <p v-for="item in comicJSON.person_credits" :key="item.id">
-                  {{ item.name + " role:" + item.role }}
+                  <router-link :to="`/person/${item.id}`">
+                    {{ item.name + " role:" + item.role }}</router-link
+                  >
                 </p>
               </td>
             </tr>

@@ -57,7 +57,7 @@ export const getComicByID = async (req, res) => {
 
     responseObject.person_credits =
       response.person_credits.map((person) => {
-        return { name: person.name, role: person.role };
+        return { id: person.id, name: person.name, role: person.role };
       }) || null;
 
     responseObject.team_credits =
