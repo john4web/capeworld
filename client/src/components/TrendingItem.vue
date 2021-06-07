@@ -24,7 +24,15 @@
         class="uppercase text-gray-900 hover:text-red-500"
       >
         <button
-          class="bg-red-500 hover:bg-red-700 text-white uppercase py-2 px-4 rounded"
+          class="
+            bg-red-500
+            hover:bg-red-700
+            text-white
+            uppercase
+            py-2
+            px-4
+            rounded
+          "
         >
           Read More
         </button></router-link
@@ -51,6 +59,7 @@ export default {
   height: 300px;
   background-position-y: 50%;
   background-position-x: 50%;
+  background-size: 100%;
 }
 
 .overview-text-container {

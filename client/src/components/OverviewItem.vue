@@ -62,6 +62,7 @@ export default {
   height: 100px;
   background-position-y: 50%;
   background-position-x: 50%;
+  background-size: 100%;
 }
 .placeholder {
   width: 80px;
