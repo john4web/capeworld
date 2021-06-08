@@ -1,6 +1,7 @@
 import axios from "axios";
 import credentials from "../../api_credentials";
 import { ComicModel } from "../models/comicModel";
+import { PersonModel } from "../models/personModel";
 
 export const getComicByID = async (req, res) => {
   const comicID = req.params.comicID;
@@ -84,11 +85,30 @@ export const getComicByID = async (req, res) => {
         });
       } else {
         comic.accesscount++;
+        comic.image = responseObject.image;
         comic.save();
       }
     });
 
     res.json(responseObject);
+
+    //Save every person who worked on the comic into the database. But only if it does not already exist in the database
+    const personCredits = responseObject.person_credits || [];
+    personCredits.forEach((item) => {
+      PersonModel.findOne({ id: item.id }, "", (err, docs) => {
+        if (!docs) {
+          PersonModel.create(
+            { id: item.id, name: item.name, image: null, accesscount: 0 },
+            (err) => {
+              console.log("inserted");
+              if (err) {
+                console.log(err);
+              }
+            }
+          );
+        }
+      });
+    });
   } catch (error) {
     console.error(error);
   }
@@ -160,9 +180,11 @@ export const getRandomComic = async (req, res) => {
     console.error(error);
   }*/
 
+  res.json(await ComicModel.getRandomComic());
+  /*
   ComicModel.getRandomComic((err, comic) => {
     res.json(comic);
-  });
+  });*/
 };
 
 export const getRandomComics = (req, res) => {};
@@ -181,7 +203,11 @@ export const getRandomImages = async (req, res) => {
   for (let i = 0; i < imageCount; i++) {
     const random = Math.floor(Math.random() * count);
     const comic = await ComicModel.findOne().skip(random).exec();
-    imageArray.push(comic.image);
+    if (comic.image !== null) {
+      imageArray.push(comic.image);
+    } else {
+      i--;
+    }
   }
   res.json(imageArray);
 };

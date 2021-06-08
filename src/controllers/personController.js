@@ -1,6 +1,7 @@
 import axios from "axios";
 import credentials from "../../api_credentials";
 import { PersonModel } from "../models/personModel";
+import { ComicModel } from "../models/comicModel";
 
 export const getPersonByID = async (req, res) => {
   const personID = req.params.personID;
@@ -86,11 +87,30 @@ export const getPersonByID = async (req, res) => {
         });
       } else {
         person.accesscount++;
+        person.image = responseObject.image;
         person.save();
       }
     });
 
     res.json(responseObject);
+
+    //Save every issue where the current person appeared into the database. But only if it does not already exist in the database
+    const issuesToSave = responseObject.issues || [];
+    issuesToSave.forEach((item) => {
+      ComicModel.findOne({ id: item.id }, "", (err, docs) => {
+        if (!docs) {
+          ComicModel.create(
+            { id: item.id, name: item.name, image: null, accesscount: 0 },
+            (err) => {
+              console.log("inserted");
+              if (err) {
+                console.log(err);
+              }
+            }
+          );
+        }
+      });
+    });
   } catch (error) {
     console.error(error);
   }

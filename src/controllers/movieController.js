@@ -1,33 +1,7 @@
 import axios from "axios";
 import credentials from "../../api_credentials";
 import { MovieModel } from "../models/movieModel";
-
-/*export const getMovieByID = async (req, res) => {
-  var movieID = req.params.movieID;
-
-  try {
-    const response = await axios.get(
-      `https://comicvine.gamespot.com/api/movie/4025-${movieID}/?api_key=${credentials.comic_vines_api.access_token}&format=json`
-    );
-    const responseArray = [];
-
-    responseArray.push({
-      id: response.data.results.id,
-      name: response.data.results.name,
-      imageURL: response.data.results.image.medium_url,
-      rating: response.data.results.rating,
-      releaseDate: response.data.results.release_date,
-      runtime: response.data.results.runtime,
-      studios: response.data.results.studios,
-      writers: response.data.results.writers,
-      story: response.data.results.description,
-    });
-
-    res.json(responseArray);
-  } catch (error) {
-    console.error(error);
-  }
-};*/
+import { PersonModel } from "../models/personModel";
 
 export const getMovieByID = async (req, res) => {
   const movieID = req.params.movieID;
@@ -102,11 +76,35 @@ export const getMovieByID = async (req, res) => {
         });
       } else {
         movie.accesscount++;
+        movie.image = responseObject.image;
         movie.save();
       }
     });
 
     res.json(responseObject);
+
+    const writersAndProducers =
+      [
+        ...(responseObject.writers || []),
+        ...(responseObject.producers || []),
+      ] || [];
+
+    //Save every producer and writer of the movie into the database. But only if it does not already exist in the database
+    writersAndProducers.forEach((item) => {
+      PersonModel.findOne({ id: item.id }, "", (err, docs) => {
+        if (!docs) {
+          PersonModel.create(
+            { id: item.id, name: item.name, image: null, accesscount: 0 },
+            (err) => {
+              console.log("inserted");
+              if (err) {
+                console.log(err);
+              }
+            }
+          );
+        }
+      });
+    });
   } catch (error) {
     console.error(error);
   }
@@ -126,9 +124,9 @@ export const getMoviesByNameFilter = (req, res) => {
 };
 
 export const getRandomMovie = async (req, res) => {
-  MovieModel.getRandomMovie((err, movie) => {
-    res.json(movie);
-  });
+  // MovieModel.getRandomMovie((err, movie) => {
+  res.json(await MovieModel.getRandomMovie());
+  // });
 };
 
 export const getRandomMovies = async (req, res) => {};

@@ -101,11 +101,13 @@
             v-html="movie.description"
           ></p>
           <p v-else>
-            No additional information about the plot of this comic available
+            No additional information about the plot of this movie available
           </p>
 
           <div class="mb-10">
-            <h2 v-if="characters" class="uppercase">Characters</h2>
+            <h2 v-if="characters" class="uppercase">
+              Characters in this movie:
+            </h2>
             <div class="flex flex-wrap" v-if="characters">
               <div
                 class="

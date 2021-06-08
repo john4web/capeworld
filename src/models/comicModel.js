@@ -13,7 +13,7 @@ const ComicSchema = new Schema({
   },
   image: {
     type: String,
-    required: true,
+    required: false,
   },
   accesscount: {
     type: Number,
@@ -28,16 +28,31 @@ ComicSchema.statics.findTrendiest = function (callback) {
     .exec(callback);
 };
 
-ComicSchema.statics.getRandomComic = function (callback) {
+ComicSchema.statics.getRandomComic = async function () {
+  let comicFound = false;
+  const count = await ComicModel.estimatedDocumentCount();
+
+  while (!comicFound) {
+    const random = Math.floor(Math.random() * count);
+    const comic = await ComicModel.findOne().skip(random).exec();
+
+    if (comic.image !== null) {
+      comicFound = true;
+      return comic;
+    }
+  }
+
+  /*
   this.estimatedDocumentCount(
     function (err, count) {
       if (err) {
         return callback(err);
       }
+
       const rand = Math.floor(Math.random() * count);
-      this.findOne().skip(rand).exec(callback);
+      console.log(this.findOne().skip(rand).exec(callback));
     }.bind(this)
-  );
+  );*/
 };
 
 export const ComicModel = mongoose.model("Comic", ComicSchema);

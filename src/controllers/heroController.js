@@ -2,6 +2,8 @@ import axios from "axios";
 import credentials from "../../api_credentials";
 import crypto from "crypto";
 import { CharacterModel } from "../models/characterModel";
+import { ComicModel } from "../models/comicModel";
+import { MovieModel } from "../models/movieModel";
 
 export const getHeroByID = async (req, res) => {
   const heroID = req.params.heroID;
@@ -187,9 +189,12 @@ export const getHeroByID = async (req, res) => {
               : null;
 
             responseObject.movies = comicVinesAPIResponse.movies.length
-              ? comicVinesAPIResponse.movies.map((movie) => {
-                  return { id: movie.id, name: movie.name };
-                })
+              ? comicVinesAPIResponse.movies
+                  .filter((movie) => movie.name) //only show movies with a name
+                  .slice(0, 40) //only show first 40 moovies
+                  .map((movie) => {
+                    return { id: movie.id, name: movie.name };
+                  })
               : null;
 
             responseObject.issues_died_in = comicVinesAPIResponse.issues_died_in
@@ -233,6 +238,42 @@ export const getHeroByID = async (req, res) => {
           res.json(responseObject);
         }
       );
+
+      //Save all comics of the current hero in the database, but only if they do not exist in the databse
+      const issueCredits = responseObject.issue_credits || [];
+      issueCredits.forEach((item) => {
+        ComicModel.findOne({ id: item.id }, "", (err, docs) => {
+          if (!docs) {
+            ComicModel.create(
+              { id: item.id, name: item.name, image: null, accesscount: 0 },
+              (err) => {
+                console.log("inserted");
+                if (err) {
+                  console.log(err);
+                }
+              }
+            );
+          }
+        });
+      });
+
+      //Save all movies of the current hero in the database, but only if they do not exist in the databse
+      const moviesToSave = responseObject.movies || [];
+      moviesToSave.forEach((item) => {
+        MovieModel.findOne({ id: item.id }, "", (err, docs) => {
+          if (!docs) {
+            MovieModel.create(
+              { id: item.id, name: item.name, image: null, accesscount: 0 },
+              (err) => {
+                console.log("inserted");
+                if (err) {
+                  console.log(err);
+                }
+              }
+            );
+          }
+        });
+      });
     });
   }
 

@@ -13,7 +13,7 @@ const PersonSchema = new Schema({
   },
   image: {
     type: String,
-    required: true,
+    required: false,
   },
   accesscount: {
     type: Number,
