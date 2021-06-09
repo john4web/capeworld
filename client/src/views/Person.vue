@@ -2,9 +2,9 @@
   <div class="w-full md:max-w-7xl">
     <rotate-square2 :class="{ hidden: !showLoader }"></rotate-square2>
     <div :class="{ hidden: showLoader }">
-      <div class="p-4 bg-green-500 headline" v-if="movie">
+      <div class="p-4 bg-green-500 headline" v-if="person">
         <h1 class="uppercase inline-block text-2xl text-white mt-3">
-          {{ movie.name }}
+          {{ person.name }}
         </h1>
 
         <p
@@ -19,93 +19,72 @@
             m-2
           "
         >
-          Movie
+          Person
         </p>
       </div>
-      <div class="flex flex-wrap overflow-hidden" v-if="movie">
+      <div class="flex flex-wrap overflow-hidden" v-if="person">
         <div class="w-full overflow-hidden md:w-2/6 bg-gray-300 p-10">
           <div class="w-full overflow-hidden flex justify-center mb-10">
             <div>
               <div>
-                <img :src="movie.image" class="max-h-80" alt="image" />
+                <img :src="person.image" class="max-h-80" alt="image" />
               </div>
             </div>
           </div>
           <table class="profileInfo w-full mr-auto ml-auto">
-            <tr v-if="movie.name">
+            <tr v-if="person.name">
               <th class="uppercase">Name</th>
-              <td>{{ movie.name }}</td>
+              <td>{{ person.name }}</td>
             </tr>
-            <tr v-if="movie.ratinge">
-              <th class="uppercase">Rating</th>
-              <td>{{ movie.rating }}</td>
-            </tr>
-            <tr v-if="movie.budget">
-              <th class="uppercase">Budget</th>
-              <td>{{ movie.budget }}</td>
-            </tr>
-            <tr v-if="movie.release_date">
-              <th class="uppercase">Release Date</th>
-              <td>{{ movie.release_date }}</td>
-            </tr>
-            <tr v-if="movie.runtime">
-              <th class="uppercase">Runtime</th>
-              <td>{{ movie.runtime }}</td>
-            </tr>
-            <tr v-if="movie.box_office_revenue">
-              <th class="uppercase">Box Office Revenue</th>
-              <td>{{ movie.box_office_revenue }}</td>
-            </tr>
-            <tr v-if="movie.total_revenue">
-              <th class="uppercase">Total Revenue</th>
-              <td>{{ movie.total_revenue }}</td>
-            </tr>
-            <tr v-if="writers">
-              <th class="uppercase">Writers</th>
+            <tr v-if="person.gender">
+              <th class="uppercase">Gender</th>
               <td>
-                <p v-for="writer in writers" :key="writer.id">
-                  <router-link :to="`/person/${writer.id}`">
-                    {{ writer.name }}</router-link
-                  >
-                </p>
+                <p>{{ person.gender }}</p>
               </td>
             </tr>
-            <tr v-if="producers">
-              <th class="uppercase">Producers</th>
+            <tr v-if="person.aliases">
+              <th class="uppercase">Aliases</th>
+              <td>{{ person.aliases }}</td>
+            </tr>
+            <tr v-if="person.website">
+              <th class="uppercase">Website</th>
               <td>
-                <p v-for="producer in producers" :key="producer.id">
-                  <router-link :to="`/person/${producer.id}`">
-                    {{ producer.name }}</router-link
-                  >
-                </p>
+                <a
+                  :href="person.website"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  >{{ person.website }}</a
+                >
               </td>
             </tr>
-            <tr v-if="studios">
-              <th class="uppercase">Studios</th>
-              <td>
-                <p v-for="(studio, index) in studios" :key="'studio' + index">
-                  {{ studio }}
-                </p>
-              </td>
+            <tr v-if="person.email">
+              <th class="uppercase">Email address</th>
+              <td>{{ person.email }}</td>
+            </tr>
+            <tr v-if="person.birth">
+              <th class="uppercase">Birth date</th>
+              <td>{{ person.birth }}</td>
+            </tr>
+            <tr v-if="person.death">
+              <th class="uppercase">Death date</th>
+              <td>{{ person.death.date }}</td>
+              <td>{{ person.death.timezone }}</td>
+            </tr>
+            <tr v-if="person.hometown">
+              <th class="uppercase">Hometown</th>
+              <td>{{ person.hometown }}</td>
+            </tr>
+            <tr v-if="person.country">
+              <th class="uppercase">Country</th>
+              <td>{{ person.country }}</td>
             </tr>
           </table>
         </div>
         <div class="w-full overflow-hidden md:w-4/6 p-10 mr-auto ml-auto">
-          <h1 class="text-lg uppercase pb-2">Deck</h1>
-          <p v-if="movie.deck" class="pb-4 htmlContent" v-html="movie.deck"></p>
-
-          <h1 class="text-lg uppercase pb-2">Story</h1>
-          <p
-            v-if="movie.description"
-            class="pb-4"
-            v-html="movie.description"
-          ></p>
-          <p v-else>
-            No additional information about the plot of this comic available
-          </p>
-
           <div class="mb-10">
-            <h2 v-if="characters" class="uppercase">Characters</h2>
+            <h2 v-if="characters" class="uppercase">
+              Characters created by this person
+            </h2>
             <div class="flex flex-wrap" v-if="characters">
               <div
                 class="
@@ -135,7 +114,7 @@
                 "
                 :class="{ hidden: moreCharactersAreHidden }"
                 v-for="item in characters"
-                :key="item.id + 'more_friends'"
+                :key="item.id + 'more_characters'"
               >
                 <router-link :to="`/superhero/${item.id}`">
                   {{ item.name }}</router-link
@@ -192,6 +171,16 @@
               Hide
             </button>
           </div>
+          <h1 class="text-lg uppercase pb-2">Deck</h1>
+          <p v-if="person.deck" class="pb-4" v-html="person.deck"></p>
+
+          <h1 class="text-lg uppercase pb-2">Story</h1>
+          <p
+            v-if="person.description"
+            class="pb-4"
+            v-html="person.description"
+          ></p>
+          <p v-else>No additional information about the person available</p>
         </div>
       </div>
     </div>
@@ -202,18 +191,16 @@
 import axios from "axios";
 import { RotateSquare2 } from "vue-loading-spinner";
 export default {
-  name: "Movie",
+  name: "person",
   components: { RotateSquare2 },
   props: {},
   watch: {},
   data() {
     return {
       currentID: this.$route.params.id,
-      movie: null,
-      writers: null,
+      person: null,
+      issues: null,
       characters: null,
-      producers: null,
-      studios: null,
       showLoader: true,
       moreCharactersAreHidden: true,
     };
@@ -222,12 +209,10 @@ export default {
   mounted: async function () {
     try {
       this.showLoader = true;
-      const response = await axios.get(`/api/movie/${this.currentID}`);
-      this.movie = response.data;
-      this.writers = response.data.writers;
-      this.characters = response.data.characters;
-      this.producers = response.data.producers;
-      this.studios = response.data.studios;
+      const response = await axios.get(`/api/person/${this.currentID}`);
+      this.person = response.data;
+      this.issues = response.data.issues;
+      this.characters = response.data.created_characters;
     } catch (error) {
       console.error(error);
     } finally {

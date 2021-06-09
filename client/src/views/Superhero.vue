@@ -504,7 +504,6 @@ export default {
   },
   data() {
     return {
-      superheroName: "",
       superheroJSON: {
         name: "",
       },

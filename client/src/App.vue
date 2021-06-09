@@ -3,10 +3,27 @@
     <header class="w-full flex flex-col">
       <nav
         id="navbar"
-        class="p-4 flex flex-col sm:flex-row w-full justify-between items-center bg-gray-900 border-b-2 border-red-500"
+        class="
+          p-4
+          flex flex-col
+          sm:flex-row
+          w-full
+          justify-between
+          items-center
+          bg-gray-900
+          border-b-2 border-red-500
+        "
       >
         <div
-          class="w-full md:w-auto flex flex-row md:flex-none flex-no-wrap justify-between items-center"
+          class="
+            w-full
+            md:w-auto
+            flex flex-row
+            md:flex-none
+            flex-no-wrap
+            justify-between
+            items-center
+          "
         >
           <router-link to="/">
             <img class="logo" src="./assets/cape.svg" alt="logo" />
@@ -24,7 +41,17 @@
           </button>
         </div>
         <div
-          class="w-full sm:w-auto self-end sm:self-center flex-col sm:flex-row items-center h-full md:block"
+          class="
+            w-full
+            sm:w-auto
+            self-end
+            sm:self-center
+            flex-col
+            sm:flex-row
+            items-center
+            h-full
+            md:block
+          "
           :class="{ hidden: isHidden, flex: isFlex }"
         >
           <router-link
@@ -48,6 +75,11 @@
             >Movies</router-link
           >
           <router-link
+            to="/people"
+            class="uppercase text-white hover:text-red-500 m-4"
+            >People</router-link
+          >
+          <router-link
             to="/legal"
             class="uppercase text-white hover:text-red-500 m-4"
             >Legal Notice</router-link
@@ -62,7 +94,14 @@
       <div class="banner bg-black w-full flex justify-center">
         <div class="items-center w-full flex justify-center">
           <h1
-            class="z-50 absolute uppercase text-5xl font-bold text-white text-center"
+            class="
+              z-50
+              absolute
+              uppercase
+              text-5xl
+              font-bold
+              text-white text-center
+            "
           >
             Capeworld
           </h1>
@@ -98,10 +137,28 @@
           </div>
           <router-link
             to="/superheroes"
-            class="uppercase text-white hover:text-red-500 m-8 flex justify-center z-50 absolute header-button"
+            class="
+              uppercase
+              text-white
+              hover:text-red-500
+              m-8
+              flex
+              justify-center
+              z-50
+              absolute
+              header-button
+            "
           >
             <button
-              class="bg-red-500 hover:bg-red-700 text-white uppercase py-2 px-4 rounded"
+              class="
+                bg-red-500
+                hover:bg-red-700
+                text-white
+                uppercase
+                py-2
+                px-4
+                rounded
+              "
             >
               Find Superhero
             </button></router-link
