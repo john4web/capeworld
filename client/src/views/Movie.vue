@@ -8,7 +8,16 @@
         </h1>
 
         <p
-          class="uppercase text-white border-2 rounded-lg text-center border-white p-2 m-2"
+          class="
+            uppercase
+            text-white
+            border-2
+            rounded-lg
+            text-center
+            border-white
+            p-2
+            m-2
+          "
         >
           Movie
         </p>
@@ -82,7 +91,7 @@
         </div>
         <div class="w-full overflow-hidden md:w-4/6 p-10 mr-auto ml-auto">
           <h1 class="text-lg uppercase pb-2">Deck</h1>
-          <p v-if="movie.deck" class="pb-4" v-html="movie.deck"></p>
+          <p v-if="movie.deck" class="pb-4 htmlContent" v-html="movie.deck"></p>
 
           <h1 class="text-lg uppercase pb-2">Story</h1>
           <p
@@ -98,7 +107,14 @@
             <h2 v-if="characters" class="uppercase">Characters</h2>
             <div class="flex flex-wrap" v-if="characters">
               <div
-                class="text-green-500 border-2 rounded-lg border-green-500 p-2 m-2"
+                class="
+                  text-green-500
+                  border-2
+                  rounded-lg
+                  border-green-500
+                  p-2
+                  m-2
+                "
                 :class="{ hidden: !moreCharactersAreHidden }"
                 v-for="item in characters.slice(0, 5)"
                 :key="item.id"
@@ -108,7 +124,14 @@
                 >
               </div>
               <div
-                class="text-green-500 border-2 rounded-lg border-green-500 p-2 m-2"
+                class="
+                  text-green-500
+                  border-2
+                  rounded-lg
+                  border-green-500
+                  p-2
+                  m-2
+                "
                 :class="{ hidden: moreCharactersAreHidden }"
                 v-for="item in characters"
                 :key="item.id + 'more_friends'"
@@ -119,7 +142,14 @@
               </div>
             </div>
             <div
-              class="text-green-500 border-2 rounded-lg border-green-500 p-2 m-2"
+              class="
+                text-green-500
+                border-2
+                rounded-lg
+                border-green-500
+                p-2
+                m-2
+              "
               :class="{ hidden: moreCharactersAreHidden }"
               v-else
             >
@@ -134,7 +164,14 @@
               v-if="characters && characters.length > 5"
               @click="moreCharactersAreHidden = false"
               :class="{ hidden: !moreCharactersAreHidden }"
-              class="bg-green-500 hover:bg-green-700 text-white py-3 px-4 rounded"
+              class="
+                bg-green-500
+                hover:bg-green-700
+                text-white
+                py-3
+                px-4
+                rounded
+              "
             >
               Show All
             </button>
@@ -142,7 +179,14 @@
               v-if="characters && characters.length > 5"
               @click="moreCharactersAreHidden = true"
               :class="{ hidden: moreCharactersAreHidden }"
-              class="bg-green-500 hover:bg-green-700 text-white py-3 px-4 rounded"
+              class="
+                bg-green-500
+                hover:bg-green-700
+                text-white
+                py-3
+                px-4
+                rounded
+              "
             >
               Hide
             </button>
