@@ -9,7 +9,6 @@
         >
           {{ superheroJSON.name }}
         </h1>
-
         <p
           class="
             uppercase
@@ -22,8 +21,68 @@
             m-2
           "
         >
-          Hero
+          Character
         </p>
+        <div v-if="superheroJSON.biography">
+          <p
+            v-if="superheroJSON.biography.alignment == 'good'"
+            class="
+              uppercase
+              text-white
+              border-2
+              rounded-lg
+              text-center
+              border-white
+              p-2
+              m-2
+            "
+          >
+            Superhero
+          </p>
+          <p
+            v-if="superheroJSON.biography.alignment == 'bad'"
+            class="
+              uppercase
+              text-white
+              border-2
+              rounded-lg
+              text-center
+              border-white
+              p-2
+              m-2
+            "
+          >
+            Supervillian
+          </p>
+        </div>
+        <p
+          v-else
+          class="
+            uppercase
+            text-white
+            border-2
+            rounded-lg
+            text-center
+            border-white
+            p-2
+            m-2
+          "
+        >
+          Minor Character
+        </p>
+        <div class="publisherLogoContainer" v-if="superheroJSON.publisher">
+          <img
+            class="publisherLogo"
+            v-if="superheroJSON.publisher == 'Marvel'"
+            src="../assets/marvel_logo.png"
+          />
+
+          <img
+            class="publisherLogo"
+            v-if="superheroJSON.publisher == 'DC Comics'"
+            src="../assets/DC_logo.png"
+          />
+        </div>
       </div>
 
       <div class="flex flex-wrap overflow-hidden">
@@ -123,11 +182,44 @@
               >
             </div>
           </div>
-
+          <div v-if="superheroJSON.appearance" class="mb-10">
+            <h1 v-if="superheroJSON.appearance" class="text-xl uppercase pb-2">
+              Appearance
+            </h1>
+            <table class="appearance" style="width: 100%">
+              <tr>
+                <th v-if="superheroJSON.appearance.eye_color">Eye Color</th>
+                <th v-if="superheroJSON.appearance.hair_color">Hair Color</th>
+                <th v-if="superheroJSON.appearance.height">Height</th>
+                <th v-if="superheroJSON.appearance.weight">Weight</th>
+                <th v-if="superheroJSON.appearance.race">Race</th>
+              </tr>
+              <tr>
+                <td v-if="superheroJSON.appearance.eye_color">
+                  {{ superheroJSON.appearance.eye_color }}
+                </td>
+                <td v-if="superheroJSON.appearance.hair_color">
+                  {{ superheroJSON.appearance.hair_color }}
+                </td>
+                <td v-if="superheroJSON.appearance.height">
+                  {{ superheroJSON.appearance.height[1] }}
+                </td>
+                <td v-if="superheroJSON.appearance.weight">
+                  {{ superheroJSON.appearance.weight[1] }}
+                </td>
+                <td v-if="superheroJSON.appearance.race">
+                  {{ superheroJSON.appearance.race }}
+                </td>
+              </tr>
+            </table>
+          </div>
           <div class="mb-10">
-            <h2 v-if="superheroJSON.character_friends" class="uppercase">
+            <h1
+              v-if="superheroJSON.character_friends"
+              class="text-xl uppercase pb-2"
+            >
               Friends
-            </h2>
+            </h1>
             <div class="flex flex-wrap" v-if="superheroJSON.character_friends">
               <div
                 class="
@@ -222,9 +314,12 @@
           </div>
 
           <div class="mb-10">
-            <h2 v-if="superheroJSON.character_enemies" class="uppercase">
+            <h1
+              v-if="superheroJSON.character_enemies"
+              class="text-xl uppercase pb-2"
+            >
               Enemies
-            </h2>
+            </h1>
             <div class="flex flex-wrap" v-if="superheroJSON.character_enemies">
               <div
                 class="text-red-500 border-2 rounded-lg border-red-500 p-2 m-2"
@@ -569,9 +664,22 @@ table > tr:last-child > th {
 }
 @media (min-width: 768px) {
   .headline {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-columns: 85% 15%;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: 65% 15% 15% 5%;
   }
+}
+.publisherLogo {
+  width: 50px;
+}
+.publisherLogoContainer {
+  display: block;
+  margin: auto;
+}
+
+.appearance td,
+th {
+  width: 20%;
+  text-align: center;
 }
 </style>
 
