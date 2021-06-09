@@ -188,6 +188,7 @@ export const getHeroByID = async (req, res) => {
               ? comicVinesAPIResponse.powers.map((power) => power.name)
               : null;
 
+            /*
             responseObject.movies = comicVinesAPIResponse.movies.length
               ? comicVinesAPIResponse.movies
                   .filter((movie) => movie.name) //only show movies with a name
@@ -195,7 +196,19 @@ export const getHeroByID = async (req, res) => {
                   .map((movie) => {
                     return { id: movie.id, name: movie.name };
                   })
-              : null;
+              : null;*/
+
+            if (comicVinesAPIResponse.movies.length) {
+              const filteredMovies = comicVinesAPIResponse.movies.filter(
+                (movie) => movie.name
+              ); //only show movies with a name
+              const randomMovies = getRandomElementsOfArray(filteredMovies, 40); //show 40 random movies
+              responseObject.movies = randomMovies.map((movie) => {
+                return { id: movie.id, name: movie.name };
+              });
+            } else {
+              responseObject.movies = null;
+            }
 
             responseObject.issues_died_in = comicVinesAPIResponse.issues_died_in
               .length
@@ -207,6 +220,18 @@ export const getHeroByID = async (req, res) => {
                 })
               : null;
 
+            if (comicVinesAPIResponse.issue_credits.length) {
+              const filteredIssues = comicVinesAPIResponse.issue_credits.filter(
+                (issue) => issue.name
+              ); //only show issues with a name
+              const randomIssues = getRandomElementsOfArray(filteredIssues, 40); //show 40 random issues
+              responseObject.issue_credits = randomIssues.map((issue) => {
+                return { id: issue.id, name: issue.name };
+              });
+            } else {
+              responseObject.issue_credits = null;
+            }
+            /*
             responseObject.issue_credits = comicVinesAPIResponse.issue_credits
               .length
               ? comicVinesAPIResponse.issue_credits
@@ -215,7 +240,7 @@ export const getHeroByID = async (req, res) => {
                   .map((issue) => {
                     return { id: issue.id, name: issue.name };
                   })
-              : null;
+              : null;*/
 
             break;
 
@@ -288,6 +313,20 @@ export const getHeroByID = async (req, res) => {
     });
     return object;
   };
+
+  function getRandomElementsOfArray(arr, n) {
+    var result = new Array(n),
+      len = arr.length,
+      taken = new Array(len);
+    if (n > len) return arr;
+    //throw new RangeError("getRandom: more elements taken than available");
+    while (n--) {
+      var x = Math.floor(Math.random() * len);
+      result[n] = arr[x in taken ? taken[x] : x];
+      taken[x] = --len in taken ? taken[len] : len;
+    }
+    return result;
+  }
 };
 
 export const getHeroesByNameFilter = (req, res) => {
