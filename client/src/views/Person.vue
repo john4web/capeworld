@@ -2,7 +2,7 @@
   <div class="w-full md:max-w-7xl">
     <rotate-square2 :class="{ hidden: !showLoader }"></rotate-square2>
     <div :class="{ hidden: showLoader }">
-      <div class="p-4 bg-green-500 headline" v-if="person">
+      <div class="p-4 bg-blue-500 headline" v-if="person">
         <h1 class="uppercase inline-block text-2xl text-white mt-3">
           {{ person.name }}
         </h1>
@@ -63,11 +63,18 @@
             </tr>
             <tr v-if="person.birth">
               <th class="uppercase">Birth date</th>
-              <td>{{ person.birth }}</td>
+              <td>{{ person.birth.substr(0, person.birth.indexOf(" ")) }}</td>
             </tr>
             <tr v-if="person.death">
               <th class="uppercase">Death date</th>
-              <td>{{ person.death.date }}</td>
+              <td>
+                {{
+                  person.death.date.substr(0, person.death.date.indexOf(" "))
+                }}
+              </td>
+            </tr>
+            <tr v-if="person.death">
+              <th class="uppercase">Death place</th>
               <td>{{ person.death.timezone }}</td>
             </tr>
             <tr v-if="person.hometown">
@@ -81,17 +88,20 @@
           </table>
         </div>
         <div class="w-full overflow-hidden md:w-4/6 p-10 mr-auto ml-auto">
-          <div class="mb-10">
-            <h2 v-if="characters" class="uppercase">
+          <div class="mb-10" v-if="characters">
+            <h2 v-if="person.name" class="text-lg uppercase pb-2">
+              Characters created by {{ person.name }}
+            </h2>
+            <h2 v-else class="text-lg uppercase pb-2">
               Characters created by this person
             </h2>
             <div class="flex flex-wrap" v-if="characters">
               <div
                 class="
-                  text-green-500
+                  text-blue-500
                   border-2
                   rounded-lg
-                  border-green-500
+                  border-blue-500
                   p-2
                   m-2
                 "
@@ -105,10 +115,10 @@
               </div>
               <div
                 class="
-                  text-green-500
+                  text-blue-500
                   border-2
                   rounded-lg
-                  border-green-500
+                  border-blue-500
                   p-2
                   m-2
                 "
@@ -122,14 +132,7 @@
               </div>
             </div>
             <div
-              class="
-                text-green-500
-                border-2
-                rounded-lg
-                border-green-500
-                p-2
-                m-2
-              "
+              class="text-blue-500 border-2 rounded-lg border-blue-500 p-2 m-2"
               :class="{ hidden: moreCharactersAreHidden }"
               v-else
             >
@@ -144,14 +147,7 @@
               v-if="characters && characters.length > 5"
               @click="moreCharactersAreHidden = false"
               :class="{ hidden: !moreCharactersAreHidden }"
-              class="
-                bg-green-500
-                hover:bg-green-700
-                text-white
-                py-3
-                px-4
-                rounded
-              "
+              class="bg-blue-500 hover:bg-blue-700 text-white py-3 px-4 rounded"
             >
               Show All
             </button>
@@ -159,14 +155,7 @@
               v-if="characters && characters.length > 5"
               @click="moreCharactersAreHidden = true"
               :class="{ hidden: moreCharactersAreHidden }"
-              class="
-                bg-green-500
-                hover:bg-green-700
-                text-white
-                py-3
-                px-4
-                rounded
-              "
+              class="bg-blue-500 hover:bg-blue-700 text-white py-3 px-4 rounded"
             >
               Hide
             </button>
@@ -177,7 +166,7 @@
           <h1 class="text-lg uppercase pb-2">Story</h1>
           <p
             v-if="person.description"
-            class="pb-4"
+            class="pb-4 htmlContent"
             v-html="person.description"
           ></p>
           <p v-else>No additional information about the person available</p>
@@ -225,6 +214,9 @@ export default {
 </script>
 
 <style scoped>
+.spinner[data-v-fa81853e]:after {
+  @apply bg-blue-500;
+}
 .spinner {
   margin-top: 20px;
   margin-left: 50%;

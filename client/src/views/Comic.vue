@@ -366,7 +366,7 @@ export default {
 
 <style scoped>
 .spinner[data-v-fa81853e]:after {
-  background: #f59e0b;
+  @apply bg-yellow-500;
 }
 
 .spinner {
