@@ -16,7 +16,7 @@
           :id="randomMovie.id"
           :name="randomMovie.name"
           :imageURL="randomMovie.image"
-          :trending="false"
+          :type="'random'"
         />
       </div>
     </div>
@@ -27,7 +27,7 @@
           :id="randomComic.id"
           :name="randomComic.name"
           :imageURL="randomComic.image"
-          :trending="false"
+          :type="'random'"
         />
       </div>
     </div>
@@ -39,7 +39,7 @@
           :id="trendiestHero.id"
           :name="trendiestHero.name"
           :imageURL="trendiestHero.image"
-          :trending="true"
+          :type="'trending'"
         />
         <!-- <span>User accesses: {{ trendiestHero.accesscount }}</span> -->
       </div>
@@ -52,7 +52,7 @@
           :id="trendiestComic.id"
           :name="trendiestComic.name"
           :imageURL="trendiestComic.image"
-          :trending="true"
+          :type="'trending'"
         />
         <!-- <span>User accesses: {{ trendiestComic.accesscount }}</span> -->
       </div>

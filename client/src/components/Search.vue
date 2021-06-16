@@ -99,7 +99,7 @@ export default {
 
 <style scoped>
 .spinner[data-v-fa81853e]:after {
-  background: rgba(239, 68, 68);
+  @apply bg-red-500;
 }
 
 .spinner {

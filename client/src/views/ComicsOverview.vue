@@ -13,7 +13,7 @@
           :id="trendiestComic.id"
           :name="trendiestComic.name"
           :imageURL="trendiestComic.image"
-          :trending="true"
+          :type="'trending'"
         />
       </div>
     </div>

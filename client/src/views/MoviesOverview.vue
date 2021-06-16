@@ -13,7 +13,7 @@
           :id="randomMovie.id"
           :name="randomMovie.name"
           :imageURL="randomMovie.image"
-          :trending="false"
+          :type="'random'"
         />
       </div>
     </div>

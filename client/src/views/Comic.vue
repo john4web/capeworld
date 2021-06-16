@@ -117,7 +117,7 @@
           <h1 class="text-lg uppercase pb-2">Story</h1>
           <p
             v-if="comicJSON.description"
-            class="pb-4"
+            class="pb-4 htmlContent"
             v-html="comicJSON.description"
           ></p>
           <p v-else>
@@ -366,7 +366,7 @@ export default {
 
 <style scoped>
 .spinner[data-v-fa81853e]:after {
-  background: #f59e0b;
+  @apply bg-yellow-500;
 }
 
 .spinner {

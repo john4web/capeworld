@@ -7,11 +7,23 @@
       ></div>
     </div>
     <div class="overview-text-container mr-0 bg-white p-8">
-      <p v-if="trending" class="uppercase text-3xl text-red-500 font-bold mb-2">
+      <p
+        v-if="type === 'trending'"
+        class="uppercase text-3xl text-red-500 font-bold mb-2"
+      >
         Trending {{ dataType }}
       </p>
-      <p v-else class="uppercase text-3xl text-red-500 font-bold mb-2">
+      <p
+        v-if="type === 'random'"
+        class="uppercase text-3xl text-red-500 font-bold mb-2"
+      >
         Random {{ dataType }}
+      </p>
+      <p
+        v-if="type === 'quiz'"
+        class="uppercase text-3xl text-red-500 font-bold mb-2"
+      >
+        You are
       </p>
       <router-link
         :to="`/${dataType}/${id}`"
@@ -45,7 +57,7 @@
 export default {
   name: "Trending",
   components: {},
-  props: ["dataType", "id", "name", "imageURL", "trending"],
+  props: ["dataType", "id", "name", "imageURL", "type"],
   watch: {},
 
   mounted() {},
@@ -57,8 +69,8 @@ export default {
 .overview-image-container {
   width: 500px;
   height: 300px;
-  background-position-y: 50%;
-  background-position-x: 50%;
+  background-position-y: 25%;
+  background-position-x: 25%;
   background-size: 100%;
 }
 

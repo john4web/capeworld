@@ -92,7 +92,7 @@
         </div>
         <div class="w-full overflow-hidden md:w-4/6 p-10 mr-auto ml-auto">
           <h1 class="text-lg uppercase pb-2">Deck</h1>
-          <p v-if="movie.deck" class="pb-4" v-html="movie.deck"></p>
+          <p v-if="movie.deck" class="pb-4 htmlContent" v-html="movie.deck"></p>
 
           <h1 class="text-lg uppercase pb-2">Story</h1>
           <p
