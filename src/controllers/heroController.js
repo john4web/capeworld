@@ -7,11 +7,17 @@ import { MovieModel } from "../models/movieModel";
 
 export const getHeroByID = async (req, res) => {
   const heroID = req.params.heroID;
-  const doc = await CharacterModel.findOne({ id: heroID }, "name").exec();
+  let doc = null;
+  try {
+    doc = await CharacterModel.findOne({ id: heroID }, "name").exec();
+  } catch (error) {
+    res.json({ notFound: true }); //send empty array
+    return; //stop script execution
+  }
 
   if (doc === null) {
     //requested hero is not persisted in database
-    res.json([]); //send empty array
+    res.json({ notFound: true }); //send empty array
     return; //stop script execution
   } else {
     const heroName = doc.name;
