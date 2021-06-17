@@ -28,16 +28,19 @@ PersonSchema.statics.findTrendiest = function (callback) {
     .exec(callback);
 };
 
-PersonSchema.statics.getRandomPerson = function (callback) {
-  this.estimatedDocumentCount(
-    function (err, count) {
-      if (err) {
-        return callback(err);
-      }
-      const rand = Math.floor(Math.random() * count);
-      this.findOne().skip(rand).exec(callback);
-    }.bind(this)
-  );
+PersonSchema.statics.getRandomPerson = async function () {
+  let personFound = false;
+  const count = await PersonModel.estimatedDocumentCount();
+
+  while (!personFound) {
+    const random = Math.floor(Math.random() * count);
+    const person = await PersonModel.findOne().skip(random).exec();
+
+    if (person.image !== null) {
+      personFound = true;
+      return person;
+    }
+  }
 };
 
 export const PersonModel = mongoose.model("Person", PersonSchema);

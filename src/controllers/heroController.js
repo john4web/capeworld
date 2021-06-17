@@ -11,13 +11,13 @@ export const getHeroByID = async (req, res) => {
   try {
     doc = await CharacterModel.findOne({ id: heroID }, "name").exec();
   } catch (error) {
-    res.json({ notFound: true }); //send empty array
+    res.json({ notFound: true });
     return; //stop script execution
   }
 
   if (doc === null) {
     //requested hero is not persisted in database
-    res.json({ notFound: true }); //send empty array
+    res.json({ notFound: true });
     return; //stop script execution
   } else {
     const heroName = doc.name;

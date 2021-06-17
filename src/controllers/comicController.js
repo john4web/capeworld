@@ -5,112 +5,117 @@ import { PersonModel } from "../models/personModel";
 
 export const getComicByID = async (req, res) => {
   const comicID = req.params.comicID;
-
+  let request = null;
   try {
-    const request = await axios.get(
+    request = await axios.get(
       `https://comicvine.gamespot.com/api/issue/4000-${comicID}/?api_key=${credentials.comic_vines_api.access_token}&format=json`
     );
+  } catch (error) {
+    res.json({ notFound: true });
+    return; //stop script execution
+  }
+  const response = request.data.results;
 
-    const response = request.data.results;
+  if (!response || Array.isArray(response)) {
+    res.json({ notFound: true });
+    return; //stop script execution
+  }
 
-    const responseObject = {
-      id: null,
-      name: null,
-      image: null,
-      issue_number: null,
-      store_date: null,
-      volume_name: null,
-      cover_date: null,
-      description: null,
-      deck: null,
-      character_died_in: null,
-      character_credits: null,
-      person_credits: null,
-      team_credits: null,
-      aliases: null,
-      first_appearance_characters: null,
-      first_appearance_teams: null,
-    };
+  const responseObject = {
+    id: null,
+    name: null,
+    image: null,
+    issue_number: null,
+    store_date: null,
+    volume_name: null,
+    cover_date: null,
+    description: null,
+    deck: null,
+    character_died_in: null,
+    character_credits: null,
+    person_credits: null,
+    team_credits: null,
+    aliases: null,
+    first_appearance_characters: null,
+    first_appearance_teams: null,
+  };
 
-    responseObject.id = response.id;
-    responseObject.name = response.name || "issue name unknown";
-    responseObject.image = response.image.medium_url;
-    responseObject.issue_number = response.issue_number;
-    responseObject.store_date = response.store_date;
-    responseObject.volume_name = response.volume.name;
-    responseObject.cover_date = response.cover_date;
-    responseObject.description = response.description;
-    responseObject.deck = response.deck;
+  responseObject.id = response.id;
+  responseObject.name = response.name || "issue name unknown";
+  responseObject.image = response.image.medium_url;
+  responseObject.issue_number = response.issue_number;
+  responseObject.store_date = response.store_date;
+  responseObject.volume_name = response.volume.name;
+  responseObject.cover_date = response.cover_date;
+  responseObject.description = response.description;
+  responseObject.deck = response.deck;
 
-    responseObject.character_died_in =
-      response.character_died_in.map((character) => {
-        return { id: character.id, name: character.name };
-      }) || null;
+  responseObject.character_died_in =
+    response.character_died_in.map((character) => {
+      return { id: character.id, name: character.name };
+    }) || null;
 
-    if (!responseObject.character_died_in.length) {
-      responseObject.character_died_in = null;
+  if (!responseObject.character_died_in.length) {
+    responseObject.character_died_in = null;
+  }
+
+  responseObject.character_credits =
+    response.character_credits.map((character) => {
+      return { id: character.id, name: character.name };
+    }) || null;
+
+  responseObject.person_credits =
+    response.person_credits.map((person) => {
+      return { id: person.id, name: person.name, role: person.role };
+    }) || null;
+
+  responseObject.team_credits =
+    response.team_credits.map((team) => team.name) || null;
+
+  if (!responseObject.team_credits.length) {
+    responseObject.team_credits = null;
+  }
+
+  responseObject.aliases = response.aliases;
+
+  responseObject.first_appearance_characters =
+    response.first_appearance_characters;
+  responseObject.first_appearance_teams = response.first_appearance_teams;
+
+  //Save comic into database when it does not exist in the database
+  ComicModel.findOne({ id: responseObject.id }, (err, comic) => {
+    if (!comic) {
+      ComicModel.create({
+        id: responseObject.id,
+        name: responseObject.name,
+        image: responseObject.image,
+        accesscount: 1,
+      });
+    } else {
+      comic.accesscount++;
+      comic.image = responseObject.image;
+      comic.save();
     }
+  });
 
-    responseObject.character_credits =
-      response.character_credits.map((character) => {
-        return { id: character.id, name: character.name };
-      }) || null;
+  res.json(responseObject);
 
-    responseObject.person_credits =
-      response.person_credits.map((person) => {
-        return { id: person.id, name: person.name, role: person.role };
-      }) || null;
-
-    responseObject.team_credits =
-      response.team_credits.map((team) => team.name) || null;
-
-    if (!responseObject.team_credits.length) {
-      responseObject.team_credits = null;
-    }
-
-    responseObject.aliases = response.aliases;
-
-    responseObject.first_appearance_characters =
-      response.first_appearance_characters;
-    responseObject.first_appearance_teams = response.first_appearance_teams;
-
-    //Save comic into database when it does not exist in the database
-    ComicModel.findOne({ id: responseObject.id }, (err, comic) => {
-      if (!comic) {
-        ComicModel.create({
-          id: responseObject.id,
-          name: responseObject.name,
-          image: responseObject.image,
-          accesscount: 1,
-        });
-      } else {
-        comic.accesscount++;
-        comic.image = responseObject.image;
-        comic.save();
+  //Save every person who worked on the comic into the database. But only if it does not already exist in the database
+  const personCredits = responseObject.person_credits || [];
+  personCredits.forEach((item) => {
+    PersonModel.findOne({ id: item.id }, "", (err, docs) => {
+      if (!docs) {
+        PersonModel.create(
+          { id: item.id, name: item.name, image: null, accesscount: 0 },
+          (err) => {
+            if (err) {
+              console.log(err);
+            }
+          }
+        );
       }
     });
-
-    res.json(responseObject);
-
-    //Save every person who worked on the comic into the database. But only if it does not already exist in the database
-    const personCredits = responseObject.person_credits || [];
-    personCredits.forEach((item) => {
-      PersonModel.findOne({ id: item.id }, "", (err, docs) => {
-        if (!docs) {
-          PersonModel.create(
-            { id: item.id, name: item.name, image: null, accesscount: 0 },
-            (err) => {
-              if (err) {
-                console.log(err);
-              }
-            }
-          );
-        }
-      });
-    });
-  } catch (error) {
-    console.error(error);
-  }
+  });
 };
 
 export const getComicsByNameFilter = (req, res) => {

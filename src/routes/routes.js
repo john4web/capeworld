@@ -21,6 +21,7 @@ import {
 import {
   getPersonByID,
   getPeopleByNameFilter,
+  getRandomPerson,
 } from "../controllers/personController";
 import {
   getRandomComic,
@@ -44,6 +45,7 @@ router.get("/movie/name/:movieName", getMoviesByNameFilter);
 
 router.get("/person/:personID", getPersonByID);
 router.get("/person/name/:personName", getPeopleByNameFilter);
+router.get("/personrandom", getRandomPerson);
 
 router.get("/movierandom", getRandomMovie);
 router.get("/moviesrandom", getRandomMovies);

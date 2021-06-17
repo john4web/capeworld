@@ -5,108 +5,111 @@ import { PersonModel } from "../models/personModel";
 
 export const getMovieByID = async (req, res) => {
   const movieID = req.params.movieID;
-
+  let request = null;
   try {
-    const request = await axios.get(
+    request = await axios.get(
       `https://comicvine.gamespot.com/api/movie/4025-${movieID}/?api_key=${credentials.comic_vines_api.access_token}&format=json`
     );
+  } catch (error) {
+    res.json({ notFound: true });
+    return; //stop script execution
+  }
+  const response = request.data.results;
 
-    const response = request.data.results;
+  if (!response || Array.isArray(response)) {
+    res.json({ notFound: true });
+    return; //stop script execution
+  }
 
-    const responseObject = {
-      id: null,
-      name: null,
-      image: null,
-      budget: null,
-      deck: null,
-      description: null,
-      rating: null,
-      release_date: null,
-      runtime: null,
-      total_revenue: null,
-      box_office_revenue: null,
-      writers: null,
-      characters: null,
-      producers: null,
-      studios: null,
-    };
+  const responseObject = {
+    id: null,
+    name: null,
+    image: null,
+    budget: null,
+    deck: null,
+    description: null,
+    rating: null,
+    release_date: null,
+    runtime: null,
+    total_revenue: null,
+    box_office_revenue: null,
+    writers: null,
+    characters: null,
+    producers: null,
+    studios: null,
+  };
 
-    responseObject.id = response.id;
-    responseObject.name = response.name || "movie name unknown";
-    responseObject.image = response.image.medium_url;
-    responseObject.budget = response.budget;
-    responseObject.deck = response.deck;
-    responseObject.description = response.description;
-    responseObject.rating = response.rating;
-    responseObject.release_date = response.release_date;
-    responseObject.total_revenue = response.total_revenue;
-    responseObject.runtime = response.runtime;
-    responseObject.box_office_revenue = response.box_office_revenue;
+  responseObject.id = response.id;
+  responseObject.name = response.name || "movie name unknown";
+  responseObject.image = response.image.medium_url;
+  responseObject.budget = response.budget;
+  responseObject.deck = response.deck;
+  responseObject.description = response.description;
+  responseObject.rating = response.rating;
+  responseObject.release_date = response.release_date;
+  responseObject.total_revenue = response.total_revenue;
+  responseObject.runtime = response.runtime;
+  responseObject.box_office_revenue = response.box_office_revenue;
 
-    responseObject.writers = response.writers
-      ? response.writers.map((writer) => {
-          return { id: writer.id, name: writer.name };
-        })
-      : null;
+  responseObject.writers = response.writers
+    ? response.writers.map((writer) => {
+        return { id: writer.id, name: writer.name };
+      })
+    : null;
 
-    responseObject.characters = response.characters
-      ? response.characters.map((character) => {
-          return { id: character.id, name: character.name };
-        })
-      : null;
+  responseObject.characters = response.characters
+    ? response.characters.map((character) => {
+        return { id: character.id, name: character.name };
+      })
+    : null;
 
-    responseObject.producers = response.producers
-      ? response.producers.map((producer) => {
-          return { id: producer.id, name: producer.name };
-        })
-      : null;
+  responseObject.producers = response.producers
+    ? response.producers.map((producer) => {
+        return { id: producer.id, name: producer.name };
+      })
+    : null;
 
-    responseObject.studios = response.studios
-      ? response.studios.map((studio) => studio.name)
-      : null;
+  responseObject.studios = response.studios
+    ? response.studios.map((studio) => studio.name)
+    : null;
 
-    //Save movie into database when it does not exist in the database
-    MovieModel.findOne({ id: responseObject.id }, (err, movie) => {
-      if (!movie) {
-        MovieModel.create({
-          id: responseObject.id,
-          name: responseObject.name,
-          image: responseObject.image,
-          accesscount: 1,
-        });
-      } else {
-        movie.accesscount++;
-        movie.image = responseObject.image;
-        movie.save();
+  //Save movie into database when it does not exist in the database
+  MovieModel.findOne({ id: responseObject.id }, (err, movie) => {
+    if (!movie) {
+      MovieModel.create({
+        id: responseObject.id,
+        name: responseObject.name,
+        image: responseObject.image,
+        accesscount: 1,
+      });
+    } else {
+      movie.accesscount++;
+      movie.image = responseObject.image;
+      movie.save();
+    }
+  });
+
+  res.json(responseObject);
+
+  const writersAndProducers =
+    [...(responseObject.writers || []), ...(responseObject.producers || [])] ||
+    [];
+
+  //Save every producer and writer of the movie into the database. But only if it does not already exist in the database
+  writersAndProducers.forEach((item) => {
+    PersonModel.findOne({ id: item.id }, "", (err, docs) => {
+      if (!docs) {
+        PersonModel.create(
+          { id: item.id, name: item.name, image: null, accesscount: 0 },
+          (err) => {
+            if (err) {
+              console.log(err);
+            }
+          }
+        );
       }
     });
-
-    res.json(responseObject);
-
-    const writersAndProducers =
-      [
-        ...(responseObject.writers || []),
-        ...(responseObject.producers || []),
-      ] || [];
-
-    //Save every producer and writer of the movie into the database. But only if it does not already exist in the database
-    writersAndProducers.forEach((item) => {
-      PersonModel.findOne({ id: item.id }, "", (err, docs) => {
-        if (!docs) {
-          PersonModel.create(
-            { id: item.id, name: item.name, image: null, accesscount: 0 },
-            (err) => {
-              if (err) {
-                console.log(err);
-              }
-            }
-          );
-        }
-      });
-    });
-  } catch (error) {
-    console.error(error);
-  }
+  });
 };
 
 export const getMoviesByNameFilter = (req, res) => {

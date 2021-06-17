@@ -419,36 +419,51 @@
             <h1 class="text-xl uppercase pb-4" v-if="description">
               More Information
             </h1>
-            <p
-              v-if="description.length <= 10000"
-              class="pb-4 htmlContent"
-              v-html="description"
-            ></p>
-            <div v-else>
-              <p class="htmlContent" v-html="description.substr(0, 10000)">
-                ...
-              </p>
+            <div v-if="description">
               <p
+                v-if="description.length <= 10000"
                 class="pb-4 htmlContent"
-                :class="{ hidden: moreTextHidden }"
-                v-html="description.substr(10000, 10000000)"
+                v-html="description"
               ></p>
-              <button
-                @click="moreTextHidden = false"
-                :class="{ hidden: !moreTextHidden }"
-                class="bg-red-500 hover:bg-red-700 text-white py-3 px-4 rounded"
-              >
-                Read More
-              </button>
-              <button
-                @click="moreTextHidden = true"
-                :class="{ hidden: moreTextHidden }"
-                class="bg-red-500 hover:bg-red-700 text-white py-3 px-4 rounded"
-              >
-                Show Less
-              </button>
+              <div v-else>
+                <p class="htmlContent" v-html="description.substr(0, 10000)">
+                  ...
+                </p>
+                <p
+                  class="pb-4 htmlContent"
+                  :class="{ hidden: moreTextHidden }"
+                  v-html="description.substr(10000, 10000000)"
+                ></p>
+                <button
+                  @click="moreTextHidden = false"
+                  :class="{ hidden: !moreTextHidden }"
+                  class="
+                    bg-red-500
+                    hover:bg-red-700
+                    text-white
+                    py-3
+                    px-4
+                    rounded
+                  "
+                >
+                  Read More
+                </button>
+                <button
+                  @click="moreTextHidden = true"
+                  :class="{ hidden: moreTextHidden }"
+                  class="
+                    bg-red-500
+                    hover:bg-red-700
+                    text-white
+                    py-3
+                    px-4
+                    rounded
+                  "
+                >
+                  Show Less
+                </button>
+              </div>
             </div>
-
             <p v-if="!description && !superheroJSON.description_short">
               Sorry, there is no further information available for this
               character!

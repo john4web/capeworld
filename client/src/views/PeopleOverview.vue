@@ -6,7 +6,7 @@
     <div class="text-center">
       <search :dataType="dataType" />
     </div>
-    <!-- <div v-if="randomPerson" class="mb-10 mt-16">
+    <div v-if="randomPerson" class="mb-10 mt-16">
       <div class="flex justify-center">
         <trending-item
           dataType="person"
@@ -16,17 +16,17 @@
           :trending="false"
         />
       </div>
-    </div>-->
+    </div>
   </div>
 </template>
 
 <script>
-//import axios from "axios";
-//import TrendingItem from "../components/TrendingItem.vue";
+import axios from "axios";
+import TrendingItem from "../components/TrendingItem.vue";
 import Search from "../components/Search.vue";
 export default {
   name: "PeopleOverview",
-  components: { /*TrendingItem,*/ Search },
+  components: { TrendingItem, Search },
   props: {},
   watch: {},
   data() {
@@ -36,12 +36,12 @@ export default {
     };
   },
   mounted: async function () {
-    /* try {
+    try {
       const responseRandomPerson = await axios.get(`/api/personrandom`);
       this.randomPerson = responseRandomPerson.data;
     } catch (error) {
       console.error(error);
-    }*/
+    }
   },
 };
 </script>
