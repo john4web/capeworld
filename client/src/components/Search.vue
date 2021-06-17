@@ -27,10 +27,12 @@
       </div>
     </div>
     <div class="mt-4" v-else>
-      <div v-if="dataType === 'superhero'">No Heroes found!</div>
-      <div v-if="dataType === 'comic'">No Comics found!</div>
-      <div v-if="dataType === 'movie'">No Movies found!</div>
-      <div v-if="dataType === 'person'">No People found!</div>
+      <div v-if="searchUsed">
+        <div v-if="dataType === 'superhero'">No Heroes found!</div>
+        <div v-if="dataType === 'comic'">No Comics found!</div>
+        <div v-if="dataType === 'movie'">No Movies found!</div>
+        <div v-if="dataType === 'person'">No People found!</div>
+      </div>
     </div>
   </div>
 </template>
@@ -55,11 +57,14 @@ export default {
       isHidden: true,
       type: this.$props.dataType,
       responseType: "",
+      searchUsed: false,
     };
   },
   mounted() {},
   methods: {
     async getResultsByName() {
+      this.searchUsed = !this.searchUsed || true;
+
       if (this.type == "superhero") {
         this.responseType = "hero";
       } else {
@@ -84,9 +89,9 @@ export default {
           this.resultsJSON = response.data;
         } catch (error) {
           if (axios.isCancel(error)) {
-            console.log("Request Cancelled");
+            //console.log("Request Cancelled");
           } else {
-            console.error(error);
+            // console.error(error);
           }
         }
       } else {

@@ -563,6 +563,7 @@ export default {
 
   methods: {
     async requestPageContent(heroID) {
+      this.characterNotFound = false;
       try {
         this.showLoader = true;
         const response = await axios.get(`/api/hero/${heroID}`);

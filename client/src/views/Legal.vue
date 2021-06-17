@@ -17,7 +17,9 @@
         <a href="https://developer.marvel.com/" target="_blank">Marvel API</a>
       </li>
       <li class="uppercase text-red-500 hover:text-red-700">
-        <a href="https://superhero-quotes.herokuapp.com/random" target="_blank"
+        <a
+          href="https://github.com/Pool-Of-Tears/SuperHero-Quotes"
+          target="_blank"
           >SuperHero Quotes API</a
         >
       </li>

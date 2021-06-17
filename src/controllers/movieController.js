@@ -96,7 +96,6 @@ export const getMovieByID = async (req, res) => {
           PersonModel.create(
             { id: item.id, name: item.name, image: null, accesscount: 0 },
             (err) => {
-              console.log("inserted");
               if (err) {
                 console.log(err);
               }
