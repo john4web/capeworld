@@ -732,5 +732,11 @@ th {
   width: 20%;
   text-align: center;
 }
+table a {
+  @apply text-red-900;
+}
+table a:hover {
+  @apply text-red-700;
+}
 </style>
 

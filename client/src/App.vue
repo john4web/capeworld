@@ -93,25 +93,54 @@
       </nav>
       <div class="banner bg-black w-full flex justify-center">
         <div class="items-center w-full flex justify-center">
-          <h1
-            class="
-              z-50
-              absolute
-              uppercase
-              text-5xl
-              font-bold
-              text-white text-center
-            "
-          >
-            Capeworld
-          </h1>
-          <div v-if="randomQuote" class="z-50 absolute text-center quote">
-            <p class="text-lg mt-4 italic font-bold text-white">
-              {{ randomQuote.quote }}
-            </p>
-            <router-link :to="`/superhero/${randomQuote.author.id}`">
-              <p class="text-red-500 mb-4">- {{ randomQuote.author.name }}</p>
-            </router-link>
+          <div class="absolute header-info">
+            <h1
+              class="
+                z-50
+                relative
+                uppercase
+                text-5xl
+                font-bold
+                text-white text-center
+              "
+            >
+              Capeworld
+            </h1>
+            <div v-if="randomQuote" class="z-50 relative text-center quote">
+              <p class="text-lg mt-4 italic font-bold text-white">
+                {{ randomQuote.quote }}
+              </p>
+              <router-link :to="`/superhero/${randomQuote.author.id}`">
+                <p class="text-red-500 mb-4">- {{ randomQuote.author.name }}</p>
+              </router-link>
+            </div>
+            <router-link
+              to="/superheroes"
+              class="
+                uppercase
+                text-white
+                hover:text-red-500
+                flex
+                justify-center
+                z-50
+                relative
+                header-button
+              "
+            >
+              <button
+                class="
+                  bg-red-500
+                  hover:bg-red-700
+                  text-white
+                  uppercase
+                  py-2
+                  px-4
+                  rounded
+                "
+              >
+                Find Superhero
+              </button></router-link
+            >
           </div>
           <div class="banner grid headerimages">
             <div
@@ -135,34 +164,6 @@
               :style="{ backgroundImage: 'url(' + headerImages[4] + ')' }"
             ></div>
           </div>
-          <router-link
-            to="/superheroes"
-            class="
-              uppercase
-              text-white
-              hover:text-red-500
-              m-8
-              flex
-              justify-center
-              z-50
-              absolute
-              header-button
-            "
-          >
-            <button
-              class="
-                bg-red-500
-                hover:bg-red-700
-                text-white
-                uppercase
-                py-2
-                px-4
-                rounded
-              "
-            >
-              Find Superhero
-            </button></router-link
-          >
         </div>
       </div>
     </header>
@@ -211,13 +212,8 @@ a.router-link-exact-active {
   background-blend-mode: multiply;
   background-position: right;
 }
-
-.quote {
-  margin-top: 110px;
-}
-
-.header-button {
-  margin-top: 260px !important;
+.header-info {
+  margin-top: 150px;
 }
 </style>
 

@@ -70,10 +70,14 @@
               <tr v-if="comicJSON.person_credits">
                 <th class="uppercase">People</th>
                 <td>
-                  <p v-for="item in comicJSON.person_credits" :key="item.id">
+                  <p
+                    v-for="item in comicJSON.person_credits"
+                    :key="item.id"
+                    class="border-b border-black person"
+                  >
                     <router-link :to="`/person/${item.id}`">
-                      {{ item.name + " role:" + item.role }}</router-link
-                    >
+                      {{ item.name }}</router-link
+                    ><span class=""> / {{ item.role }}</span>
                   </p>
                 </td>
               </tr>
@@ -422,5 +426,14 @@ table > tr:last-child > th {
     grid-template-columns: repeat(2, 1fr);
     grid-template-columns: 85% 15%;
   }
+}
+table a {
+  @apply text-yellow-900;
+}
+table a:hover {
+  @apply text-yellow-700;
+}
+.person:last-child {
+  border: none;
 }
 </style>

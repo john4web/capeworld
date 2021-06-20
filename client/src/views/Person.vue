@@ -282,5 +282,11 @@ table > tr:last-child > th {
     grid-template-columns: 85% 15%;
   }
 }
+table a {
+  @apply text-blue-900;
+}
+table a:hover {
+  @apply text-blue-700;
+}
 </style>
 
