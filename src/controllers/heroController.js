@@ -363,7 +363,7 @@ export const getTrendiestHero = (req, res) => {
 export const getFirstThreeTrendiestHeroes = (req, res) => {};
 
 //Function to insert all DC and Marvel Characters from the ComicVine-API in our database
-const insertAllCharactersInDatabase = () => {
+export const insertNewCharactersInDatabase = () => {
   //get data from APIs
   const comicvines_MARVEL_request_url = `https://comicvine.gamespot.com/api/publisher/31/?api_key=${credentials.comic_vines_api.access_token}&field_list=characters&format=json`;
   const comicvines_DC_request_url = `https://comicvine.gamespot.com/api/publisher/10/?api_key=${credentials.comic_vines_api.access_token}&field_list=characters&format=json`;
@@ -375,7 +375,7 @@ const insertAllCharactersInDatabase = () => {
   ];
 
   Promise.allSettled(promises) //returns a promise that resolves after all of the given promises have either fulfilled or rejected, with an array of objects that each describes the outcome of each promise.
-    .then((apiResponses) => {
+    .then(async (apiResponses) => {
       //gets executed when all promises have either fulfilled or rejected
 
       const responseArray = apiResponses
@@ -389,11 +389,20 @@ const insertAllCharactersInDatabase = () => {
             name: character.name,
             image: null,
             accesscount: 0,
-          }; //show only id and name of characters
+          }; //show only id, name and image of characters
         });
 
-      // Insert
-      CharacterModel.insertMany(generatedResponse)
+      const allHeroesFromDB = await CharacterModel.find({});
+      const apiHeroIDs = generatedResponse.map((hero) => hero.id);
+      const dbHeroIDs = allHeroesFromDB.map((hero) => hero.id);
+      const differenceIDs = apiHeroIDs.filter((x) => !dbHeroIDs.includes(x));
+
+      const difference = generatedResponse.filter((apiObj) => {
+        return differenceIDs.some((id) => id === apiObj.id);
+      });
+
+      // Insert the new characters into the database
+      CharacterModel.insertMany(difference)
         .then(function () {
           console.log("Data Successfully Inserted"); // Success
         })

@@ -3,6 +3,8 @@ import cors from "cors";
 import morgan from "morgan";
 import routes from "./src/routes/routes";
 import mongoose from "mongoose";
+import cron from "node-cron";
+import { insertNewCharactersInDatabase } from "./src/controllers/heroController";
 
 const app = express();
 app.use(cors());
@@ -27,6 +29,11 @@ mongoose.Promise = global.Promise;
 mongoose.connect("mongodb://localhost/capeworld", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+});
+
+// Cronjob - Gets executed every week
+cron.schedule("0 0 * * 0", function () {
+  insertNewCharactersInDatabase();
 });
 
 const port = process.env.PORT || 4000;
