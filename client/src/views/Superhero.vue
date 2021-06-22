@@ -54,7 +54,7 @@
                 m-2
               "
             >
-              Supervillian
+              Supervillain
             </p>
           </div>
           <p
