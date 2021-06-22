@@ -52,6 +52,7 @@
                 <th class="uppercase">Website</th>
                 <td>
                   <a
+                    class="website"
                     :href="person.website"
                     rel="noopener noreferrer"
                     target="_blank"
@@ -187,11 +188,54 @@
             <p v-if="person.deck" class="pb-4" v-html="person.deck"></p>
 
             <h1 class="text-lg uppercase pb-2">Story</h1>
-            <p
-              v-if="person.description"
-              class="pb-4 htmlContent"
-              v-html="person.description"
-            ></p>
+            <div v-if="person.description">
+              <p
+                v-if="person.description.length <= 10000"
+                class="pb-4 htmlContent"
+                v-html="person.description"
+              ></p>
+              <div v-else>
+                <p
+                  class="htmlContent"
+                  v-html="person.description.substr(0, 10000)"
+                >
+                  ...
+                </p>
+                <p
+                  class="pb-4 htmlContent"
+                  :class="{ hidden: moreTextHidden }"
+                  v-html="person.description.substr(10000, 10000000)"
+                ></p>
+                <button
+                  @click="moreTextHidden = false"
+                  :class="{ hidden: !moreTextHidden }"
+                  class="
+                    bg-blue-500
+                    hover:bg-blue-700
+                    text-white
+                    py-3
+                    px-4
+                    rounded
+                  "
+                >
+                  Read More
+                </button>
+                <button
+                  @click="moreTextHidden = true"
+                  :class="{ hidden: moreTextHidden }"
+                  class="
+                    bg-blue-500
+                    hover:bg-blue-700
+                    text-white
+                    py-3
+                    px-4
+                    rounded
+                  "
+                >
+                  Show Less
+                </button>
+              </div>
+            </div>
             <p v-else>No additional information about the person available</p>
           </div>
         </div>
@@ -217,6 +261,7 @@ export default {
       showLoader: true,
       moreCharactersAreHidden: true,
       personNotFound: false,
+      moreTextHidden: true,
     };
   },
 
@@ -236,6 +281,7 @@ export default {
     } finally {
       this.showLoader = false;
       this.moreCharactersAreHidden = true;
+      this.moreTextHidden = true;
     }
   },
   methods: {},
@@ -287,6 +333,10 @@ table a {
 }
 table a:hover {
   @apply text-blue-700;
+}
+
+.website {
+  word-break: break-all;
 }
 </style>
 

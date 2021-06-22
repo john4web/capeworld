@@ -26,7 +26,7 @@
           "
         >
           <router-link to="/">
-            <img class="logo" src="./assets/cape.svg" alt="logo" />
+            <img class="logo" src="./assets/logo_alternative.png" alt="logo" />
           </router-link>
           <button
             class="hamburger block md:hidden"
