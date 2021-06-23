@@ -9,11 +9,11 @@
     <div v-if="randomPerson" class="mb-10 mt-16">
       <div class="flex justify-center">
         <trending-item
-          dataType="person"
+          :dataType="dataType"
           :id="randomPerson.id"
           :name="randomPerson.name"
           :imageURL="randomPerson.image"
-          :trending="false"
+          :type="'random'"
         />
       </div>
     </div>
