@@ -30,14 +30,5 @@
 <script>
 export default {
   name: "Legal",
-  components: {},
-  props: {},
-  watch: {},
-
-  mounted() {},
-  methods: {},
 };
 </script>
-
-<style scoped>
-</style>

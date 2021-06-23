@@ -126,11 +126,9 @@
             </h1>
             <p v-if="comicJSON.deck" class="pb-4" v-html="comicJSON.deck"></p>
             <h1 class="text-lg uppercase pb-2">Story</h1>
-            <p
-              v-if="comicJSON.description"
-              class="pb-4 htmlContent"
-              v-html="comicJSON.description"
-            ></p>
+            <p v-if="comicJSON.description">
+              <show-more :data="comicJSON.description" :color="color" />
+            </p>
             <p v-else>
               No additional information about the plot of this comic available
             </p>
@@ -139,203 +137,28 @@
               <h2 v-if="comicJSON.character_credits" class="uppercase">
                 Characters participating in this issue
               </h2>
-              <div class="flex flex-wrap" v-if="comicJSON.character_credits">
-                <div
-                  class="
-                    text-yellow-500
-                    border-2
-                    rounded-lg
-                    border-yellow-500
-                    p-2
-                    m-2
-                  "
-                  :class="{ hidden: !moreCharactersAreHidden }"
-                  v-for="item in comicJSON.character_credits.slice(0, 5)"
-                  :key="item.id"
-                >
-                  <router-link :to="`/superhero/${item.id}`">
-                    {{ item.name }}</router-link
-                  >
-                </div>
-                <div
-                  class="
-                    text-yellow-500
-                    border-2
-                    rounded-lg
-                    border-yellow-500
-                    p-2
-                    m-2
-                  "
-                  :class="{ hidden: moreCharactersAreHidden }"
-                  v-for="item in comicJSON.character_credits"
-                  :key="item.id + 'more_friends'"
-                >
-                  <router-link :to="`/superhero/${item.id}`">
-                    {{ item.name }}</router-link
-                  >
-                </div>
+              <div v-if="comicJSON.character_credits">
+                <character-list
+                  :dataType="dataTypeHero"
+                  :data="comicJSON.character_credits"
+                  :color="color"
+                />
               </div>
-              <div
-                class="
-                  text-yellow-500
-                  border-2
-                  rounded-lg
-                  border-yellow-500
-                  p-2
-                  m-2
-                "
-                :class="{ hidden: moreCharactersAreHidden }"
-                v-else
-              >
-                <router-link
-                  :to="`/superhero/${characters.id}`"
-                  v-if="comicJSON.character_credits"
-                >
-                  {{ comicJSON.character_credits.name }}</router-link
-                >
-              </div>
-              <button
-                v-if="
-                  comicJSON.character_credits &&
-                  comicJSON.character_credits.length > 5
-                "
-                @click="moreCharactersAreHidden = false"
-                :class="{ hidden: !moreCharactersAreHidden }"
-                class="
-                  bg-yellow-500
-                  hover:bg-yellow-700
-                  text-white
-                  py-3
-                  px-4
-                  rounded
-                "
-              >
-                Show All
-              </button>
-              <button
-                v-if="
-                  comicJSON.character_credits &&
-                  comicJSON.character_credits.length > 5
-                "
-                @click="moreCharactersAreHidden = true"
-                :class="{ hidden: moreCharactersAreHidden }"
-                class="
-                  bg-yellow-500
-                  hover:bg-yellow-700
-                  text-white
-                  py-3
-                  px-4
-                  rounded
-                "
-              >
-                Hide
-              </button>
-            </div>
-
-            <div class="mb-10">
-              <h2
-                v-if="comicJSON.first_appearance_characters"
-                class="uppercase"
-              >
-                Characters with first appearance in this issue
-              </h2>
-              <div
-                class="flex flex-wrap"
-                v-if="comicJSON.first_appearance_characters"
-              >
-                <div
-                  class="
-                    text-yellow-500
-                    border-2
-                    rounded-lg
-                    border-yellow-500
-                    p-2
-                    m-2
-                  "
-                  :class="{ hidden: !moreFirstCharactersAreHidden }"
-                  v-for="item in comicJSON.first_appearance_characters.slice(
-                    0,
-                    5
-                  )"
-                  :key="item.id"
-                >
-                  <router-link :to="`/superhero/${item.id}`">
-                    {{ item.name }}</router-link
-                  >
-                </div>
-                <div
-                  class="
-                    text-yellow-500
-                    border-2
-                    rounded-lg
-                    border-yellow-500
-                    p-2
-                    m-2
-                  "
-                  :class="{ hidden: moreFirstCharactersAreHidden }"
-                  v-for="item in comicJSON.first_appearance_characters"
-                  :key="item.id + 'more_friends'"
-                >
-                  <router-link :to="`/superhero/${item.id}`">
-                    {{ item.name }}</router-link
-                  >
-                </div>
-              </div>
-              <div
-                class="
-                  text-yellow-500
-                  border-2
-                  rounded-lg
-                  border-yellow-500
-                  p-2
-                  m-2
-                "
-                :class="{ hidden: moreFirstCharactersAreHidden }"
-                v-else
-              >
-                <router-link
-                  :to="`/superhero/${characters.id}`"
+              <div class="mb-10">
+                <h2
                   v-if="comicJSON.first_appearance_characters"
+                  class="uppercase"
                 >
-                  {{ comicJSON.first_appearance_characters.name }}</router-link
-                >
+                  Characters with first appearance in this issue
+                </h2>
+                <div v-if="comicJSON.first_appearance_characters">
+                  <character-list
+                    :dataType="dataTypeHero"
+                    :data="comicJSON.first_appearance_characters"
+                    :color="color"
+                  />
+                </div>
               </div>
-              <button
-                v-if="
-                  comicJSON.first_appearance_characters &&
-                  comicJSON.first_appearance_characters.length > 5
-                "
-                @click="moreFirstCharactersAreHidden = false"
-                :class="{ hidden: !moreFirstCharactersAreHidden }"
-                class="
-                  bg-yellow-500
-                  hover:bg-yellow-700
-                  text-white
-                  py-3
-                  px-4
-                  rounded
-                "
-              >
-                Show All
-              </button>
-              <button
-                v-if="
-                  comicJSON.first_appearance_characters &&
-                  comicJSON.first_appearance_characters.length > 5
-                "
-                @click="moreFirstCharactersAreHidden = true"
-                :class="{ hidden: moreFirstCharactersAreHidden }"
-                class="
-                  bg-yellow-500
-                  hover:bg-yellow-700
-                  text-white
-                  py-3
-                  px-4
-                  rounded
-                "
-              >
-                Hide
-              </button>
             </div>
           </div>
         </div>
@@ -347,19 +170,19 @@
 <script>
 import axios from "axios";
 import { RotateSquare2 } from "vue-loading-spinner";
+import CharacterList from "../components/CharacterList.vue";
+import ShowMore from "../components/ShowMore.vue";
 export default {
   name: "Comic",
-  components: { RotateSquare2 },
-  props: {},
-  watch: {},
+  components: { RotateSquare2, CharacterList, ShowMore },
   data() {
     return {
       currentID: this.$route.params.id,
       comicJSON: {},
       showLoader: true,
-      moreCharactersAreHidden: true,
-      moreFirstCharactersAreHidden: true,
       comicNotFound: false,
+      dataTypeHero: "superhero",
+      color: "yellow",
     };
   },
 
@@ -376,11 +199,8 @@ export default {
       console.error(error);
     } finally {
       this.showLoader = false;
-      this.moreCharactersAreHidden = true;
-      this.moreFirstCharactersAreHidden = true;
     }
   },
-  methods: {},
 };
 </script>
 

@@ -27,8 +27,6 @@ import TrendingItem from "../components/TrendingItem.vue";
 export default {
   name: "SuperheroesOverview",
   components: { Search, TrendingItem },
-  props: {},
-  watch: {},
   data() {
     return {
       dataType: "superhero",
@@ -43,9 +41,5 @@ export default {
       console.error(error);
     }
   },
-  methods: {},
 };
 </script>
-
-<style scoped>
-</style>

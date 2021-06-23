@@ -49,7 +49,6 @@ export default {
   name: "Search",
   components: { OverviewItem, RotateSquare2 },
   props: ["dataType"],
-  watch: {},
   data() {
     return {
       resultsJSON: {},
@@ -60,7 +59,6 @@ export default {
       searchUsed: false,
     };
   },
-  mounted() {},
   methods: {
     async getResultsByName() {
       this.searchUsed = !this.searchUsed || true;

@@ -20,7 +20,6 @@
       >
         <h1 class="uppercase">{{ name }}</h1></router-link
       >
-      <!-- <p class="mt-2 text-sm">{{ id }}</p> -->
     </div>
     <div
       v-if="imageURL"
@@ -44,12 +43,7 @@
 <script>
 export default {
   name: "Overview",
-  components: {},
   props: ["dataType", "id", "name", "imageURL"],
-  watch: {},
-
-  mounted() {},
-  methods: {},
 };
 </script>
 

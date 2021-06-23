@@ -27,8 +27,6 @@ import Search from "../components/Search.vue";
 export default {
   name: "MoviesOverview",
   components: { TrendingItem, Search },
-  props: {},
-  watch: {},
   data() {
     return {
       dataType: "movie",
@@ -45,6 +43,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-</style>

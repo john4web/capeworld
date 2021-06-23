@@ -101,11 +101,9 @@
             ></p>
 
             <h1 class="text-lg uppercase pb-2">Story</h1>
-            <p
-              v-if="movie.description"
-              class="pb-4"
-              v-html="movie.description"
-            ></p>
+            <p v-if="movie.description">
+              <show-more :data="movie.description" :color="color" />
+            </p>
             <p v-else>
               No additional information about the plot of this movie available
             </p>
@@ -114,91 +112,13 @@
               <h2 v-if="characters" class="uppercase">
                 Characters in this movie:
               </h2>
-              <div class="flex flex-wrap" v-if="characters">
-                <div
-                  class="
-                    text-green-500
-                    border-2
-                    rounded-lg
-                    border-green-500
-                    p-2
-                    m-2
-                  "
-                  :class="{ hidden: !moreCharactersAreHidden }"
-                  v-for="item in characters.slice(0, 5)"
-                  :key="item.id"
-                >
-                  <router-link :to="`/superhero/${item.id}`">
-                    {{ item.name }}</router-link
-                  >
-                </div>
-                <div
-                  class="
-                    text-green-500
-                    border-2
-                    rounded-lg
-                    border-green-500
-                    p-2
-                    m-2
-                  "
-                  :class="{ hidden: moreCharactersAreHidden }"
-                  v-for="item in characters"
-                  :key="item.id + 'more_friends'"
-                >
-                  <router-link :to="`/superhero/${item.id}`">
-                    {{ item.name }}</router-link
-                  >
-                </div>
+              <div v-if="characters">
+                <character-list
+                  :dataType="dataTypeHero"
+                  :data="characters"
+                  :color="color"
+                />
               </div>
-              <div
-                class="
-                  text-green-500
-                  border-2
-                  rounded-lg
-                  border-green-500
-                  p-2
-                  m-2
-                "
-                :class="{ hidden: moreCharactersAreHidden }"
-                v-else
-              >
-                <router-link
-                  :to="`/superhero/${characters.id}`"
-                  v-if="characters"
-                >
-                  {{ characters.name }}</router-link
-                >
-              </div>
-              <button
-                v-if="characters && characters.length > 5"
-                @click="moreCharactersAreHidden = false"
-                :class="{ hidden: !moreCharactersAreHidden }"
-                class="
-                  bg-green-500
-                  hover:bg-green-700
-                  text-white
-                  py-3
-                  px-4
-                  rounded
-                "
-              >
-                Show All
-              </button>
-              <button
-                v-if="characters && characters.length > 5"
-                @click="moreCharactersAreHidden = true"
-                :class="{ hidden: moreCharactersAreHidden }"
-                class="
-                  bg-green-500
-                  hover:bg-green-700
-                  text-white
-                  py-3
-                  px-4
-                  rounded
-                "
-              >
-                Hide
-              </button>
             </div>
           </div>
         </div>
@@ -210,11 +130,11 @@
 <script>
 import axios from "axios";
 import { RotateSquare2 } from "vue-loading-spinner";
+import CharacterList from "../components/CharacterList.vue";
+import ShowMore from "../components/ShowMore.vue";
 export default {
   name: "Movie",
-  components: { RotateSquare2 },
-  props: {},
-  watch: {},
+  components: { RotateSquare2, CharacterList, ShowMore },
   data() {
     return {
       currentID: this.$route.params.id,
@@ -224,8 +144,9 @@ export default {
       producers: null,
       studios: null,
       showLoader: true,
-      moreCharactersAreHidden: true,
       movieNotFound: false,
+      dataTypeHero: "superhero",
+      color: "green",
     };
   },
 
@@ -246,10 +167,8 @@ export default {
       console.error(error);
     } finally {
       this.showLoader = false;
-      this.moreCharactersAreHidden = true;
     }
   },
-  methods: {},
 };
 </script>
 

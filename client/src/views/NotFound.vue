@@ -54,7 +54,6 @@ import TrendingItem from "../components/TrendingItem.vue";
 export default {
   name: "NotFound",
   components: { TrendingItem },
-  props: {},
   data() {
     return {
       trendiestHero: null,
@@ -70,6 +69,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-</style>

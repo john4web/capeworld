@@ -221,7 +221,6 @@ a.router-link-exact-active {
 import axios from "axios";
 export default {
   name: "App",
-  components: {},
   data() {
     return {
       isOpen: false,

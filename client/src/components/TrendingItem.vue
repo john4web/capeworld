@@ -56,12 +56,7 @@
 <script>
 export default {
   name: "Trending",
-  components: {},
   props: ["dataType", "id", "name", "imageURL", "type"],
-  watch: {},
-
-  mounted() {},
-  methods: {},
 };
 </script>
 

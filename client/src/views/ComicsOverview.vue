@@ -27,8 +27,6 @@ import Search from "../components/Search.vue";
 export default {
   name: "ComicsOverview",
   components: { TrendingItem, Search },
-  props: {},
-  watch: {},
   data() {
     return {
       dataType: "comic",
@@ -45,6 +43,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-</style>

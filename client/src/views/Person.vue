@@ -98,143 +98,20 @@
               <h2 v-else class="text-lg uppercase pb-2">
                 Characters created by this person
               </h2>
-              <div class="flex flex-wrap" v-if="characters">
-                <div
-                  class="
-                    text-blue-500
-                    border-2
-                    rounded-lg
-                    border-blue-500
-                    p-2
-                    m-2
-                  "
-                  :class="{ hidden: !moreCharactersAreHidden }"
-                  v-for="item in characters.slice(0, 5)"
-                  :key="item.id"
-                >
-                  <router-link :to="`/superhero/${item.id}`">
-                    {{ item.name }}</router-link
-                  >
-                </div>
-                <div
-                  class="
-                    text-blue-500
-                    border-2
-                    rounded-lg
-                    border-blue-500
-                    p-2
-                    m-2
-                  "
-                  :class="{ hidden: moreCharactersAreHidden }"
-                  v-for="item in characters"
-                  :key="item.id + 'more_characters'"
-                >
-                  <router-link :to="`/superhero/${item.id}`">
-                    {{ item.name }}</router-link
-                  >
-                </div>
+              <div v-if="characters">
+                <character-list
+                  :dataType="dataTypeHero"
+                  :data="characters"
+                  :color="color"
+                />
               </div>
-              <div
-                class="
-                  text-blue-500
-                  border-2
-                  rounded-lg
-                  border-blue-500
-                  p-2
-                  m-2
-                "
-                :class="{ hidden: moreCharactersAreHidden }"
-                v-else
-              >
-                <router-link
-                  :to="`/superhero/${characters.id}`"
-                  v-if="characters"
-                >
-                  {{ characters.name }}</router-link
-                >
-              </div>
-              <button
-                v-if="characters && characters.length > 5"
-                @click="moreCharactersAreHidden = false"
-                :class="{ hidden: !moreCharactersAreHidden }"
-                class="
-                  bg-blue-500
-                  hover:bg-blue-700
-                  text-white
-                  py-3
-                  px-4
-                  rounded
-                "
-              >
-                Show All
-              </button>
-              <button
-                v-if="characters && characters.length > 5"
-                @click="moreCharactersAreHidden = true"
-                :class="{ hidden: moreCharactersAreHidden }"
-                class="
-                  bg-blue-500
-                  hover:bg-blue-700
-                  text-white
-                  py-3
-                  px-4
-                  rounded
-                "
-              >
-                Hide
-              </button>
             </div>
-            <h1 class="text-lg uppercase pb-2">Deck</h1>
+            <h1 v-if="person.deck" class="text-lg uppercase pb-2">Deck</h1>
             <p v-if="person.deck" class="pb-4" v-html="person.deck"></p>
 
-            <h1 class="text-lg uppercase pb-2">Story</h1>
+            <h1 class="text-lg uppercase pb-2">Description</h1>
             <div v-if="person.description">
-              <p
-                v-if="person.description.length <= 10000"
-                class="pb-4 htmlContent"
-                v-html="person.description"
-              ></p>
-              <div v-else>
-                <p
-                  class="htmlContent"
-                  v-html="person.description.substr(0, 10000)"
-                >
-                  ...
-                </p>
-                <p
-                  class="pb-4 htmlContent"
-                  :class="{ hidden: moreTextHidden }"
-                  v-html="person.description.substr(10000, 10000000)"
-                ></p>
-                <button
-                  @click="moreTextHidden = false"
-                  :class="{ hidden: !moreTextHidden }"
-                  class="
-                    bg-blue-500
-                    hover:bg-blue-700
-                    text-white
-                    py-3
-                    px-4
-                    rounded
-                  "
-                >
-                  Read More
-                </button>
-                <button
-                  @click="moreTextHidden = true"
-                  :class="{ hidden: moreTextHidden }"
-                  class="
-                    bg-blue-500
-                    hover:bg-blue-700
-                    text-white
-                    py-3
-                    px-4
-                    rounded
-                  "
-                >
-                  Show Less
-                </button>
-              </div>
+              <show-more :data="person.description" :color="color" />
             </div>
             <p v-else>No additional information about the person available</p>
           </div>
@@ -247,11 +124,11 @@
 <script>
 import axios from "axios";
 import { RotateSquare2 } from "vue-loading-spinner";
+import CharacterList from "../components/CharacterList.vue";
+import ShowMore from "../components/ShowMore.vue";
 export default {
   name: "person",
-  components: { RotateSquare2 },
-  props: {},
-  watch: {},
+  components: { RotateSquare2, CharacterList, ShowMore },
   data() {
     return {
       currentID: this.$route.params.id,
@@ -259,9 +136,9 @@ export default {
       issues: null,
       characters: null,
       showLoader: true,
-      moreCharactersAreHidden: true,
       personNotFound: false,
-      moreTextHidden: true,
+      dataTypeHero: "superhero",
+      color: "blue",
     };
   },
 
@@ -280,11 +157,8 @@ export default {
       console.error(error);
     } finally {
       this.showLoader = false;
-      this.moreCharactersAreHidden = true;
-      this.moreTextHidden = true;
     }
   },
-  methods: {},
 };
 </script>
 

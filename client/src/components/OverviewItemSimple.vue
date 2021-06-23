@@ -1,6 +1,17 @@
 <template>
   <div
-    class="text-red-500 border-2 rounded-lg border-red-500 p-2 m-2 w-60 overflow-hidden text-center align-middle"
+    class="
+      text-red-500
+      border-2
+      rounded-lg
+      border-red-500
+      p-2
+      m-2
+      w-60
+      overflow-hidden
+      text-center
+      align-middle
+    "
   >
     <div class="inline-block align-middle">
       <router-link
@@ -16,14 +27,6 @@
 <script>
 export default {
   name: "OverviewSimple",
-  components: {},
   props: ["dataType", "id", "name"],
-  watch: {},
-
-  mounted() {},
-  methods: {},
 };
 </script>
-
-<style scoped>
-</style>

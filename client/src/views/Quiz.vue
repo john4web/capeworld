@@ -149,8 +149,6 @@ import TrendingItem from "../components/TrendingItem.vue";
 export default {
   name: "Quiz",
   components: { TrendingItem },
-  props: {},
-  watch: {},
   data() {
     return {
       title: "Which superhero are you?",
@@ -216,7 +214,6 @@ export default {
       started: false,
     };
   },
-  mounted() {},
   methods: {
     start() {
       if (!this.userResponses[this.questionIndex]) {
@@ -246,6 +243,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-</style>

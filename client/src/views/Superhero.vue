@@ -227,100 +227,13 @@
               >
                 Friends
               </h1>
-              <div
-                class="flex flex-wrap"
-                v-if="superheroJSON.character_friends"
-              >
-                <div
-                  class="
-                    text-green-500
-                    border-2
-                    rounded-lg
-                    border-green-500
-                    p-2
-                    m-2
-                  "
-                  :class="{ hidden: !moreFriendsAreHidden }"
-                  v-for="item in superheroJSON.character_friends.slice(0, 5)"
-                  :key="item.id"
-                >
-                  <router-link :to="`/superhero/${item.id}`">
-                    {{ item.name }}</router-link
-                  >
-                </div>
-                <div
-                  class="
-                    text-green-500
-                    border-2
-                    rounded-lg
-                    border-green-500
-                    p-2
-                    m-2
-                  "
-                  :class="{ hidden: moreFriendsAreHidden }"
-                  v-for="item in superheroJSON.character_friends"
-                  :key="item.id + 'more_friends'"
-                >
-                  <router-link :to="`/superhero/${item.id}`">
-                    {{ item.name }}</router-link
-                  >
-                </div>
+              <div v-if="superheroJSON.character_friends">
+                <character-list
+                  :dataType="dataTypeHero"
+                  :data="superheroJSON.character_friends"
+                  :color="colorFriends"
+                />
               </div>
-              <div
-                class="
-                  text-green-500
-                  border-2
-                  rounded-lg
-                  border-green-500
-                  p-2
-                  m-2
-                "
-                :class="{ hidden: moreFriendsAreHidden }"
-                v-else
-              >
-                <router-link
-                  :to="`/superhero/${superheroJSON.character_friends.id}`"
-                  v-if="superheroJSON.character_friends"
-                >
-                  {{ superheroJSON.character_friends.name }}</router-link
-                >
-              </div>
-              <button
-                v-if="
-                  superheroJSON.character_friends &&
-                  superheroJSON.character_friends.length > 5
-                "
-                @click="moreFriendsAreHidden = false"
-                :class="{ hidden: !moreFriendsAreHidden }"
-                class="
-                  bg-green-500
-                  hover:bg-green-700
-                  text-white
-                  py-3
-                  px-4
-                  rounded
-                "
-              >
-                Show All
-              </button>
-              <button
-                v-if="
-                  superheroJSON.character_friends &&
-                  superheroJSON.character_friends.length > 5
-                "
-                @click="moreFriendsAreHidden = true"
-                :class="{ hidden: moreFriendsAreHidden }"
-                class="
-                  bg-green-500
-                  hover:bg-green-700
-                  text-white
-                  py-3
-                  px-4
-                  rounded
-                "
-              >
-                Hide
-              </button>
             </div>
 
             <div class="mb-10">
@@ -330,79 +243,13 @@
               >
                 Enemies
               </h1>
-              <div
-                class="flex flex-wrap"
-                v-if="superheroJSON.character_enemies"
-              >
-                <div
-                  class="
-                    text-red-500
-                    border-2
-                    rounded-lg
-                    border-red-500
-                    p-2
-                    m-2
-                  "
-                  :class="{ hidden: !moreEnemiesAreHidden }"
-                  v-for="item in superheroJSON.character_enemies.slice(0, 5)"
-                  :key="item.id"
-                >
-                  <router-link :to="`/superhero/${item.id}`">
-                    {{ item.name }}</router-link
-                  >
-                </div>
-                <div
-                  class="
-                    text-red-500
-                    border-2
-                    rounded-lg
-                    border-red-500
-                    p-2
-                    m-2
-                  "
-                  :class="{ hidden: moreEnemiesAreHidden }"
-                  v-for="item in superheroJSON.character_enemies"
-                  :key="item.id + 'more_enemies'"
-                >
-                  <router-link :to="`/superhero/${item.id}`">
-                    {{ item.name }}</router-link
-                  >
-                </div>
+              <div v-if="superheroJSON.character_enemies">
+                <character-list
+                  :dataType="dataTypeHero"
+                  :data="superheroJSON.character_enemies"
+                  :color="colorEnemies"
+                />
               </div>
-              <div
-                class="text-red-500 border-2 rounded-lg border-red-500 p-2 m-2"
-                :class="{ hidden: moreEnemiesAreHidden }"
-                v-else
-              >
-                <router-link
-                  :to="`/superhero/${superheroJSON.character_enemies.id}`"
-                  v-if="superheroJSON.character_enemies"
-                >
-                  {{ superheroJSON.character_enemies.name }}</router-link
-                >
-              </div>
-              <button
-                v-if="
-                  superheroJSON.character_enemies &&
-                  superheroJSON.character_enemies.length > 5
-                "
-                @click="moreEnemiesAreHidden = false"
-                :class="{ hidden: !moreEnemiesAreHidden }"
-                class="bg-red-500 hover:bg-red-700 text-white py-3 px-4 rounded"
-              >
-                Show All
-              </button>
-              <button
-                v-if="
-                  superheroJSON.character_enemies &&
-                  superheroJSON.character_enemies.length > 5
-                "
-                @click="moreEnemiesAreHidden = true"
-                :class="{ hidden: moreEnemiesAreHidden }"
-                class="bg-red-500 hover:bg-red-700 text-white py-3 px-4 rounded"
-              >
-                Hide
-              </button>
             </div>
 
             <div>
@@ -420,49 +267,7 @@
               More Information
             </h1>
             <div v-if="description">
-              <p
-                v-if="description.length <= 10000"
-                class="pb-4 htmlContent"
-                v-html="description"
-              ></p>
-              <div v-else>
-                <p class="htmlContent" v-html="description.substr(0, 10000)">
-                  ...
-                </p>
-                <p
-                  class="pb-4 htmlContent"
-                  :class="{ hidden: moreTextHidden }"
-                  v-html="description.substr(10000, 10000000)"
-                ></p>
-                <button
-                  @click="moreTextHidden = false"
-                  :class="{ hidden: !moreTextHidden }"
-                  class="
-                    bg-red-500
-                    hover:bg-red-700
-                    text-white
-                    py-3
-                    px-4
-                    rounded
-                  "
-                >
-                  Read More
-                </button>
-                <button
-                  @click="moreTextHidden = true"
-                  :class="{ hidden: moreTextHidden }"
-                  class="
-                    bg-red-500
-                    hover:bg-red-700
-                    text-white
-                    py-3
-                    px-4
-                    rounded
-                  "
-                >
-                  Show Less
-                </button>
-              </div>
+              <show-more :data="description" :color="colorEnemies" />
             </div>
             <p v-if="!description && !superheroJSON.description_short">
               Sorry, there is no further information available for this
@@ -538,11 +343,12 @@
 <script>
 import axios from "axios";
 import OverviewItemSimple from "../components/OverviewItemSimple.vue";
+import CharacterList from "../components/CharacterList.vue";
+import ShowMore from "../components/ShowMore.vue";
 import { RotateSquare2 } from "vue-loading-spinner";
 export default {
   name: "Superhero",
-  components: { OverviewItemSimple, RotateSquare2 },
-  props: {},
+  components: { OverviewItemSimple, RotateSquare2, CharacterList, ShowMore },
   watch: {
     "$route.path"() {
       this.requestPageContent(this.$route.params.id);
@@ -557,6 +363,7 @@ export default {
       comicsJSON: {},
       dataTypeMovie: "movie",
       dataTypeComic: "comic",
+      dataTypeHero: "superhero",
       widthInt: "",
       widthStr: "",
       widthSpeed: "",
@@ -565,10 +372,9 @@ export default {
       widthCom: "",
       showLoader: true,
       description: "",
-      moreFriendsAreHidden: true,
-      moreEnemiesAreHidden: true,
-      moreTextHidden: true,
       characterNotFound: false,
+      colorFriends: "green",
+      colorEnemies: "red",
     };
   },
 
@@ -600,9 +406,6 @@ export default {
         console.error(error);
       } finally {
         this.showLoader = false;
-        this.moreFriendsAreHidden = true;
-        this.moreEnemiesAreHidden = true;
-        this.moreTextHidden = true;
       }
     },
   },
