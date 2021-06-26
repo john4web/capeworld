@@ -193,7 +193,7 @@
               >
                 Appearance
               </h1>
-              <table class="appearance" style="width: 100%">
+              <table class="appearance w-full">
                 <tr>
                   <th v-if="superheroJSON.appearance.eye_color">Eye Color</th>
                   <th v-if="superheroJSON.appearance.hair_color">Hair Color</th>
@@ -211,6 +211,38 @@
                   <td v-if="superheroJSON.appearance.height">
                     {{ superheroJSON.appearance.height[1] }}
                   </td>
+                  <td v-if="superheroJSON.appearance.weight">
+                    {{ superheroJSON.appearance.weight[1] }}
+                  </td>
+                  <td v-if="superheroJSON.appearance.race">
+                    {{ superheroJSON.appearance.race }}
+                  </td>
+                </tr>
+              </table>
+              <table class="appearance-mobile w-full">
+                <tr>
+                  <th v-if="superheroJSON.appearance.eye_color">Eye Color</th>
+                  <th v-if="superheroJSON.appearance.hair_color">Hair Color</th>
+                  <th v-if="superheroJSON.appearance.height">Height</th>
+                </tr>
+                <tr>
+                  <td v-if="superheroJSON.appearance.eye_color">
+                    {{ superheroJSON.appearance.eye_color }}
+                  </td>
+                  <td v-if="superheroJSON.appearance.hair_color">
+                    {{ superheroJSON.appearance.hair_color }}
+                  </td>
+                  <td v-if="superheroJSON.appearance.height">
+                    {{ superheroJSON.appearance.height[1] }}
+                  </td>
+                </tr>
+              </table>
+              <table class="appearance-mobile w-full">
+                <tr>
+                  <th v-if="superheroJSON.appearance.weight">Weight</th>
+                  <th v-if="superheroJSON.appearance.race">Race</th>
+                </tr>
+                <tr>
                   <td v-if="superheroJSON.appearance.weight">
                     {{ superheroJSON.appearance.weight[1] }}
                   </td>
@@ -530,16 +562,32 @@ table > tr:last-child > th {
   margin: auto;
 }
 
-.appearance td,
-th {
-  width: 20%;
-  text-align: center;
-}
 table a {
   @apply text-red-900;
 }
 table a:hover {
   @apply text-red-700;
+}
+.appearance-mobile td,
+th {
+  width: 20%;
+  text-align: center;
+}
+.appearance {
+  @apply hidden;
+}
+@media (min-width: 520px) {
+  .appearance-mobile {
+    @apply hidden;
+  }
+  .appearance {
+    display: revert;
+  }
+  .appearance td,
+  th {
+    width: 20%;
+    text-align: center;
+  }
 }
 </style>
 
