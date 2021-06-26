@@ -57,36 +57,43 @@
           <router-link
             to="/"
             class="uppercase text-white hover:text-red-500 m-4"
+            @click.native="resetToggle"
             >Home</router-link
           >
           <router-link
             to="/superheroes"
             class="uppercase text-white hover:text-red-500 m-4"
+            @click.native="resetToggle"
             >Superheroes</router-link
           >
           <router-link
             to="/comics"
             class="uppercase text-white hover:text-red-500 m-4"
+            @click.native="resetToggle"
             >Comics</router-link
           >
           <router-link
             to="/movies"
             class="uppercase text-white hover:text-red-500 m-4"
+            @click.native="resetToggle"
             >Movies</router-link
           >
           <router-link
             to="/people"
             class="uppercase text-white hover:text-red-500 m-4"
+            @click.native="resetToggle"
             >People</router-link
           >
           <router-link
             to="/legal"
             class="uppercase text-white hover:text-red-500 m-4"
+            @click.native="resetToggle"
             >Legal Notice</router-link
           >
           <router-link
             to="/quiz"
             class="uppercase text-white hover:text-red-500 m-4"
+            @click.native="resetToggle"
             >Quiz</router-link
           >
         </div>
@@ -167,12 +174,34 @@
         </div>
       </div>
     </header>
-
-    <div id="content" class="m-4 flex justify-center"><router-view /></div>
+    <div id="content" class="m-4 flex justify-center min-height-130px">
+      <transition name="fade" mode="out-in">
+        <router-view />
+      </transition>
+    </div>
   </div>
 </template>
 
 <style>
+.min-height-130px {
+  min-height: 130px;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition-property: opacity;
+  transition-duration: 0.5s;
+}
+
+.fade-enter-active {
+  transition-delay: 0.5s;
+}
+
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
+}
+
 .hamburger {
   width: 25px;
 }
@@ -242,21 +271,14 @@ export default {
   },
   methods: {
     navToggle: function () {
-      if (this.isOpen) {
-        this.isOpen = false;
-      } else {
-        this.isOpen = true;
-      }
-      if (this.isHidden) {
-        this.isHidden = false;
-      } else {
-        this.isHidden = true;
-      }
-      if (this.isFlex) {
-        this.isFlex = false;
-      } else {
-        this.isFlex = true;
-      }
+      this.isOpen = !this.isOpen;
+      this.isHidden = !this.isHidden;
+      this.isFlex = !this.isFlex;
+    },
+    resetToggle: function () {
+      this.isOpen = false;
+      this.isHidden = true;
+      this.isFlex = false;
     },
   },
 };
