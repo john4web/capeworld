@@ -96,6 +96,12 @@
             @click.native="resetToggle"
             >Quiz</router-link
           >
+          <router-link
+            to="/about"
+            class="uppercase text-white hover:text-red-500 m-4"
+            @click.native="resetToggle"
+            >About</router-link
+          >
         </div>
       </nav>
       <div class="banner bg-black w-full flex justify-center">
